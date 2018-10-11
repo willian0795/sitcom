@@ -1,0 +1,122 @@
+<script>
+	estado_transaccion='<?php echo $estado_transaccion?>';
+	estado_correcto='<?php echo $mensaje; ?>';
+	estado_incorrecto='Error de conexión al servidor. Por favor vuelva a intentarlo.';
+</script>
+<section>
+    <h2>Catálogo de Vehículos</h2>
+</section>
+<button style="width:200px" type="button" onclick="window.open('<?php echo base_url()."index.php/vehiculo/nuevo_vehiculo" ?>','_parent')" name="btnNuevo">Nuevo Vehículo</button>
+<table  class="grid">
+    <thead>
+      <tr>
+        <th>Placa</th>
+        <th>Marca</th>
+        <th>Modelo</th>
+        <th>Clase</th>
+        <th>Estado</th>
+        <th>Mtto. Prev.</th>
+        <th>Opción</th>
+      </tr>
+     </thead>
+     <tbody>
+    <?php    
+        foreach ($datos as $fila) {
+    ?>
+        <tr>
+            <td align="center"><?php echo $fila->placa?></td>
+            <td align="center"><?php echo ucwords($fila->marca)?></td>
+            <td align="center"><?php echo ucwords($fila->modelo)?></td>
+            <td align="center"><?php echo ucwords($fila->clase)?></td>
+            <td align="center">
+            <?php
+			if($fila->estado==1) $msj="Activo";
+			else if($fila->estado==2) $msj="En Taller Interno";
+			else if($fila->estado==3) $msj="En Taller Externo";
+			else if($fila->estado==4) $msj="Robado";
+			else if($fila->estado==5) $msj="Extraviado";
+			else if($fila->estado==6) $msj="Hurtado";
+			else if($fila->estado==0) $msj="Inactivo";
+			
+			echo $msj;
+			?>
+            </td>
+            <td align="center"><img width="20px" title="<?php echo "Faltan ".$fila->dif_km." km";?>" src="
+				<?php
+					if(($fila->dif_km)>1500)echo base_url()."img/verde.jpg";
+                	elseif(($fila->dif_km)<=1500 && ($fila->dif_km)>1000)echo base_url()."img/amarillo.jpg";
+					elseif(($fila->dif_km)<=1000)echo base_url()."img/rojo.jpg";
+				?>" /></td>
+            <td>
+            	<a rel="leanModal" title="Ver información detallada del vehículo" href="#ventana" onclick="dialogo(<?php echo $fila->id?>)"><img  src="<?php echo base_url()?>img/lupa.gif"/></a>
+                <a rel="leanModal" title="Modificar información del vehículo" href="<?php echo base_url()."index.php/vehiculo/nuevo_vehiculo/".$fila->id ?>" ><img src="<?php echo base_url()?>img/editar.png"/></a>
+                <?php 
+				if($fila->estado==1)
+				{
+				?>
+                <a rel="leanModal" title="Enviar al taller interno" href="<?php echo base_url()."index.php/vehiculo/controlMtto/".$fila->id ?>" ><img src="<?php echo base_url()?>img/mantenimiento.png" height="20px"/></a>
+                <a rel="leanModal" title="Realizar mantenimiento rutinario" href="<?php echo base_url()."index.php/vehiculo/mantenimiento_rutinario/".$fila->id ?>" ><img src="<?php echo base_url()?>img/reparacion.png" height="23px"/></a>
+                <?php
+				}
+				?>
+            </td>
+        </tr>
+    <?php } ?>
+    </tbody>
+</table>
+
+
+<div id="ventana" style="height:600px; width:650px">
+    <div id='signup-header'>
+        <h2>Información del Vehículo</h2>
+        <a id="cerrar" class="modal_close"></a>
+    </div>
+    <div id='contenido-ventana'>
+    </div>
+</div>
+<script language="javascript" >
+	function dialogo(id)
+	{
+		$('#contenido-ventana').load(base_url()+'index.php/vehiculo/dialogo_vehiculo_info/'+id);
+		return false;
+	}
+	function cerrar_vent()
+	{
+		$('#cerrar').click();
+	}
+	function motoristaf(id,id2)
+	{
+		$('#motorista').destruirValidacion();
+		$('#cont-select').html("");
+		$.ajax({
+			async:	true, 
+			url:	"<?php echo base_url()?>/index.php/transporte/verificar_motoristas/"+id+"/"+id2,
+			dataType:"json",
+			success: function(data) {
+				json = data;
+				var cont='';
+				cont=cont+'<select name="motorista" id="motorista">';
+				for(i=0;i<json.length;i++) {			
+					cont=cont+'<option value="'+json[i].id_empleado+'">'+json[i].nombre.capitalize()+'</option>';
+				}	
+				cont=cont+'</select>';
+				$('#cont-select').html(cont);
+				$('#motorista').kendoComboBox({
+					autoBind: false,
+					filter: 'contains'
+				});
+				/*$('#motorista').validacion({
+					men: 'Debe seleccionar un item'
+				});*/
+			},
+			error:function(data) {
+				 alertify.alert('Error al cargar los datos de los motoristas');
+			}
+		});	
+	}
+	
+	function enviar(v)
+	{
+		document.getElementById('resp').value=v;
+	}
+</script>

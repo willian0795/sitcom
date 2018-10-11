@@ -1,0 +1,66 @@
+<script>
+	estado_transaccion='<?php echo $estado_transaccion?>';
+	estado_correcto='<?php echo $mensaje?>';
+	estado_incorrecto='Error de conexión al servidor. Por favor vuelva a intentarlo más tarde.';
+</script>
+<section>
+    <h2>Vehículos en Taller Externo</h2>
+</section>
+
+<button style="width:200px" type="button" onclick="window.open('<?php echo base_url(); ?>index.php/vehiculo/ingreso_taller_ext','_parent')" name="btnNuevo">
+Ingresar Vehículo
+</button>
+<table  class="grid">
+    <thead>
+      <tr>
+        <th>Placa</th>
+        <th>Marca</th>
+        <th>Modelo</th>
+        <th>Clase</th>
+        <th>Taller</th>
+        <th>Fecha Ingreso</th>
+        <th>Opción</th>
+      </tr>
+     </thead>
+     <tbody>
+    <?php   
+	foreach ($taller_externo as $fila) {
+    ?>
+        <tr align="center">
+            <td><?php echo $fila['placa']?></td>
+            <td><?php echo ucwords($fila['marca'])?></td>
+            <td><?php echo ucwords($fila['modelo'])?></td>
+            <td><?php echo ucwords($fila['clase'])?></td>
+            <td><?php echo ucwords($fila['taller'])?></td>
+            <td><?php echo ucwords($fila['fecha_recepcion'])?></td>
+            <td>
+            	<a rel="leanModal" title="Ver información de ingreso al taller" href="#ventana" onclick="dialogo(<?php echo $fila['id_ingreso_taller_ext']?>)"><img  src="<?php echo base_url()?>img/lupa.gif"/></a>&nbsp;&nbsp;
+                <a rel="leanModal" title="Modificar información de ingreso al taller externo" href="<?php echo base_url()."index.php/vehiculo/ingreso_taller_ext/".$fila['id_vehiculo']."/NULL/".$fila['id_ingreso_taller_ext'] ?>" ><img src="<?php echo base_url()?>img/editar.png"/></a>
+                <a rel="leanModal" title="Dar de alta" href="<?php echo base_url()."index.php/vehiculo/alta_taller_ext/".$fila['id_ingreso_taller_ext'] ?>" ><img src="<?php echo base_url()?>img/alta.png" height="23px"/></a>
+            </td>
+        </tr>
+    <?php } ?>
+    </tbody>
+</table>
+
+
+<div id="ventana" style="height:600px; width:650px">
+    <div id='signup-header'>
+        <h2>Información de Ingreso del Vehículo en el Taller Externo</h2>
+        <a class="modal_close" id="cerrar"></a>
+    </div>
+    <div id='contenido-ventana'>
+    </div>
+</div>
+
+<script type="text/javascript">
+function dialogo(id,id2)
+{
+	$('#contenido-ventana').load(base_url()+'index.php/vehiculo/ventana_taller_ext/'+id);
+	return false;
+}
+function cerrar_vent()
+{
+	$('#cerrar').click();
+}
+</script>

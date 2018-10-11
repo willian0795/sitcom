@@ -1,0 +1,433 @@
+@charset "utf-8";
+/* CSS Document */
+form {
+	position: relative;
+	width: 95%;
+	height: auto;
+	margin: 0 auto;
+	/*font-family: Verdana, Geneva, sans-serif;*/
+}    
+img {
+	border: 0;
+}
+.select_rol {
+	width: 115px;
+}   
+form p {
+	position: relative;
+	width: 100%;
+	height: auto;
+	margin-top: 5px !important;
+	margin-bottom: 5px !important;
+	padding: 0 !important;	
+	font-size: 0.85em !important;
+}
+form label {
+	position: relative;
+	cursor: pointer;
+	width: 17%;
+	height: 22px;
+	vertical-align: baseline;
+	display: inline-block;
+	text-align: right;
+}
+.label_textarea {
+	vertical-align: top;
+	margin-top: 25px;
+}
+input[type="text"], input[type="password"], select, input[type="radio"], textarea {
+	height: 22px;
+	padding: 5px;
+	position: relative;
+	border: solid 1px #777;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	display: inline-block;
+	box-sizing: initial !important;
+}
+textarea {
+	min-height: 50px;	
+	max-height: 50px;
+} 
+button {
+	/*height: 34px !important;*/
+}
+.required {
+	border: solid 1px #f00 !important;
+}
+.correct {
+	border: solid 1px #666 !important;;
+}
+.correct2 {
+	border: solid 1px #0f0 !important;
+}
+.mensaje-tooltip {
+	font-size: 0.75em;
+}
+.obligatorio {
+	color: #F00;
+}	
+.tam-1, .tam-2, .tam-3 {
+	/*min-width: 300px;*/
+}
+.tam-1 {
+	width: 20% !important;
+}
+.tam-2 {
+	width: 30% !important;
+}
+.tam-3 {
+	width: 55% !important;
+}
+.tam-4 {
+	width: 80% !important;
+}
+#contenedor {
+	position: relative;
+	width: 70%;
+	height: auto;
+	margin: 0 auto;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 0.85em !important;
+}
+#pie {
+	position: relative;
+	margin-top: 40px;
+	width: 100%;
+	height: 150px;
+	text-align: center;
+	overflow: hidden;
+	color: #fdfbda;
+	background-image:url(../img/pie.gif);
+	background-position: left bottom;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+#pie .pie-izq {
+	position: relative;
+	width: 20%;
+	height: 100%;
+	display: inline-block;	
+}
+#pie .pie-der {
+	position: relative;
+	width: 70%;
+	height: 100%;
+	display: inline-block;	
+}
+#pie span {
+	position: absolute;
+	text-align: left;
+	font-size: 12px;
+	left: 10px;
+	bottom: 10px;
+}
+#pie .ues {
+	position: absolute;
+	width: auto;
+	max-width: 81px;
+	height: auto;
+	right: 100px;
+	bottom: 25px;
+}
+#pie .escudo {
+	position: absolute;
+	width: auto;
+	max-width: 81px;
+	height: auto;
+	right: 10px;
+	bottom: 25px;
+}
+.k-delete {
+	float: right;
+}
+/*SCROLL*/
+::-webkit-scrollbar {  
+    width: 8px; 
+}  
+::-webkit-scrollbar-track {  
+    background-color: #eaeaea;  
+    border-left: 1px solid #ccc;  
+}  
+::-webkit-scrollbar-thumb {  
+    background-color: #ccc;  
+}  
+::-webkit-scrollbar-thumb:hover {  
+    background-color: #aaa;  
+}
+#lean_overlay, #lean_overlay2 {
+	position: fixed;
+	z-index:1000000;
+	top: 0px;
+	left: 0px;
+	height:100%;
+	width:100%;
+	background: #000;
+	display: none;
+}
+#ventana, #ventana2 {
+	width: 60%;
+	min-height: 50%;
+	max-height: 80%;
+	/*padding: 10px; */
+	display:none;
+	background: #FFF;
+	border-radius: 5px; 
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px;
+	box-shadow: 0px 0px 4px rgba(0,0,0,0.7); 
+	-webkit-box-shadow: 0 0 4px rgba(0,0,0,0.7);
+	-moz-box-shadow: 0 0px 4px rgba(0,0,0,0.7);   
+}
+
+#contenido-ventana {
+	height: 100%;
+	overflow: auto;
+	padding-bottom: 65px;
+}
+#signup-header { 
+	background: url(../img/hd-bg.png); 
+	padding: 18px 18px 14px 18px; 
+	border-bottom: 1px solid #CCC; 
+	border-top-left-radius: 5px; 
+	-moz-border-radius-topleft: 5px; 
+	-webkit-border-top-left-radius: 5px; 
+	border-top-right-radius: 5px; 
+	-moz-border-radius-topright: 5px; 
+	-webkit-border-top-right-radius: 5px; 
+	margin-bottom: 10px;
+}
+#signup-header  h2 { 
+	/*
+	*	Lenoel: Las primeras dos lineas yo se las agregre
+	*/
+	height: 30px;
+	overflow: hidden;
+	color: #444; 
+	font-size: 1.5em;
+	font-weight: 700;
+	margin-bottom: 0px;
+	margin-top: 0px;
+	text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5); 
+}
+#signup-header  p { 
+	color: #444; 
+	font-size: 1.3em; 
+	margin: 0; 
+	text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5); 
+	text-shadow: none; 
+}
+.modal_close, .cerrar-modal { 
+	position: absolute; 
+	top: 12px; 
+	right: 12px; 
+	display: block; 
+	width: 14px; 
+	height: 14px; 
+	background: url(../img/modal_close.png); 
+	z-index: 2;
+	cursor: pointer;
+}
+
+.table_design {
+	width: 90%;
+	border:0;
+	outline:0;
+	font-size:100%;
+	vertical-align:baseline;
+	background:transparent;
+	font:12px/15px "Helvetica Neue",Arial, Helvetica, sans-serif;
+	color: #555;
+	overflow:hidden;
+	border:1px solid #d3d3d3;
+	background:#fefefe;
+	-moz-border-radius:5px; /* FF1+ */
+	-webkit-border-radius:5px; /* Saf3-4 */
+	border-radius:5px;
+	-moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.table_design th, .table_design td {
+	padding:5px 10px 5px;
+}
+button {
+	display: inline-block;
+	margin: 15px auto;
+	padding: 5px;
+	text-decoration: none;
+	text-align: center;
+	font: bold 13px Verdana, Arial, Helvetica, sans-serif;
+	width: 150px;
+	color: #FFF;
+	cursor: pointer;
+	outline-style: none;
+	background-color: #5A5655;
+	border: 1px solid #5A5655;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+.table_design th {
+	text-shadow: 1px 1px 1px #fff; 
+	background:#e8eaeb;
+	text-align:center;
+	background: -moz-linear-gradient(100% 20% 90deg, #e8eaeb, #ededed);
+	background: -webkit-gradient(linear, 0% 0%, 0% 20%, from(#ededed), to(#e8eaeb));
+}
+
+.table_design td {
+	border-top:1px solid #e0e0e0; 
+	border-right:1px solid #e0e0e0;
+	background: -moz-linear-gradient(100% 25% 90deg, #fefefe, #f9f9f9);
+	background: -webkit-gradient(linear, 0% 0%, 0% 25%, from(#f9f9f9), to(#fefefe));
+}
+#utiliza, #final{
+margin-left: 40px;
+
+}
+
+canvas {
+	margin: -20px auto !important;
+	display: block;
+	top: -10px;
+	position: relative;
+}
+
+	.ayuda{
+		color: #000;
+		margin-top: 60px;
+
+	}
+	#contenAyuda{
+		margin-top: 150px;
+	}
+
+	/* todo lo de aqui es para e; sidebar de ayuda */
+.sidebar-right-heading{
+
+	right: 0px;
+	height: 60px;
+	background-color: #2C3439;
+	width: 325px;
+	z-index: 6;
+	-webkit-transition:All 0.3s ease;
+	-moz-transition:All 0.3s ease;
+	-o-transition:All 0.3s ease;
+	top: 60px;
+	text-align: center;
+	}
+
+
+	.sidebar-right-heading .nav-tabs{
+		border-bottom: none;
+		background: #00436F;
+		margin-top: -20px;}
+
+	.sidebar-right-heading .nav-tabs > li{margin-bottom: 0px;}
+	.sidebar-right-heading .nav-tabs > li > a{margin-right: 0px;
+		border: none;
+		height: 60px;
+		padding: 20px 0;
+		color: #E6E9ED;}
+.sidebar-right-heading .nav-tabs.nav-justified > li{
+		display: table-cell;
+		width: 1%;}
+.sidebar-right-heading .nav-tabs.nav-justified > li > a{
+	margin-bottom: 0;}
+.sidebar-right-heading .nav-tabs > li > a:hover{
+	background-color: transparent;
+	color: #E6E9ED;}
+
+.sidebar-right-heading .nav-tabs > li.active > a,.sidebar-right-heading .nav-tabs > li.active > a:hover,.sidebar-right-heading .nav-tabs > li.active > a:focus{
+	color: #E6E9ED;
+	cursor: default;
+	border: none;
+	background-color: #F48F35}
+
+.sidebar-right{
+
+	float: right;
+}
+
+.descrip{
+	margin-top: 25px;
+	padding-left: 25px;
+	padding-right: 30px;
+	text-align: justify;
+	color: #000;
+}
+.pasos{
+text-align:left;
+margin: 10px;
+
+}
+
+/* Incia clases para pasos de ayuda*/
+ol {
+    counter-reset: li; /* Initiate a counter */
+    list-style: none; /* Remove default numbering */
+    *list-style: decimal; /* Keep using default numbering for IE6/7 */
+    font: 15px 'trebuchet MS', 'lucida sans';
+    padding: 0;
+    margin-bottom: 4em;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+ol ol {
+    margin: 0 0 0 2em; /* Add some left margin for inner lists */
+}
+
+.rounded-list a{
+    position: relative;
+    display: block;
+    padding: .4em .4em .4em 2em;
+    *padding: .4em;
+    margin: .5em 0;
+    font: 15px 'trebuchet MS', 'lucida sans';
+    text-align: left;
+    color: #00436F;
+    text-decoration: none;
+    border-radius: .3em;
+    transition: all .3s ease-out;  
+    width: 271px;
+	margin-left: 32px;
+	
+}
+
+.rounded-list a:hover{
+ /*   background: #eee; */
+}
+
+.rounded-list a:hover:before{
+    /* transform: rotate(360deg);  */
+}
+
+
+.rounded-list a:before{
+    content: counter(li);
+    counter-increment: li;
+    position: absolute; 
+    left: -1.3em;
+    top: 50%;
+    margin-top: -1.3em;
+    background: #87ceeb;
+    height: 2em;
+    width: 2em;
+    line-height: 2em;
+    border: .3em solid #fff;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 2em;
+    transition: all .3s ease-out;
+}
+.e a, .e :hover {
+    color: #444;
+    text-decoration: none;
+
+}
+
+
+/*Termina clases para pasos de ayuda*/
+/*.oculto {
+
+}*/
