@@ -2410,5 +2410,32 @@ function Desactivar_combustible_para_todos_automatico()
 				)) > 120";
 	$query = $this->db->query($q);
 }
+
+	public function obtener_numeracion_vales($cantidad, $fuente) {
+
+		$query = $this->db->query("
+			SELECT 
+				CAST(a.cantidad_solicitada + b.numero_inicial AS INT) inicial,
+				". $cantidad ." + CAST(A.CANTIDAD_SOLICITADA + B.NUMERO_INICIAL AS INT) final
+			FROM tcm_requisicion a
+			JOIN tcm_requisicion_vale b ON a.id_requisicion = b.id_requisicion
+			WHERE a.id_requisicion = (
+				SELECT aa.id_requisicion
+				FROM tcm_requisicion aa
+				WHERE YEAR(aa.fecha) = ". date('Y') ." and aa.id_fuente_fondo = ".$fuente."
+				AND aa.correlativo = (
+					SELECT MAX(aaa.correlativo) 
+					FROM tcm_requisicion aaa
+					WHERE YEAR(aaa.fecha) = ". date('Y') ." and aaa.id_fuente_fondo = ".$fuente."
+				) 
+			)
+		");
+		if ($query->num_rows() > 0) {
+			return $query;
+		}
+		else {
+			return FALSE;
+		}
+	}
 }
 ?>

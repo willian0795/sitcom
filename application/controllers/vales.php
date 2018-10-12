@@ -18,12 +18,11 @@
 	define("GASOLINERA",140); 
 	define("FUENTE_FONDO",119); 
 	define("ACTIVAR_COMBUSTIBLE",205);
+	define("PLANTA", 414);
 	define ("SISTEMA","5"); //ID del sistema
 
 class Vales extends CI_Controller
 {
-
-
 
     function Vales()
 	{
@@ -2631,6 +2630,41 @@ function Combustible_para_todos()
 		echo 'No tiene permisos para acceder';
 	}
 }
+
+/*
+	*	Nombre: ingreso_requisicion_plan
+	*	Objetivo: Cargar la vista de la requisicion plan
+	*	Hecha por: Alberto
+	*	Modificada por: Alberto
+	*	Última Modificación: 12/10/2018
+	*	Observaciones: Ninguna.
+	*/
+	function ingreso_requisicion_planta() {
+		$data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usuario'), PLANTA); /*Verificacion de permiso para crear requisiciones*/
+		$url='vales/requicision_planta';
+		
+		$data['id_modulo']=PLANTA;
+		
+		if($data['id_permiso']!=NULL) {
+			
+			$data['fuente']=$this->vales_model->consultar_fuente_fondo();
+			$data['estado_transaccion']=$estado_transaccion;
+			$data['accion']=$accion;
+
+			pantalla($url, $data);	
+		}
+		else {
+			echo 'No tiene permisos para acceder ';
+		}
+	}
+
+	public function obtener_numeracion_vales() {
+		$numeros = $this->vales_model->obtener_numeracion_vales($this->input->post('cantidad'), $this->input->post('fuente'));
+		
+		if ($numeros) {
+			echo json_encode($numeros->result_array());
+		}
+	}
 
 }
 
