@@ -2524,5 +2524,27 @@ function Desactivar_combustible_para_todos_automatico()
 			return FALSE;
 		}
 	}
+
+	public function insertar_requisicion($formuInfo) {
+		extract($formuInfo);
+		$sentencia="INSERT INTO mtps.tcm_requisicion
+		(fecha, id_seccion, cantidad_solicitada, id_empleado_solicitante, id_fuente_fondo, justificacion, id_empledo_entrega, id_empleado_vistobueno, id_usuario_crea, fecha_creacion, fecha_modificacion, estado, fecha_visto_bueno, fecha_entregado, refuerzo, observaciones, cantidad_entregado, correlativo, asignado, mes, restante_anterior)
+		VALUES( CONCAT_WS(' ', CURDATE(),CURTIME()),'$id_seccion','$cantidad_solicitada','$id_empleado_solicitante', $id_fuente_fondo, '$justificacion', '$id_empleado_solicitante', '$id_empleado_solicitante', $id_usuario, CONCAT_WS(' ', CURDATE(),CURTIME()), CONCAT_WS(' ', CURDATE(),CURTIME()), 3, CONCAT_WS(' ', CURDATE(),CURTIME()), CONCAT_WS(' ', CURDATE(),CURTIME()), 0, '', $cantidad_solicitada, (SELECT max(a.correlativo) + 1 correlativo FROM tcm_requisicion a WHERE YEAR(fecha_creacion) = YEAR(NOW())), $cantidad_solicitada, $mes, 0);";
+		
+		$this->db->query($sentencia);
+		return $this->db->insert_id();
+	}
+
+	public function insertar_liquidacion_planta($id_requisicion, $formuInfo) {
+		extract($formuInfo);
+
+		$sentencia = "INSERT INTO mtps.tcm_liquidacion_planta
+					(id_requisicion, mes_liquidacion, entregados)
+					VALUES($id_requisicion, $mes, $cantidad_solicitada);";
+
+		$this->db->query($sentencia);
+		return $this->db->insert_id();
+	}
+
 }
 ?>

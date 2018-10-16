@@ -20,7 +20,7 @@
 	display: inline-block;
 }
 </style>
-<form name="form_mision" method="post" id="form_mision" action="<?php echo base_url()?>index.php/vales/guardar_requisicion_plan">
+<form name="form_mision" method="post" id="form_mision" action="<?php echo base_url()?>index.php/vales/guardar_requisicion_planta">
     <?=llaveform()?>
 	<div id="wizard" class="swMain">
         <ul>
