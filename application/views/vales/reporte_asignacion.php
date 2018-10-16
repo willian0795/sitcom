@@ -74,25 +74,14 @@
 <br>
 <table cellspacing='0' align='center' class='table_design' id="datos" >
             <thead>
-               <th>
-                   N°
-                </th>
-                <th>
-                   Seccion
-                </th>
-                <th>
-                    Asignado
-                </th>
-                <th>
-                    Entregado
-                </th> 
-                <th>
-                    Consumido
-                </th> 
-                 <th>
-                    Series
-                </th>             
-
+                <th>N°</th>
+                <th>Seccion</th>
+                <th>Sobrante mes anterior</th>
+                <th>Entregado</th> 
+                <th>Disponibles</th>
+                <th>Consumidos</th>
+                <th>Sobrante mes</th> 
+                <th>Series</th>             
             </thead>
             <tbody>
             </tbody>

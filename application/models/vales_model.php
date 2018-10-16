@@ -1712,38 +1712,39 @@ function detalleF($id_consumo=NULL)
 			return $query->result_array();
 	}
 
-function asignacion_reporte($id_seccion='', $id_fuente_fondo="", $fecha_inicio=NULL, $fecha_fin=NULL, $agrupar=NULL)
-        {
-                $fechaF=" rv.mes = DATE_FORMAT(CURDATE(),'%Y%m')        ";
-                                $fuenteF="";
-                                $seccionF="";
-                                if($fecha_inicio !=NULL && $fecha_fin!=NULL){
-
-                                        $fechaF="  rv.mes  BETWEEN DATE_FORMAT(DATE('".$fecha_inicio."'),'%Y%m') AND DATE_FORMAT(DATE('".$fecha_fin."'),'%Y%m')";
-                                }
-                                if($id_seccion!=NULL){
-
-                                        $seccionF=" AND r.id_seccion = ".$id_seccion;
-                                }
-                                if($id_fuente_fondo!=NULL){
-
-                                        $fuenteF=" AND r.id_fuente_fondo = ".$id_fuente_fondo;
-                                }
-
-                                if($agrupar==NULL || $agrupar==2){ //por mes
+	function asignacion_reporte($id_seccion='', $id_fuente_fondo="", $fecha_inicio=NULL, $fecha_fin=NULL, $agrupar=NULL){
+		$queryadds = "";
+        if($fecha_inicio !=NULL && $fecha_fin!=NULL){
+            $queryadds=" lc.mes_liquidacion BETWEEN DATE_FORMAT(DATE('".$fecha_inicio."'),'%Y%m') AND DATE_FORMAT(DATE('".$fecha_fin."'),'%Y%m')";
+        }
+        if($id_seccion!=NULL){ $queryadds .= " AND lc.id_seccion = ".$id_seccion; }
+        //if($id_fuente_fondo!=NULL){ $queryadds .= " AND r.id_fuente_fondo = ".$id_fuente_fondo; }
         
-                                        $selecM="       CONCAT( s.nombre_seccion, ' <br>', f.nombre_fuente_fondo, ' - ',DATE_FORMAT(DATE( CONCAT_WS('-',LEFT(x.mes,4),RIGHT(x.mes,2),'01')),'%M %Y'))  as seccion,";
-                                        $mes ="r.mes";
-
-                                }else{ // por año
-                                        $selecM="       CONCAT( s.nombre_seccion, ' <br>', f.nombre_fuente_fondo, '-', x.mes) as seccion,";
-                                        $mes="LEFT(r.mes,4)";
-
-                                }
-
+        /*if($agrupar==NULL || $agrupar==2){ //por mes
+                $selecM=" CONCAT( s.nombre_seccion, ' <br>', f.nombre_fuente_fondo, ' - ',DATE_FORMAT(DATE( CONCAT_WS('-',LEFT(x.mes,4),RIGHT(x.mes,2),'01')),'%M %Y'))  as seccion,";
+                $mes ="r.mes";
+        }else{ // por año
+                $selecM=" CONCAT( s.nombre_seccion, ' <br>', f.nombre_fuente_fondo, '-', x.mes) as seccion,";
+                $mes="LEFT(r.mes,4)";
+        }*/
 
 
-                        $where= $fechaF.$seccionF.$fuenteF;
+        $this->db->select('lc.mes_liquidacion AS mes,
+        					SUM(lc.sobrantes_anterior) AS sobrantes_anterior, 
+        					SUM(lc.entregados) AS asignado, 
+        					SUM(lc.disponibles) AS disponibles, 
+        					SUM(lc.consumidos) AS consumidos, 
+        					SUM(lc.sobrantes_despues) sobrantes_despues
+        					s.nombre_seccion')
+        			->from('tcm_liquidacion_combustible lc')
+        			->join('org_seccion s', 's.id_seccion = lc.id_seccion')
+        			/*->join('tcm_fuente_fondo f', 'f.id_fuente_fondo = lc.id_fuente_fondo')*/
+        			->where($queryadds)
+        			->group_by('lc.mes_liquidacion');
+
+
+
+                        /*$where= $fechaF.$seccionF.$fuenteF;
                         $query=$this->db->query(" SET lc_time_names = 'es_ES'");                
                         $query=$this->db->query(" SET @row_number:=0;");
                         $q="SELECT
@@ -1774,13 +1775,15 @@ function asignacion_reporte($id_seccion='', $id_fuente_fondo="", $fecha_inicio=N
                                                 r.id_seccion,
                                                 ".$mes." ) as x ON r.id_seccion = x.id_seccion AND ".$mes." = x.mes
                                 WHERE ".$where."        
-                                 GROUP BY r.id_seccion, ".$mes;
-                        //echo $q;
-                        $query=$this->db->query($q);
+                                 GROUP BY r.id_seccion, ".$mes;*/
+
+
+                        
+                        $query=$this->db->get($q);
 
                         return $query->result();
 
-        }
+    }
 
 function consultar_seccion($id_seccion=NULL)
 {
