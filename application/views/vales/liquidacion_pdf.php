@@ -28,8 +28,6 @@
         <thead>
         <tr>
             <th>Oficina</th>
-            <th>Fecha<br> Liquidación</th>
-            <th>Cuota</th>
             <th>Sobrante  <br><?php echo $mesn1;?></th>
             <th>Entregado <br><?php echo $mesn;?></th>  
             <th>Disponibles</th>
@@ -49,8 +47,6 @@
     ?>          
         <tr>
             <td><?php echo $key['seccion']; ?></td>
-            <td><?php echo $key['fecha']; ?></td>
-            <td><?php echo $key['cuota']; ?></td>
             <td><?php echo $key['anterior']; ?></td>
             <td><?php echo $key['entregado']; ?></td>
             <td><?php echo $key['disponibles']; ?></td>
@@ -62,8 +58,6 @@
         ?>
          <tr>
             <td><strong>TOTAL</strong></td>
-            <td></td>
-            <td></td>
             <td> <strong><?php echo $s1;?></strong></td>
             <td> <strong><?php echo $s2;?></strong></td>
             <td> <strong><?php echo $s3;?></strong></td>

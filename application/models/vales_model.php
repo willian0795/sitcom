@@ -1064,7 +1064,9 @@ por lo tanto la logica de niveles se manejara de forma diferente
         }
         if($id_seccion!=NULL){ $queryadds .= " AND lc.id_seccion = ".$id_seccion; }
 
-        $query=$this->db->query("SELECT lc.mes_liquidacion AS mes,
+        SELECT * FROM tcm_requisicion r JOIN tcm_requisicion_vale rv ON rv.id_requisicion = r.id_requisicion JOIN tcm_vale v ON v.id_vale = rv.id_vale WHERE GROUP BY r.mes
+
+        $query=$this->db->query(" SELECT lc.mes_liquidacion AS mes,
         					SUM(lc.sobrantes_anterior) AS sobrantes_anterior, 
         					COALESCE(SUM(lc.entregados),0) AS asignado, 
         					SUM(lc.disponibles) AS disponibles, 
@@ -1843,71 +1845,20 @@ GROUP BY r.mes, r.id_seccion";
    }   
    function liquidacion_mensual2($mes_post=NULL, $fuente=NULL)
    {
-   	$fechaF=" rv.mes = DATE_FORMAT(CURDATE(),'%Y%m')        ";
-                                $fuenteF="";
-                                $seccionF="";
-                                if($mes_post !=NULL && $mes_post!=NULL){
-
-                                        $fechaF=" rv.mes = '".$mes_post."' ";
-                                }
-                                if($id_seccion!=NULL){
-
-                                        $seccionF=" AND r.id_seccion = ".$id_seccion;
-                                }
-                                if($id_fuente_fondo!=NULL){
-
-                                        $fuenteF=" AND r.id_fuente_fondo = ".$id_fuente_fondo;
-                                }
-
-                                if($agrupar==NULL || $agrupar==2){ //por mes
-        
-                                        $selecM="       CONCAT( s.nombre_seccion, ' <br>', f.nombre_fuente_fondo, ' - ',DATE_FORMAT(DATE( CONCAT_WS('-',LEFT(x.mes,4),RIGHT(x.mes,2),'01')),'%M %Y'))  as seccion,";
-                                        $mes ="r.mes";
-
-                                }else{ // por año
-                                        $selecM="       CONCAT( s.nombre_seccion, ' <br>', f.nombre_fuente_fondo, '-', x.mes) as seccion,";
-                                        $mes="LEFT(r.mes,4)";
-
-                                }
-
-                        $where= $fechaF.$seccionF.$fuenteF;
-                        $query=$this->db->query(" SET lc_time_names = 'es_ES'");                
-                        $query=$this->db->query(" SET @row_number:=0;");
-                        $q="SELECT
-                                        @row_number:=@row_number+1 AS row_number, 
-                                        r.id_seccion, 
-                                                        ".$selecM."
-                                        
-                                        x.anterior anterior,
-                                        x.asignado asignado,
-                                        x.entregado,
-                                        x.consumido,
-                                        (x.anterior + x.entregado - x.consumido) AS sobrante,
-                                        GROUP_CONCAT(rv.inicial) as inicial ,
-                                        GROUP_CONCAT(rv.final) as final
-                                FROM tcm_requisicion r 
-                                INNER JOIN tcm_requisicion_vale2 rv ON r.id_requisicion = rv.id_requisicion
-                                INNER JOIN org_seccion s ON s.id_seccion= r.id_seccion
-                                INNER JOIN tcm_vale v ON v.id_vale  = rv.id_vale
-                                INNER JOIN tcm_fuente_fondo f ON f.id_fuente_fondo = r.id_fuente_fondo 
-                                LEFT  JOIN (    SELECT
-                                                (asignado) asignado,
-                                                SUM(cantidad_entregado) entregado,
-                                                (r.restante_anterior) as anterior,
-                                                (COALESCE(cant,0)) AS consumido,
-                                                r.id_seccion, 
-                                                ".$mes." as mes
-                                        FROM
-                                                tcm_requisicion r LEFT JOIN tcm_consumido_mes c ON c.mesc=r.mes AND c.id_fuente_fondo=r.id_fuente_fondo AND c.id_seccion=r.id_seccion
-                                        GROUP BY
-                                                r.id_seccion,
-                                                ".$mes." ) as x ON r.id_seccion = x.id_seccion AND ".$mes." = x.mes
-                                WHERE ".$where."
-                                 GROUP BY r.id_seccion";
-                                 echo $q;
-                        $query=$this->db->query($q);
-
-                        return $query->result();
+   	$query=$this->db->query("SELECT lc.mes_liquidacion AS mes,
+        					'22222222222' AS inicial,
+        					'44444444444' AS final,
+        					SUM(lc.sobrantes_anterior) AS anterior, 
+        					COALESCE(SUM(lc.entregados),0) AS asignado, 
+        					COALESCE(SUM(lc.entregados),0) AS entregado, 
+        					SUM(lc.disponibles) AS disponibles, 
+        					COALESCE(SUM(lc.consumidos),0) AS consumido, 
+        					SUM(lc.sobrantes_despues) sobrante,
+        					CONCAT(s.nombre_seccion) seccion FROM tcm_liquidacion_combustible lc 
+        					JOIN org_seccion s ON s.id_seccion = lc.id_seccion 
+        					WHERE lc.mes_liquidacion = '".$mes."' 
+        					GROUP BY lc.mes_liquidacion, lc.id_seccion");
+	    return $query->result_array();
 
    }
 function name_mes($mes)
