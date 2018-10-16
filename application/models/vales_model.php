@@ -1057,18 +1057,29 @@ por lo tanto la logica de niveles se manejara de forma diferente
 
 	function consumo_seccion_fuente($id_seccion='', $id_fuente_fondo="", $fecha_inicio=NULL, $fecha_fin=NULL, $agrupar=NULL)
 	{
-		/*		$q="SELECT
-                        s.nombre_seccion as seccion,
-                        SUM(rv.cantidad_entregado - rv.cantidad_restante ) AS consumido,
-                        sa.cantidad as asignado
-                    FROM
-                        tcm_requisicion r
-                    INNER JOIN tcm_requisicion_vale rv ON r.id_requisicion = rv.id_requisicion
-                    INNER JOIN org_seccion s ON r.id_seccion = s.id_seccion
-                    INNER JOIN tcm_seccion_asignacion sa ON (s.id_seccion = sa.id_seccion AND r.id_fuente_fondo= sa.id_fuente_fondo)
-                    GROUP BY r.id_seccion "; */
 
-		$fechaF = " DATE_FORMAT(DATE(fecha_factura),'%Y-%m') = DATE_FORMAT(CURDATE(),'%Y-%m')	";
+        $queryadds = "";
+        if($fecha_inicio !=NULL && $fecha_fin!=NULL){
+            $queryadds=" lc.mes_liquidacion BETWEEN DATE_FORMAT(DATE('".$fecha_inicio."'),'%Y%m') AND DATE_FORMAT(DATE('".$fecha_fin."'),'%Y%m')";
+        }
+        if($id_seccion!=NULL){ $queryadds .= " AND lc.id_seccion = ".$id_seccion; }
+
+        $query=$this->db->query("SELECT lc.mes_liquidacion AS mes,
+        					SUM(lc.sobrantes_anterior) AS sobrantes_anterior, 
+        					COALESCE(SUM(lc.entregados),0) AS asignado, 
+        					SUM(lc.disponibles) AS disponibles, 
+        					COALESCE(SUM(lc.consumidos),0) AS consumidos, 
+        					SUM(lc.sobrantes_despues) sobrantes_despues,
+        					0.00 dinero,
+        					'22222222222' AS inicial,
+        					'44444444444' AS final,
+        					CONCAT(s.nombre_seccion) seccion FROM tcm_liquidacion_combustible lc 
+        					JOIN org_seccion s ON s.id_seccion = lc.id_seccion 
+        					WHERE ".$queryadds." 
+        					GROUP BY lc.mes_liquidacion, lc.id_seccion");
+	    return $query->result();
+
+		/*$fechaF = " DATE_FORMAT(DATE(fecha_factura),'%Y-%m') = DATE_FORMAT(CURDATE(),'%Y-%m')	";
 		$fuenteF = "";
 		$seccionF = "";
 		if ($fecha_inicio != NULL && $fecha_fin != NULL) {
@@ -1123,7 +1134,7 @@ por lo tanto la logica de niveles se manejara de forma diferente
 		$query = $this->db->query($q);
 		#echo  $q;
 
-		return $query->result();
+		return $query->result();*/
 	}
 	# Función sumaba asignación de vales por refuerzos 26.10.16
 	/*function consumo_seccion_fuente($id_seccion='', $id_fuente_fondo="", $fecha_inicio=NULL, $fecha_fin=NULL, $agrupar=NULL)

@@ -95,7 +95,7 @@ function grafico (chartData, label) {
                 var graph1 = new AmCharts.AmGraph();
                 graph1.type = "column";
                 graph1.title = "Consumido";
-                graph1.valueField = "consumido";
+                graph1.valueField = "consumidos";
                 graph1.lineAlpha = 0;
                 graph1.fillColors = color1;
                 graph1.fillAlphas = 0.8;
@@ -198,30 +198,51 @@ function grafico2 (chartData, label) {//para el  reporte de asignacion
 
 }
 function tabla (json) {
-                var fila; var asignado = 0; var consumo = 0; var total = 0; 
+                var fila; var sobrantes_anterior = 0; var asignado = 0; var consumo = 0; 
+                var disponibles = 0; 
+                var total = 0; var sobrantes_despues = 0; 
 
             $('#datos tbody').remove();        
             for (i=0;i<json.length;i++) {   
             var n = new Number(json[i].dinero);
+            sobrantes_anterior += parseInt(json[i].sobrantes_anterior);
             asignado += parseInt(json[i].asignado);
-            consumo += parseInt(json[i].consumido);
+            consumo += parseInt(json[i].consumidos);
+            disponibles += parseInt(json[i].disponibles);
+            sobrantes_despues += parseInt(json[i].sobrantes_despues);
             total += n;
              fila= "<tr>" +
-              "<td align='center'>" + json[i].row_number + "</td>" +
+              "<td align='center'>" + (i+1) + "</td>" +
               "<td align='center'>" + json[i].seccion + "</td>" +
+              "<td align='center'>" + json[i].sobrantes_anterior + "</td>" +
               "<td align='center'>" + json[i].asignado + "</td>" +
-              "<td align='center'>" + json[i].consumido + "</td>" +
+              "<td align='center'>" + json[i].disponibles + "</td>" +
+              "<td align='center'>" + json[i].consumidos + "</td>" +
+              "<td align='center'>" + json[i].sobrantes_despues + "</td>" +
               "<td align='center'>$" + n.toFixed(2) + "</td>" +
+              "<td align='center'>"; 
+                var series1=json[i].inicial.split(",");
+                var series2=json[i].final.split(",");
+                    
+                    for (var j= 0; j < series1.length; j++) {
+                        fila+=series1[j]+" - "+ series2[j];
+                        if(j!=series1.length-1){ fila+="<br>"}
+                    }
+
+             fila+= "</td>" +
             "</tr>";    
                 $('#datos').append(fila)    
                 }  
 
-
           fila= "<tr>" +
               "<th align='center' colspan='2'>TOTAL</th>" +
-              "<th align='center'>" + asignado + "</th>" +
+              "<th align='center'>" + sobrantes_anterior.toString() + "</th>" +
+              "<th align='center'>" + asignado.toString() + "</th>" +
+              "<th align='center'>" + disponibles.toString() + "</th>" +
               "<th align='center'>" + consumo + "</th>" +
+              "<th align='center'>" + sobrantes_despues.toString() + "</th>" +
               "<th align='center'>$" + total.toFixed(2) + "</th>" +
+              "<th align='center'></th>" +
             "</tr>";    
                 $('#datos').append(fila)
 }

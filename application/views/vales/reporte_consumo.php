@@ -69,31 +69,23 @@
 <br><br>
 
     <!------------------------------------------Plantilla de carga de grafico y tabla----------------------------------------------------------------------- -->
-<div style="height:400px; background:#FFFFFF;" id="chartdiv">
-</div>
-<br>
-<table cellspacing='0' align='center' class='table_design' id="datos" >
+    <table cellspacing='0' align='center' class='table_design' id="datos" >
             <thead>
-               <th>
-                   N°
-                </th>
-                <th>
-                   Seccion
-                </th>
-                <th>
-                    Asignado
-                </th>
-                <th>
-                    Consumido
-                </th> 
-                 <th>
-                    Consumido ($)
-                </th>             
-
+               <th>N°</th>
+                <th>Seccion</th>
+                <th>Sobrante anterior</th>
+                <th>Asignado</th>
+                <th>Disponible</th> 
+                <th>Consumido</th>
+                <th>Sobrante actual</th>
+                <th>Consumido ($)</th>             
+                <th>Series</th>  
             </thead>
             <tbody>
             </tbody>
-        </table>
+        </table><br>
+<div style="height: 700px; background:#FFFFFF;" id="chartdiv">
+</div>
 
 
     <!----------------------------------------------------------------------------------------------------------------- -->
