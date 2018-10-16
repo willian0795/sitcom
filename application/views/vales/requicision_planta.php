@@ -42,26 +42,9 @@
             <p>
                 <label for="cantidad_solicitada" id="lcantidad_solicitada">Cantidad Solicitada </label>
                 <input style="width:100px;" type="text" tabindex="1" id="cantidad_solicitada" name="cantidad_solicitada"/>
-               
-                </p>
-                
-                <br>
-                
-                <p>
 
-                <label for="mes" id="lmes">Para el mes de </label>
-                <select class="select" style="width:200px;" tabindex="5" id="mes" name="mes" onChange="cargar_vehiculo()">
-                    <?php
-                        foreach($m as $val) {
-                    ?>
-                       <option value="<?php echo $val['mes'] ?>"><?php echo strtoupper($val['mes_nombre']) ?></option>
-                    <?php   
-                        }
-                    ?>
-                </select>
-            
                 <label for="id_fuente_fondo" id="lid_fuente_fondo">Fuente de Financiamento </label>
-                <select class="select" style="width:200px;" tabindex="2" id="id_fuente_fondo" name="id_fuente_fondo" onChange="cargar_vehiculo()">
+                <select class="select" style="width:200px;" tabindex="2" id="id_fuente_fondo" name="id_fuente_fondo" >
 
                     <?php
                         foreach($fuente as $val) {
@@ -71,6 +54,24 @@
                         }
                     ?>
                 </select>
+               
+            </p>
+            
+            <br>
+            
+            <p>
+
+                <label for="mes" id="lmes">Para el mes de </label>
+                <select class="select" style="width:200px;" tabindex="5" id="mes" name="mes" >
+                    <?php
+                        foreach($m as $val) {
+                    ?>
+                       <option value="<?php echo $val['mes'] ?>"><?php echo strtoupper($val['mes_nombre']) ?></option>
+                    <?php   
+                        }
+                    ?>
+                </select>
+                        
             </p>
             
             <br>
@@ -89,6 +90,9 @@
                 <label for="lb2" id="lrefuezo" >Número Final: </label>
                 <input type="hidden" name="numero_final" id="numero_final">
                 <strong id="lb2"></strong>
+
+                <input type="hidden" name="vale" id="vale">
+                <input type="hidden" name="restante" id="restante">
             </p>
       	</div>
     </div>

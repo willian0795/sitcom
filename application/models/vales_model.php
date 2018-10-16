@@ -2416,12 +2416,17 @@ function Desactivar_combustible_para_todos_automatico()
 
 	public function obtener_numeracion_vales($cantidad, $fuente) {
 
+		$this->db->reconnect();
+
 		$query = $this->db->query("
 			SELECT 
 				CAST(a.cantidad_solicitada + b.numero_inicial AS INT) inicial,
-				". $cantidad ." + CAST(A.CANTIDAD_SOLICITADA + B.NUMERO_INICIAL AS INT) final
+				". $cantidad ." + CAST(A.CANTIDAD_SOLICITADA + B.NUMERO_INICIAL AS INT) final,
+				c.id_vale,
+				c.cantidad_restante
 			FROM tcm_requisicion a
 			JOIN tcm_requisicion_vale b ON a.id_requisicion = b.id_requisicion
+			JOIN tcm_vale c ON c.id_vale = b.id_vale
 			WHERE a.id_requisicion = (
 				SELECT aa.id_requisicion
 				FROM tcm_requisicion aa
@@ -2432,11 +2437,79 @@ function Desactivar_combustible_para_todos_automatico()
 					WHERE YEAR(aaa.fecha) = ". date('Y') ." and aaa.id_fuente_fondo = ".$fuente."
 				) 
 			)
+			AND (". $cantidad ." + CAST(a.cantidad_solicitada + b.numero_inicial AS INT)) <= c.final
 		");
-		if ($query->num_rows() > 0) {
-			return $query;
+
+		if(is_object($query)){
+			if ($query->num_rows() > 0) {
+				return $query;
+			}
+			else {
+				return FALSE;
+			}
+		}else{
+			return FALSE;
 		}
-		else {
+	}
+
+	public function obtener_cantidad_vales($cantidad, $fuente) {
+		$query = $this->db->query("
+			SELECT 
+				CAST(a.cantidad_solicitada + b.numero_inicial AS INT) inicial,
+				c.cantidad_restante - 1 + CAST(a.cantidad_solicitada + b.numero_inicial AS INT) final,
+				c.id_vale, c.cantidad_restante - 1 restante
+			FROM tcm_requisicion a
+			JOIN tcm_requisicion_vale b ON a.id_requisicion = b.id_requisicion
+			JOIN tcm_vale c ON c.id_vale = b.id_vale
+			WHERE a.id_requisicion = (
+				SELECT aa.id_requisicion
+				FROM tcm_requisicion aa
+				WHERE YEAR(aa.fecha) = ". date('Y') ." and aa.id_fuente_fondo = ".$fuente."
+				AND aa.correlativo = (
+					SELECT MAX(aaa.correlativo) 
+					FROM tcm_requisicion aaa
+					WHERE YEAR(aaa.fecha) = ". date('Y') ." and aaa.id_fuente_fondo = ".$fuente."
+				) 
+			)
+			AND (". $cantidad ." + CAST(a.cantidad_solicitada + b.numero_inicial AS INT)) <= c.final
+		");
+
+		if(is_object($query)){
+			if ($query->num_rows() > 0) {
+				return $query;
+			}
+			else {
+				return FALSE;
+			}
+		}else{
+			return FALSE;
+		}
+	}
+
+	public function obtener_cantidad_vales_nuevos($cantidad, $fuente) {
+		$query = $this->db->query("
+			SELECT 
+				a.inicial,
+				CAST(a.inicial + ". $cantidad ." AS INT) final,
+				a.id_vale,
+				a.cantidad_restante - ". $cantidad ." restante
+			FROM tcm_vale a
+			WHERE a.id_vale = (
+				SELECT MIN(aa.id_vale)
+				FROM tcm_vale aa
+				WHERE aa.cantidad_restante > 0
+				AND aa.tipo_vehiculo = " .$fuente. "
+			)
+		");
+
+		if(is_object($query)){
+			if ($query->num_rows() > 0) {
+				return $query;
+			}
+			else {
+				return FALSE;
+			}
+		}else{
 			return FALSE;
 		}
 	}

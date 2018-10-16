@@ -2631,7 +2631,7 @@ function Combustible_para_todos()
 	}
 }
 
-/*
+	/*
 	*	Nombre: ingreso_requisicion_plan
 	*	Objetivo: Cargar la vista de la requisicion plan
 	*	Hecha por: Alberto
@@ -2650,6 +2650,7 @@ function Combustible_para_todos()
 			$data['fuente']=$this->vales_model->consultar_fuente_fondo();
 			$data['estado_transaccion']=$estado_transaccion;
 			$data['accion']=$accion;
+			$data['m']=$this->vales_model->meses_requisicion();
 
 			pantalla($url, $data);	
 		}
@@ -2657,13 +2658,98 @@ function Combustible_para_todos()
 			echo 'No tiene permisos para acceder ';
 		}
 	}
-
+	
+	/*
+	*	Nombre: obtener_numeracion_vales
+	*	Objetivo: obtienen los numeros de los vales haciendo uso del metodo PEPS
+	*	Hecha por: Alberto
+	*	Modificada por: Alberto
+	*	Última Modificación: 15/10/2018
+	*	Observaciones: Ninguna.
+	*/
 	public function obtener_numeracion_vales() {
 		$numeros = $this->vales_model->obtener_numeracion_vales($this->input->post('cantidad'), $this->input->post('fuente'));
 		
 		if ($numeros) {
-			echo json_encode($numeros->result_array());
+
+			echo json_encode($numeros->row_array());
+
+		} else {
+			$numeros = $this->vales_model->obtener_cantidad_vales($this->input->post('cantidad'), $this->input->post('fuente'));
+
+			if ($numeros) {
+				
+				$numeros_ar = $numeros->row_array();
+				
+				$numeros = $this->vales_model->obtener_cantidad_vales_nuevos($this->input->post('cantidad'), $this->input->post('fuente'));
+
+				if ($numeros) {
+
+					$numeros_arr = $numeros->row_array();
+
+					if ($numeros_ar['restante'] < 0) {
+
+						$json = array(
+							0 => $numeros_ar, 
+							1 => $numeros_arr
+						);
+
+						echo json_encode($json);
+					
+					} else {
+						
+						echo json_encode($numeros_arr);
+
+					}
+				}
+
+			}
 		}
+	}
+
+	/*
+	*	Nombre: guardar_requisicion_planta
+	*	Objetivo: guarda la requisicion de la planta
+	*	Hecha por: Alberto
+	*	Modificada por: Alberto
+	*	Última Modificación: 15/10/2018
+	*	Observaciones: Ninguna.
+	*/
+	public function guardar_requisicion_planta() {
+		
+		$data = $this->seguridad_model->consultar_permiso($this->session->userdata('id_usuario'), PLANTA); /*Verificacion de permiso */		
+		
+		if($data['id_permiso'] != NULL) {
+
+			$this->db->trans_start();			
+			$id_usuario=$this->session->userdata('id_usuario');
+			$id_empleado_solicitante=$this->vales_model->get_id_empleado($this->session->userdata('nr'));
+
+			$post = array(
+				'id_seccion' => null,
+				'cantidad_solicitada' => $this->input->post('cantidad_solicitada'),
+				'id_fuente_fondo' => $this->input->post('id_fuente_fondo'),
+				'justificacion' => $this->input->post('justificacion'),
+				'refuerzo' => 0,
+				'mes' => date('Ym'),
+				'asignado' => 0,
+				'restante' => 0
+			);
+			
+			$id_requisicion=$this->vales_model->guardar_requisicion($post, $id_usuario, $id_empleado_solicitante);
+
+			bitacora("Se guardó una requicisión  con id_requisicion ".$id_requisicion,3);
+
+			$this->db->trans_complete();
+			$tr=($this->db->trans_status()===FALSE)?0:1;
+			ir_a('index.php/vales/ingreso_requisicion_planta/'.$tr.'/1');
+
+		}else {
+
+			echo 'No tiene permisos para acceder';
+
+		}
+
 	}
 
 }
