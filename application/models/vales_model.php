@@ -2490,8 +2490,8 @@ function Desactivar_combustible_para_todos_automatico()
 		extract($formuInfo);
 
 		$sentencia = "INSERT INTO mtps.tcm_liquidacion_planta
-					(id_requisicion, mes_liquidacion, entregados)
-					VALUES($id_requisicion, $mes, $cantidad_solicitada);";
+					(id_requisicion, mes_liquidacion, entregados, id_fuente_fondo)
+					VALUES($id_requisicion, $mes, $cantidad_solicitada, $id_fuente_fondo);";
 
 		$this->db->query($sentencia);
 		return $this->db->insert_id();
