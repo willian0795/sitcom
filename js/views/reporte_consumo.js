@@ -197,54 +197,164 @@ function grafico2 (chartData, label) {//para el  reporte de asignacion
                 chart.write("chartdiv");
 
 }
+
+function encabezado_tabla(titulo){
+  var mes = parseInt(titulo.substr(4));
+  if(titulo != ""){
+    titulo = "Mes: "+meses[mes]+" "+titulo.substr(0,4);
+  }else{
+    titulo = "RESUMEN TOTAL DE EN CADA MES";
+  }
+  var fila = "<table cellspacing='0' align='center' class='table_design'>"+
+  "<thead>"+
+  "<tr><th colspan='9'>"+titulo+"</th></tr>"+
+     "<tr><th>N°</th>"+
+      "<th>Seccion</th>"+
+      "<th>Sobrante anterior</th>"+
+      "<th>Asignado</th>"+
+      "<th>Disponible</th>"+ 
+      "<th>Consumido</th>"+
+      "<th>Sobrante actual</th>"+
+      "<th>Consumido ($)</th>"+             
+      "<th width='160px'>Series</th></tr>"+  
+  "</thead>"+
+  "<tbody>";
+  return fila;
+}
+
+function encabezado_tabla2(titulo){
+    titulo = "RESUMEN TOTAL POR CADA MES";
+  var fila = "<table cellspacing='0' align='center' class='table_design'>"+
+  "<thead>"+
+  "<tr><th colspan='7'>"+titulo+"</th></tr>"+
+     "<tr>"+
+      "<th>MES</th>"+
+      "<th>Sobrante anterior</th>"+
+      "<th>Asignado</th>"+
+      "<th>Disponible</th>"+ 
+      "<th>Consumido</th>"+
+      "<th>Sobrante actual</th>"+
+      "<th>Consumido ($)</th>"+             
+      "</tr>"+  
+  "</thead>"+
+  "<tbody>";
+  return fila;
+}
+
+function pie_tabla(sobrantes_anterior, asignado, consumo, disponibles, sobrantes_despues, total){
+  var fila = "<tr>" +
+        "<th align='center' colspan='2'>TOTAL</th>" +
+        "<th align='center'>" + sobrantes_anterior.toString() + "</th>" +
+        "<th align='center'>" + asignado.toString() + "</th>" +
+        "<th align='center'>" + disponibles.toString() + "</th>" +
+        "<th align='center'>" + consumo + "</th>" +
+        "<th align='center'>" + sobrantes_despues.toString() + "</th>" +
+        "<th align='center'>$" + total.toFixed(2) + "</th>" +
+        "<th align='center'></th>" +
+      "</tr>";
+    return fila+"</tbody></table><br><br>";
+}
+
+function pie_tabla2(sobrantes_anterior, asignado, consumo, disponibles, sobrantes_despues, total){
+  var fila = "<tr>" +
+        "<th align='center'>TOTAL</th>" +
+        "<th align='center'>" + sobrantes_anterior.toString() + "</th>" +
+        "<th align='center'>" + asignado.toString() + "</th>" +
+        "<th align='center'>" + disponibles.toString() + "</th>" +
+        "<th align='center'>" + consumo + "</th>" +
+        "<th align='center'>" + sobrantes_despues.toString() + "</th>" +
+        "<th align='center'>$" + total.toFixed(2) + "</th>" +
+      "</tr>";
+    return fila+"</tbody></table><br><br>";
+}
+
+function subtotal_tabla(titulo,sobrantes_anterior, asignado, consumo, disponibles, sobrantes_despues, total){
+  mes = parseInt(titulo.substr(4));
+  titulo = "Mes: "+meses[mes]+" "+titulo.substr(0,4);
+  var fila = "<tr>" +
+        "<td align='center'>"+titulo+"</td>" +
+        "<td align='center'>" + sobrantes_anterior.toString() + "</td>" +
+        "<td align='center'>" + asignado.toString() + "</td>" +
+        "<td align='center'>" + disponibles.toString() + "</td>" +
+        "<td align='center'>" + consumo + "</td>" +
+        "<td align='center'>" + sobrantes_despues.toString() + "</td>" +
+        "<td align='center'>$" + total.toFixed(2) + "</td>" +
+      "</tr>";
+    return fila;
+}
+
+var meses = ["","Enero", "Febrero", "Marzo","Abril","Mayo","Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
 function tabla (json) {
-                var fila; var sobrantes_anterior = 0; var asignado = 0; var consumo = 0; 
-                var disponibles = 0; 
-                var total = 0; var sobrantes_despues = 0; 
+  var fila = "";  var subtotales = "";
+  var sobrantes_anterior = 0, asignado = 0, consumo = 0, disponibles = 0, total = 0, sobrantes_despues = 0; 
+  var sobrantes_anterior2 = 0, asignado2 = 0, consumo2 = 0, disponibles2 = 0, total2 = 0, sobrantes_despues2 = 0; 
 
-            $('#datos tbody').remove();        
-            for (i=0;i<json.length;i++) {   
-            var n = new Number(json[i].dinero);
-            sobrantes_anterior += parseInt(json[i].sobrantes_anterior);
-            asignado += parseInt(json[i].asignado);
-            consumo += parseInt(json[i].consumidos);
-            disponibles += parseInt(json[i].disponibles);
-            sobrantes_despues += parseInt(json[i].sobrantes_despues);
-            total += n;
-             fila= "<tr>" +
-              "<td align='center'>" + (i+1) + "</td>" +
-              "<td align='center'>" + json[i].seccion + "</td>" +
-              "<td align='center'>" + json[i].sobrantes_anterior + "</td>" +
-              "<td align='center'>" + json[i].asignado + "</td>" +
-              "<td align='center'>" + json[i].disponibles + "</td>" +
-              "<td align='center'>" + json[i].consumidos + "</td>" +
-              "<td align='center'>" + json[i].sobrantes_despues + "</td>" +
-              "<td align='center'>$" + n.toFixed(2) + "</td>" +
-              "<td align='center'>"; 
-                var series1=json[i].inicial.split(",");
-                var series2=json[i].final.split(",");
-                    
-                    for (var j= 0; j < series1.length; j++) {
-                        fila+=series1[j]+" - "+ series2[j];
-                        if(j!=series1.length-1){ fila+="<br>"}
-                    }
+  $('#datos').html('');
 
-             fila+= "</td>" +
-            "</tr>";    
-                $('#datos').append(fila)    
-                }  
+  var mesant = "";    
+  
+  for (i=0;i<json.length;i++) {
+    
+    if(i == 0){
+        fila +=encabezado_tabla(json[i].mes);
+        mesant = json[i].mes;
+    }else if(mesant != json[i].mes){
+        fila += pie_tabla(sobrantes_anterior2, asignado2, consumo2, disponibles2, sobrantes_despues2, total2);
+        subtotales += subtotal_tabla(json[i].mes, sobrantes_anterior2, asignado2, consumo2, disponibles2, sobrantes_despues2, total2);
+        fila +=encabezado_tabla(json[i].mes);
+        mesant = json[i].mes;
+        sobrantes_anterior2 = 0; asignado2 = 0; consumo2 = 0; disponibles2 = 0; total2 = 0; sobrantes_despues2 = 0;
+    }
 
-          fila= "<tr>" +
-              "<th align='center' colspan='2'>TOTAL</th>" +
-              "<th align='center'>" + sobrantes_anterior.toString() + "</th>" +
-              "<th align='center'>" + asignado.toString() + "</th>" +
-              "<th align='center'>" + disponibles.toString() + "</th>" +
-              "<th align='center'>" + consumo + "</th>" +
-              "<th align='center'>" + sobrantes_despues.toString() + "</th>" +
-              "<th align='center'>$" + total.toFixed(2) + "</th>" +
-              "<th align='center'></th>" +
-            "</tr>";    
-                $('#datos').append(fila)
+    var n = new Number(json[i].dinero);
+    sobrantes_anterior += parseInt(json[i].sobrantes_anterior);
+    asignado += parseInt(json[i].asignado);
+    consumo += parseInt(json[i].consumidos);
+    disponibles += parseInt(json[i].disponibles);
+    sobrantes_despues += parseInt(json[i].sobrantes_despues);
+    total += n;
+
+    sobrantes_anterior2 += parseInt(json[i].sobrantes_anterior);
+    asignado2 += parseInt(json[i].asignado);
+    consumo2 += parseInt(json[i].consumidos);
+    disponibles2 += parseInt(json[i].disponibles);
+    sobrantes_despues2 += parseInt(json[i].sobrantes_despues);
+    total2 += n;
+
+    fila+= "<tr>" +
+      "<td align='center'>" + (i+1) + "</td>" +
+      "<td align='center'>" + json[i].seccion + "</td>" +
+      "<td align='center'>" + json[i].sobrantes_anterior + "</td>" +
+      "<td align='center'>" + json[i].asignado + "</td>" +
+      "<td align='center'>" + json[i].disponibles + "</td>" +
+      "<td align='center'>" + json[i].consumidos + "</td>" +
+      "<td align='center'>" + json[i].sobrantes_despues + "</td>" +
+      "<td align='center'>$" + n.toFixed(2) + "</td>" +
+      "<td align='center'>";
+
+      var series1=json[i].inicial.split(",");
+      var series2=json[i].final.split(",");
+          
+      for (var j= 0; j < series1.length; j++) {
+          fila+=series1[j]+" - "+ series2[j];
+          if(j!=series1.length-1){ fila+="<br>"}
+      }
+     fila+= "</td>" +
+    "</tr>";
+
+    if((i+1) == (json.length)){
+        fila += pie_tabla(sobrantes_anterior2, asignado2, consumo2, disponibles2, sobrantes_despues2, total2);
+        subtotales += subtotal_tabla(json[i].mes, sobrantes_anterior2, asignado2, consumo2, disponibles2, sobrantes_despues2, total2);
+        mesant = json[i].mes;
+    }   
+  }
+
+  fila +=encabezado_tabla2('');
+  fila += subtotales;
+  fila += pie_tabla2(sobrantes_anterior, asignado, consumo, disponibles, sobrantes_despues, total);
+
+  $('#datos').append(fila);
 }
 
 function tabla1 (json) {

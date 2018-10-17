@@ -2282,7 +2282,17 @@ function liquidacion_pdf()
 
 				$data['l']=$this->vales_model->liquidacion_mensual2($mes, $id_fuente_fondo);	
 				$html = $this->load->view('vales/liquidacion_pdf', $data, true); /*Seleccionamos la vista que se convertirá en pdf*/
-				$this->mpdf->mPDF('utf-8','letter-L',0, '', 4, 4, 6, 6, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
+				$this->mpdf->mPDF('utf-8','letter-L',0, '', 20, 20, 15, 17, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
+
+				$pie = '<table width="100%" style="font-size: 11px; font-weight: bold;">
+				    <tr>
+				        <td width="40%">Generada por: '.$this->session->userdata('nombre').'</td>
+				        <td width="40%">Fecha y hora de generación: {DATE d/m/Y - h:i A}</td>
+				        <td width="20%" align="right">{PAGENO} de {nbpg} páginas</td>
+				    </tr>
+					</table>';
+					$this->mpdf->setHTMLFooter($pie);
+
 			}else{ //liquidacion por seccion
 					//$mes2=$mes1;
 					//$mes1=$mes;				
@@ -2323,7 +2333,7 @@ function liquidacion_pdf()
 				echo $html;
 			}elseif ($salida==1) { //PDF
 
-				$stylesheet = file_get_contents('css/style-base.css'); /*Selecionamos la hoja de estilo del pdf*/
+				$stylesheet = file_get_contents('css/bootstrap2.min.css'); /*Selecionamos la hoja de estilo del pdf*/
 				$this->mpdf->WriteHTML($stylesheet,1); /*lo escribimos en el pdf*/
 				$this->mpdf->WriteHTML($html,2); /*la escribimos en el pdf*/
 

@@ -81,7 +81,7 @@
                 <th>Disponibles</th>
                 <th>Consumidos</th>
                 <th>Sobrante mes</th> 
-                <th>Series</th>             
+                <th style="width: 200px;">Series</th>             
             </thead>
             <tbody>
             </tbody>

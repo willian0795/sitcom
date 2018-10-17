@@ -3,36 +3,37 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <?php if($base){
-     echo '<link href="'.base_url().'/css/style-base.css" rel="stylesheet" type="text/css" />';
+     echo '<link href="'.base_url().'/css/bootstrap2.min.css" rel="stylesheet" type="text/css" />';
  } ?>
 </head>
 <body>
-    <table align="center" border="0" cellspacing="0" style="width:100%;">
-        <tr>
-            <td align="left" id="imagen">
-                <img src="<?php if($base){ echo base_url();} ?>img/mtps_report2.jpg" width="175" height="106" />
+
+    <table style="width: 100%;">
+        <tr style="font-size: 20px; vertical-align: middle; font-family: "Poppins", sans-serif;">
+            <td width="110px"><img src="<?php if($base){ echo base_url();} ?>img/logo_izquierdo.jpg" width="110px"></td>
+            <td align="center" style="font-size: 13px; font-weight: bold; line-height: 1.3;">
+                <h6>MINISTERIO DE TRABAJO Y PREVISIÓN SOCIAL</h6>
+                <h6>DEPARTAMENTO DE SERVICIOS GENERALES</h6>
+                <h6>REPORTE DE VALES DE COMBUSTIBLE</h6>
             </td>
-            <td align="right">
-                <h3>REPORTE DE VALES DE COMBUSTIBLE</h3>
-                <h6>Fecha: <strong><?php echo date('d-m-Y') ?></strong> </h6>
-            </td>
+            <td width="110px"><img src="<?php if($base){ echo base_url();} ?>img/logo_derecho.jpg"  width="110px"></td>
         </tr>
-        <tr>
-        	<td colspan="2" align="center">
-            	<strong id="titulo">Liquidacion del mes de <?php echo $mesn ?></strong>
-            </td>
-        </tr>
-  	</table>
+    </table>
     <br>
-    <table align="center"   cellspacing="0" class='table_design'>    
+    <table align="center" border="1" cellspacing="0" class='table_design' width="100%">    
         <thead>
         <tr>
-            <th>Oficina</th>
-            <th>Sobrante  <br><?php echo $mesn1;?></th>
-            <th>Entregado <br><?php echo $mesn;?></th>  
-            <th>Disponibles</th>
-            <th>Consumidos<br> <?php echo $mesn;?></th>
-            <th>Sobrantes<br>  <?php echo $mesn;?> </th>                                                    
+            <th colspan="6" align="center" style="padding: 5px; font-size: 16px;">
+                Liquidación del mes de <?php echo $mesn ?>
+            </th>
+        </tr>
+        <tr>
+            <th style="width: 400px;" align="center">Oficina</th>
+            <th align="center">Sobrante  <br><?php echo ucwords(mb_strtolower($mesn1));?></th>
+            <th align="center">Entregado <br><?php echo $mesn;?></th>  
+            <th align="center">Disponibles</th>
+            <th align="center">Consumidos<br> <?php echo $mesn;?></th>
+            <th align="center">Sobrante<br>  <?php echo $mesn;?> </th>                                                    
         </tr>
         </thead>
         <tbody> 
@@ -46,23 +47,23 @@
         $s5+=$key['sobrante'];
     ?>          
         <tr>
-            <td><?php echo $key['seccion']; ?></td>
-            <td><?php echo $key['anterior']; ?></td>
-            <td><?php echo $key['entregado']; ?></td>
-            <td><?php echo $key['disponibles']; ?></td>
-            <td><?php echo $key['consumido']; ?></td>
-            <td><?php echo $key['sobrante']; ?></td>                                 
+            <td style="padding: 5px;"><?php echo $key['seccion']; ?></td>
+            <td style="padding: 5px;"><?php echo $key['anterior']; ?></td>
+            <td style="padding: 5px;"><?php echo $key['entregado']; ?></td>
+            <td style="padding: 5px;"><?php echo $key['disponibles']; ?></td>
+            <td style="padding: 5px;"><?php echo $key['consumido']; ?></td>
+            <td style="padding: 5px;"><?php echo $key['sobrante']; ?></td>                                 
         </tr>
     <?php 
             }
         ?>
          <tr>
-            <td><strong>TOTAL</strong></td>
-            <td> <strong><?php echo $s1;?></strong></td>
-            <td> <strong><?php echo $s2;?></strong></td>
-            <td> <strong><?php echo $s3;?></strong></td>
-            <td> <strong><?php echo $s4;?></strong></td>
-            <td> <strong><?php echo $s5;?></strong></td>                             
+            <th style="padding: 5px;"><strong>TOTAL</strong></th>
+            <th style="padding: 5px;"> <strong><?php echo $s1;?></strong></th>
+            <th style="padding: 5px;"> <strong><?php echo $s2;?></strong></th>
+            <th style="padding: 5px;"> <strong><?php echo $s3;?></strong></th>
+            <th style="padding: 5px;"> <strong><?php echo $s4;?></strong></th>
+            <th style="padding: 5px;"> <strong><?php echo $s5;?></strong></th>                             
         </tr>          
     </tbody>
     </table>

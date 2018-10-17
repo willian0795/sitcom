@@ -13,7 +13,7 @@
 </section>
 
 
-<form name="filtro" method="post" id="filtro" action="<? echo base_url()?>index.php/vales/consumo_pdf" target="_blank">
+<form name="filtro" method="post" id="filtro" action="<?php echo base_url(); ?>index.php/vales/consumo_pdf" target="_blank">
 
             <p> 
                 <label for="start" >Fecha Inicio:</label><input id="start" name="start" style="width: 200px" tabindex="1"/>
@@ -69,21 +69,9 @@
 <br><br>
 
     <!------------------------------------------Plantilla de carga de grafico y tabla----------------------------------------------------------------------- -->
-    <table cellspacing='0' align='center' class='table_design' id="datos" >
-            <thead>
-               <th>N°</th>
-                <th>Seccion</th>
-                <th>Sobrante anterior</th>
-                <th>Asignado</th>
-                <th>Disponible</th> 
-                <th>Consumido</th>
-                <th>Sobrante actual</th>
-                <th>Consumido ($)</th>             
-                <th>Series</th>  
-            </thead>
-            <tbody>
-            </tbody>
-        </table><br>
+    <div id="datos">
+    </div>
+    <br>
 <div style="height: 700px; background:#FFFFFF;" id="chartdiv">
 </div>
 

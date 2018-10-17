@@ -1058,27 +1058,48 @@ por lo tanto la logica de niveles se manejara de forma diferente
 	function consumo_seccion_fuente($id_seccion='', $id_fuente_fondo="", $fecha_inicio=NULL, $fecha_fin=NULL, $agrupar=NULL)
 	{
 
-        $queryadds = "";
-        if($fecha_inicio !=NULL && $fecha_fin!=NULL){
-            $queryadds=" lc.mes_liquidacion BETWEEN DATE_FORMAT(DATE('".$fecha_inicio."'),'%Y%m') AND DATE_FORMAT(DATE('".$fecha_fin."'),'%Y%m')";
+        $queryadds = ""; $queryadds2 = "";
+        if($id_seccion!=NULL){
+            $queryadds=" AND lc.id_seccion = '".$id_seccion."' ";
+            $queryadds2=" AND s.id_seccion = '".$id_seccion."' ";
         }
-        if($id_seccion!=NULL){ $queryadds .= " AND lc.id_seccion = ".$id_seccion; }
+        if($id_fuente_fondo!=NULL){
+            $queryadds=" AND lc.id_fuente_fondo = '".$id_fuente_fondo."' ";
+            $queryadds2=" AND f.id_fuente_fondo = '".$id_fuente_fondo."' ";
+        }
 
-        SELECT * FROM tcm_requisicion r JOIN tcm_requisicion_vale rv ON rv.id_requisicion = r.id_requisicion JOIN tcm_vale v ON v.id_vale = rv.id_vale WHERE GROUP BY r.mes
-
-        $query=$this->db->query(" SELECT lc.mes_liquidacion AS mes,
+        $query=$this->db->query("SELECT q2.id_seccion, q2.mes, q2.sobrantes_anterior, q2.asignado, q2.disponibles, q2.consumidos, q2.sobrantes_despues, q2.seccion, 
+							q1.consumido, COALESCE(q1.valor_nominal * q2.consumidos,0) dinero, COALESCE(q1.inicial, '') inicial, COALESCE(q1.final,'') final FROM 
+(SELECT lc.id_seccion, lc.mes_liquidacion AS mes,
         					SUM(lc.sobrantes_anterior) AS sobrantes_anterior, 
         					COALESCE(SUM(lc.entregados),0) AS asignado, 
         					SUM(lc.disponibles) AS disponibles, 
         					COALESCE(SUM(lc.consumidos),0) AS consumidos, 
         					SUM(lc.sobrantes_despues) sobrantes_despues,
-        					0.00 dinero,
-        					'22222222222' AS inicial,
-        					'44444444444' AS final,
         					CONCAT(s.nombre_seccion) seccion FROM tcm_liquidacion_combustible lc 
         					JOIN org_seccion s ON s.id_seccion = lc.id_seccion 
-        					WHERE ".$queryadds." 
-        					GROUP BY lc.mes_liquidacion, lc.id_seccion");
+        					WHERE lc.mes_liquidacion BETWEEN DATE_FORMAT(DATE('".$fecha_inicio."'),'%Y%m') AND DATE_FORMAT(DATE('".$fecha_fin."'),'%Y%m') ".$queryadds."
+        					GROUP BY lc.mes_liquidacion, lc.id_seccion) AS q2
+LEFT JOIN
+(SELECT
+					s.id_seccion,
+					SUM( cv.cantidad_vales) consumido, 
+					v.valor_nominal valor_nominal, 
+					fecha_factura,
+					GROUP_CONCAT(DISTINCT rv2.inicial) as inicial ,
+          GROUP_CONCAT(DISTINCT rv2.final) as final
+				FROM
+					tcm_consumo_vehiculo cv
+				INNER JOIN tcm_consumo c ON c.id_consumo = cv.id_consumo
+				INNER JOIN tcm_requisicion_vale_consumo_vehiculo rvcv ON rvcv.id_consumo_vehiculo = cv.id_consumo_vehiculo
+				INNER JOIN tcm_requisicion_vale rv ON rv.id_requisicion_vale = rvcv.id_requisicion_vale
+				INNER JOIN tcm_requisicion r ON r.id_requisicion = rv.id_requisicion
+				INNER JOIN tcm_requisicion_vale2 rv2 ON r.id_requisicion = rv2.id_requisicion
+				INNER JOIN org_seccion s ON s.id_seccion= r.id_seccion
+				INNER JOIN tcm_vale v ON v.id_vale  = rv.id_vale
+				INNER JOIN tcm_fuente_fondo f ON f.id_fuente_fondo = r.id_fuente_fondo
+	WHERE fecha_factura BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."' ".$queryadds2."
+GROUP BY r.id_seccion, r.mes) AS q1 ON q1.id_seccion = q2.id_seccion GROUP BY q2.id_seccion, q2.mes ORDER BY q2.mes, q2.seccion");
 	    return $query->result();
 
 		/*$fechaF = " DATE_FORMAT(DATE(fecha_factura),'%Y-%m') = DATE_FORMAT(CURDATE(),'%Y-%m')	";
@@ -1843,7 +1864,7 @@ GROUP BY r.mes, r.id_seccion";
       //  echo "<pre> er  ".$this->db->_error_message()."'<br> $q</pre>";
     return $query->result_array();
    }   
-   function liquidacion_mensual2($mes_post=NULL, $fuente=NULL)
+   function liquidacion_mensual2($mes=NULL, $fuente=NULL)
    {
    	$query=$this->db->query("SELECT lc.mes_liquidacion AS mes,
         					'22222222222' AS inicial,
