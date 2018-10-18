@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
    <?php if($base){
-     echo '<link href="'.base_url().'/css/style-base.css" rel="stylesheet" type="text/css" />';
+     echo '<link href="'.base_url().'/css/bootstrap2.css" rel="stylesheet" type="text/css" />';
  } ?>
 
 </head>
@@ -27,31 +27,31 @@
     </table>
     <br>
 <!---------------------------------------------------------------------------------- -->
-<table align="center" class='table_design' >
+<table align="center" class='table_design' border="1" width="100%">
 
   <thead>
-  <tr>
-    <th>VALES RECIBIDOS <?php echo strtoupper($mesn); ?></th>
-    <th>DEL</th>
-    <th>AL</th>
+  <tr style="background-color: #001434;">
+    <th style="color: white; padding: 4px;">VALES RECIBIDOS <?php echo strtoupper($mesn); ?></th>
+    <th style="color: white; padding: 4px;">DEL</th>
+    <th style="color: white; padding: 4px;">AL</th>
   </tr>
   </thead>
   <tbody>
   <?php foreach ($s_entregada as $key) {  ?>
   <tr>
-    <td aling="center"><?php echo $key['cant']; ?></td>
-    <td><?php echo $key['inicial']; ?></td>
-    <td><?php echo $key['final']; ?></td>
+    <td style="padding: 4px;" aling="center"><?php echo $key['cant']; ?></td>
+    <td style="padding: 4px;"><?php echo $key['inicial']; ?></td>
+    <td style="padding: 4px;"><?php echo $key['final']; ?></td>
   </tr>
   <?php }
       if(sizeof($s_entregada)==0) echo $vacio;
   ?>
   </tbody>
   <thead>
-  <tr>
-    <th>SOBRANTES <?php echo $mesn1; ?></th>
-    <th></th>
-    <th></th>
+  <tr style="background-color: #001434;">
+    <th style="color: white; padding: 4px;">SOBRANTES <?php echo $mesn1; ?></th>
+    <th style="color: white; padding: 4px;"></th>
+    <th style="color: white; padding: 4px;"></th>
   </tr>
   </thead>
   <tbody>
@@ -60,9 +60,9 @@
       $tsolicit+=$key['cant'];
     ?>
   <tr>
-    <td aling="center"><?php echo $key['cant']; ?></td>
-    <td><?php echo $key['inicial']; ?></td>
-    <td><?php echo $key['final']; ?></td>
+    <td style="padding: 4px;" aling="center"><?php echo $key['cant']; ?></td>
+    <td style="padding: 4px;"><?php echo $key['inicial']; ?></td>
+    <td style="padding: 4px;"><?php echo $key['final']; ?></td>
   </tr>
   <?php }
     if(sizeof($s_sobrante)==0) echo $vacio;
@@ -72,63 +72,57 @@
   
 <!---------------------------------------------------------------------------------- -->
   <br>
-  <table align="left" class='table_design' style="width:400px" id="utiliza">
+  <table align="left" class='table_design' style="width:400px" id="utiliza" border="1">
   <thead>
-  <tr>
-    <th colspan="2">DETALLE DE VALES UTILIZADOS</th>
+  <tr style="background-color: #001434;">
+    <th style="color: white; padding: 4px;" colspan="2">DETALLE DE VALES UTILIZADOS</th>
   </tr>
-  <tr>
-    <th>APLICADO EN</th>
-    <th>CANTIDAD</th>
+  <tr style="background-color: #001434;">
+    <th style="color: white; padding: 4px;">APLICADO EN</th>
+    <th style="color: white; padding: 4px;">CANTIDAD</th>
   </tr>
   </thead>
   <tbody>
-  <?php 
-       
-  foreach ($consumo_clase as $key) {  
-            
-
-          $tconsumido+=$key['cant'];
-    ?>
+  <?php foreach ($consumo_clase as $key) { $tconsumido+=$key['cant']; ?>
   <tr>
-    <td><?php echo $key['clase']; ?></td>
-    <td><?php echo $key['cant']; ?></td>
+    <td style="padding: 4px;"><?php echo $key['clase']; ?></td>
+    <td style="padding: 4px;"><?php echo $key['cant']; ?></td>
   </tr>
   <?php }?>
-  <tr>
-    <td aling="center"><strong>TOTAL</strong></td>
-    <td><strong><?php echo $tconsumido; ?></strong></td>
+  <tr style="background-color: #b5dff9;">
+    <th style="padding: 4px;" aling="center"><strong>TOTAL</strong></th>
+    <th style="padding: 4px;"><strong><?php echo $tconsumido; ?></strong></th>
   </tr>
   </tbody>
 </table>
 <br>
 <!---------------------------------------------------------------------------------- -->
-<table align="center" class='table_design'>
+<table align="center" class='table_design' border="1" width="100%">
 
   <thead>
-  <tr>
-    <th>VALES UTILIZADOS</th>
-    <th>DEL</th>
-    <th>AL</th>
+  <tr style="background-color: #001434;">
+    <th style="color: white; padding: 4px;">VALES UTILIZADOS</th>
+    <th style="color: white; padding: 4px;">DEL</th>
+    <th style="color: white; padding: 4px;">AL</th>
   </tr>
   </thead>
   <tbody>
   <?php
      foreach ($s_consumida as $key) {  ?>
   <tr>
-    <td aling="center"><?php echo $key['cant']; ?></td>
-    <td><?php echo $key['inicial']; ?></td>
-    <td><?php echo $key['final']; ?></td>
+    <td style="padding: 4px;" aling="center"><?php echo $key['cant']; ?></td>
+    <td style="padding: 4px;"><?php echo $key['inicial']; ?></td>
+    <td style="padding: 4px;"><?php echo $key['final']; ?></td>
   </tr>
   <?php }
     if(sizeof($s_consumida)==0) echo $vacio;
   ?>
   </tbody>
   <thead>
-  <tr>
-    <th> VALES SOBRANTES</th>
-    <th></th>
-    <th></th>
+  <tr style="background-color: #001434;">
+    <th style="color: white; padding: 4px;"> VALES SOBRANTES</th>
+    <th style="color: white; padding: 4px;"></th>
+    <th style="color: white; padding: 4px;"></th>
   </tr>
   </thead>
   <tbody>
@@ -138,9 +132,9 @@
     $tso+=$key['cant'];
     ?>
   <tr>
-    <td aling="center"><?php echo $key['cant']; ?></td>
-    <td><?php echo $key['inicial']; ?></td>
-    <td><?php echo $key['final']; ?></td>
+    <td style="padding: 4px;" aling="center"><?php echo $key['cant']; ?></td>
+    <td style="padding: 4px;"><?php echo $key['inicial']; ?></td>
+    <td style="padding: 4px;"><?php echo $key['final']; ?></td>
   </tr>
   <?php }
     if(sizeof($s_sobrante2)==0) echo $vacio;
@@ -152,17 +146,17 @@
   
 <!---------------------------------------------------------------------------------- -->
   <br>
-  <table class="table_design" style="width:300px;" id="final">
+  <table class="table_design" style="width:300px;" id="final" border="1">
   <tr>
-    <td>SOBRANTES DE <?php echo strtoupper($mesn);;?></td>
-    <td><?php echo $tso; ?></td>
+    <td style="padding: 4px;">SOBRANTES DE <?php echo strtoupper($mesn);?></td>
+    <td style="padding: 4px;"><?php echo $tso; ?></td>
   </tr>
   <tr>
-    <td>SOLICITADOS PARA <?php echo strtoupper($mesn2);?></td>
-    <td><?php $tsolicit=$asignado-$tso; echo $tsolicit; ?></td>
+    <td style="padding: 4px;">SOLICITADOS PARA <?php echo strtoupper($mesn2);?></td>
+    <td style="padding: 4px;"><?php $tsolicit=$asignado-$tso; echo $tsolicit; ?></td>
   </tr>
-  <tr>
-    <th >TOTAL DE VALES</th>
-    <th ><strong><?php echo $tsolicit+$tso; ?></strong></th>
+  <tr style="background-color: #b5dff9;">
+    <th style="padding: 4px;">TOTAL DE VALES</th>
+    <th style="padding: 4px;"><strong><?php echo $tsolicit+$tso; ?></strong></th>
   </tr>
 </table>

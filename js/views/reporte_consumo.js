@@ -1,59 +1,5 @@
  
-                 function startChange() {
-                        var startDate = start.value(),
-                        endDate = end.value();
-
-                        if (startDate) {
-                            startDate = new Date(startDate);
-                            startDate.setDate(startDate.getDate());
-                            end.min(startDate);
-                        } else if (endDate) {
-                            start.max(new Date(endDate));
-                        } else {
-                            endDate = new Date();
-                            start.max(endDate);
-                            end.min(endDate);
-                        }
-                    }
-
-                    function endChange() {
-                        var endDate = end.value(),
-                        startDate = start.value();
-
-                        if (endDate) {
-                            endDate = new Date(endDate);
-                            endDate.setDate(endDate.getDate());
-                            start.max(endDate);
-                        } else if (startDate) {
-                            end.min(new Date(startDate));
-                        } else {
-                            endDate = new Date();
-                            start.max(endDate);
-                            end.min(endDate);
-                        }
-                    }
-
-                    var start = $("#start").kendoDatePicker({
-                        change: startChange,
-                         format: "dd-MM-yyyy" 
-                    }).data("kendoDatePicker");
-
-                    var end = $("#end").kendoDatePicker({
-                        change: endChange,
-                         format: "dd-MM-yyyy" 
-                    }).data("kendoDatePicker");
-
-                    start.max(end.value());
-                    end.min(start.value());
                 
-                  $("#color1").kendoColorPicker({
-                            value: "#8281d9",
-                            buttons: false
-                        });
-                 $("#color2").kendoColorPicker({
-                            value: "#ff0040",
-                            buttons: false
-                       });
 
 
 function grafico (chartData, label) {
@@ -224,7 +170,7 @@ function encabezado_tabla(titulo){
 
 function encabezado_tabla2(titulo){
     titulo = "RESUMEN TOTAL POR CADA MES";
-  var fila = "<table cellspacing='0' align='center' class='table_design'>"+
+  var fila = "<table border='1' cellspacing='0' align='center' class='table_design'>"+
   "<thead>"+
   "<tr><th colspan='7'>"+titulo+"</th></tr>"+
      "<tr>"+
@@ -286,7 +232,7 @@ function subtotal_tabla(titulo,sobrantes_anterior, asignado, consumo, disponible
 var meses = ["","Enero", "Febrero", "Marzo","Abril","Mayo","Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
 function tabla (json) {
-  var fila = "";  var subtotales = "";
+  var fila = "";  var subtotales = ""; var cont = 0;
   var sobrantes_anterior = 0, asignado = 0, consumo = 0, disponibles = 0, total = 0, sobrantes_despues = 0; 
   var sobrantes_anterior2 = 0, asignado2 = 0, consumo2 = 0, disponibles2 = 0, total2 = 0, sobrantes_despues2 = 0; 
 
@@ -295,17 +241,18 @@ function tabla (json) {
   var mesant = "";    
   
   for (i=0;i<json.length;i++) {
-    
     if(i == 0){
         fila +=encabezado_tabla(json[i].mes);
         mesant = json[i].mes;
     }else if(mesant != json[i].mes){
         fila += pie_tabla(sobrantes_anterior2, asignado2, consumo2, disponibles2, sobrantes_despues2, total2);
-        subtotales += subtotal_tabla(json[i].mes, sobrantes_anterior2, asignado2, consumo2, disponibles2, sobrantes_despues2, total2);
+        subtotales += subtotal_tabla(mesant, sobrantes_anterior2, asignado2, consumo2, disponibles2, sobrantes_despues2, total2);
         fila +=encabezado_tabla(json[i].mes);
         mesant = json[i].mes;
         sobrantes_anterior2 = 0; asignado2 = 0; consumo2 = 0; disponibles2 = 0; total2 = 0; sobrantes_despues2 = 0;
+        cont=0;
     }
+    cont++;
 
     var n = new Number(json[i].dinero);
     sobrantes_anterior += parseInt(json[i].sobrantes_anterior);
@@ -323,7 +270,7 @@ function tabla (json) {
     total2 += n;
 
     fila+= "<tr>" +
-      "<td align='center'>" + (i+1) + "</td>" +
+      "<td align='center'>" + (cont) + "</td>" +
       "<td align='center'>" + json[i].seccion + "</td>" +
       "<td align='center'>" + json[i].sobrantes_anterior + "</td>" +
       "<td align='center'>" + json[i].asignado + "</td>" +
@@ -461,3 +408,58 @@ function tabla3 (json) {
                 $('#datos').append(fila)    
                 }  
 }
+ function startChange() {
+                        var startDate = start.value(),
+                        endDate = end.value();
+
+                        if (startDate) {
+                            startDate = new Date(startDate);
+                            startDate.setDate(startDate.getDate());
+                            end.min(startDate);
+                        } else if (endDate) {
+                            start.max(new Date(endDate));
+                        } else {
+                            endDate = new Date();
+                            start.max(endDate);
+                            end.min(endDate);
+                        }
+                    }
+
+                    function endChange() {
+                        var endDate = end.value(),
+                        startDate = start.value();
+
+                        if (endDate) {
+                            endDate = new Date(endDate);
+                            endDate.setDate(endDate.getDate());
+                            start.max(endDate);
+                        } else if (startDate) {
+                            end.min(new Date(startDate));
+                        } else {
+                            endDate = new Date();
+                            start.max(endDate);
+                            end.min(endDate);
+                        }
+                    }
+
+                    var start = $("#start").kendoDatePicker({
+                        change: startChange,
+                         format: "dd-MM-yyyy" 
+                    }).data("kendoDatePicker");
+
+                    var end = $("#end").kendoDatePicker({
+                        change: endChange,
+                         format: "dd-MM-yyyy" 
+                    }).data("kendoDatePicker");
+
+                    start.max(end.value());
+                    end.min(start.value());
+                
+                  $("#color1").kendoColorPicker({
+                            value: "#8281d9",
+                            buttons: false
+                        });
+                 $("#color2").kendoColorPicker({
+                            value: "#ff0040",
+                            buttons: false
+                       });
