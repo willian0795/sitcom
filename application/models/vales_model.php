@@ -1864,24 +1864,23 @@ GROUP BY r.mes, r.id_seccion";
       //  echo "<pre> er  ".$this->db->_error_message()."'<br> $q</pre>";
     return $query->result_array();
    }   
-   function liquidacion_mensual2($mes=NULL, $fuente=NULL)
-   {
-   	$query=$this->db->query("SELECT lc.mes_liquidacion AS mes,
-        					'22222222222' AS inicial,
-        					'44444444444' AS final,
-        					SUM(lc.sobrantes_anterior) AS anterior, 
-        					COALESCE(SUM(lc.entregados),0) AS asignado, 
-        					COALESCE(SUM(lc.entregados),0) AS entregado, 
-        					SUM(lc.disponibles) AS disponibles, 
-        					COALESCE(SUM(lc.consumidos),0) AS consumido, 
-        					SUM(lc.sobrantes_despues) sobrante,
-        					CONCAT(s.nombre_seccion) seccion FROM tcm_liquidacion_combustible lc 
-        					JOIN org_seccion s ON s.id_seccion = lc.id_seccion 
-        					WHERE lc.mes_liquidacion = '".$mes."' 
-        					GROUP BY lc.mes_liquidacion, lc.id_seccion");
-	    return $query->result_array();
+//    function liquidacion_mensual2($mes=NULL, $fuente=NULL){
+//    	$query=$this->db->query("SELECT lc.mes_liquidacion AS mes,
+//         					'22222222222' AS inicial,
+//         					'44444444444' AS final,
+//         					SUM(lc.sobrantes_anterior) AS anterior, 
+//         					COALESCE(SUM(lc.entregados),0) AS asignado, 
+//         					COALESCE(SUM(lc.entregados),0) AS entregado, 
+//         					SUM(lc.disponibles) AS disponibles, 
+//         					COALESCE(SUM(lc.consumidos),0) AS consumido, 
+//         					SUM(lc.sobrantes_despues) sobrante,
+//         					CONCAT(s.nombre_seccion) seccion FROM tcm_liquidacion_combustible lc 
+//         					JOIN org_seccion s ON s.id_seccion = lc.id_seccion 
+//         					WHERE lc.mes_liquidacion = '".$mes."' 
+//         					GROUP BY lc.mes_liquidacion, lc.id_seccion");
+// 	    return $query->result_array();
 
-   }
+//    }
 function name_mes($mes)
 {
 	   	$query=$this->db->query(" SET lc_time_names = 'es_ES'");

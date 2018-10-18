@@ -2661,6 +2661,7 @@ function Combustible_para_todos()
 			$data['estado_transaccion']=$estado_transaccion;
 			$data['accion']=$accion;
 			$data['m']=$this->vales_model->meses_requisicion();
+			$data['gasolineras']=$this->vales_model->consultar_gasolineras();
 
 			pantalla($url, $data);	
 		}
@@ -2749,17 +2750,59 @@ function Combustible_para_todos()
 			$id_requisicion = $this->vales_model->insertar_requisicion($post);
 
 			bitacora("Se guardó una requicisión  con id_requisicion ".$id_requisicion,3);
-
-			$this->db->trans_complete();
-			$tr=($this->db->trans_status()===FALSE)?0:1;
 			
 			$this->vales_model->buscar_vales($id_requisicion, $this->input->post('id_fuente_fondo'), $this->input->post('cantidad_solicitada'));
-
+			
 			$this->vales_model->insertar_liquidacion_planta($id_requisicion, $post);
 			
 			bitacora("Se autorizó una requicisión  con id_requisicion ".$id_requisicion,4);
 			bitacora("Se entregarón los vales autorizados a la requsición con id_requisicion ".$id_requisicion,4);
 
+			$super = 0;
+			$regular = 0;
+			$diesel = 0;
+
+			switch ($this->input->post('tipo_gas')) {
+				case 1:
+					$super = $this->input->post('valor');
+					break;
+				case 2:
+					$regular = $this->input->post('valor');
+					break;
+				default:
+					$diesel = $this->input->post('valor');
+					break;
+			}
+
+			$factura = array(
+				'fecha_factura'=> $this->input->post('fecha_factura'),
+				'numero_factura'=> $this->input->post('numero_factura'),
+				'valor_super'=> $super,
+				'valor_regular'=> $regular,
+				'valor_diesel'=> $diesel,
+				'id_usuario_crea'=> $this->session->userdata('id_usuario')
+			);
+
+			$id_consumo = $this->vales_model->guardar_factura($factura);
+			 
+			$consumo = array(
+				'id_consumo'=>$id_consumo,
+				'id_vehiculo'=> 0,
+				'actividad_consumo'=> 'Planta Electrica',
+				'tip_gas'=> $this->input->post('tipo_gas'),
+				'id_requisicion_vale'=> $id_requisicion_vale,
+				'cantidad'=> $this->input->post('cantidad_solicitada'),
+				'id_gasolinera'=> $this->input->post('id_gasolinera'),
+				'recibido'=> 1,
+				'bandera'=> 0,
+				'id_seccion'=> 0,
+				'id_herramienta'=> 0
+			);
+			$this->vales_model->buscar_requisicion_vale($consumo);
+			
+			$this->db->trans_complete();
+			$tr=($this->db->trans_status()===FALSE)?0:1;
+			
 			ir_a('index.php/vales/ingreso_requisicion_planta/'.$tr.'/1');
 
 		}else {

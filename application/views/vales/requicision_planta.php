@@ -32,7 +32,16 @@
                         <small>&nbsp;Datos de requisición</small>
                     </span>
                 </a>
-            </li>            
+            </li>
+            <li>
+                <a href="#step-2">
+                    <span class="stepNumber">2<small>do</small></span>
+                    <span class="stepDesc">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Paso<br/>
+                        <small>&nbsp;Datos de Factura</small>
+                    </span>
+                </a>
+            </li>
         </ul>                 
 
         <div id="step-1">	
@@ -95,6 +104,50 @@
                 <input type="hidden" name="restante" id="restante">
             </p>
       	</div>
+
+        <div id="step-2">	
+            <h2 class="StepTitle">Ingresar la factura</h2>
+
+            <p>
+                <label for="id_gasolinera" id="lid_gasolinera" >Proveedor</label>
+                <select class="select" id="id_gasolinera" name="id_gasolinera" style="width:175px">
+                    <?php
+                            foreach($gasolineras as $val) {
+                                echo '<option value="'.$val['id_gasolinera'].'">'.$val['nombre'].'</option>';
+                            }
+                    ?>
+                </select>
+            </p>
+
+            <br>
+                 
+            <p>
+                <label for="numero_factura" id="lnumero_factura">Número de factura </label>
+                <input style="width:100px;" type="text" tabindex="1" id="numero_factura" name="numero_factura"/>
+
+                <label for="fecha_factura" >Fecha Factura:</label>
+                <input id="fecha_factura" name="fecha_factura" style="width: 200px" tabindex="1"/>
+
+            </p>
+
+            <br>
+
+            <p>
+
+                <label for="tipo_gas" id="ltipo_gas">Tipo de Gasolina </label>
+                <select class="select" style="width:200px;" tabindex="5" id="tipo_gas" name="tipo_gas" >
+                    <option value=""></option>
+                    <option value="1">Super</option>
+                    <option value="2">Regular</option>
+                    <option value="3">Diesel</option>
+                </select>
+            
+                <label for="valor" id="lvalor" style="width:20%;">Precio Super </label>
+                $ <input tabindex="4" id="valor" name="valor" type="text" size="5"/> US
+            
+            </p>
+
+        </div>
     </div>
 </form>
 

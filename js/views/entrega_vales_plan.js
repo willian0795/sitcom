@@ -1,5 +1,8 @@
 // JavaScript Document
 $(document).ready(function(){
+	var tiempo = new Date();
+	newfec=new Date(tiempo.getFullYear(), tiempo.getMonth(), tiempo.getDate(), tiempo.getHours(), tiempo.getMinutes());
+	
 	$('#wizard').smartWizard();
 	
 	$("#cantidad_solicitada").validacion({
@@ -15,9 +18,33 @@ $(document).ready(function(){
 		men: "Debe seleccionar un item"
 	});
 	
-	 $("#mes").validacion({
+	$("#mes").validacion({
         men: "Debe seleccionar un item"
 	});
+
+	$("#tipo_gas").validacion({
+        men: "Debe seleccionar un item"
+	});
+
+	$("#numero_factura").validacion({
+        numMin:1,
+		ent: true
+	});
+
+	var fec_soli=$("#fecha_factura").kendoDatePicker({
+		culture: "es-SV",
+		format: "dd/MM/yyyy",
+		max: newfec
+	}).data("kendoDatePicker");
+
+	$("#fecha_factura").validacion({
+        valFecha: true
+	});
+
+	$("#id_gasolinera").validacion({
+        men: "Debe seleccionar un item"
+	});
+
 
 	$("#id_fuente_fondo").change(function () {
 		
