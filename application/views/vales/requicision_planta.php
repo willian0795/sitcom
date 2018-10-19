@@ -142,7 +142,7 @@
                     <option value="3">Diesel</option>
                 </select>
             
-                <label for="valor" id="lvalor" style="width:20%;">Precio Super </label>
+                <label for="valor" id="lvalor" style="width:20%;">Precio </label>
                 $ <input tabindex="4" id="valor" name="valor" type="text" size="5"/> US
             
             </p>
