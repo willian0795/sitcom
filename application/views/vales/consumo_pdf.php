@@ -12,36 +12,40 @@
 </head>
 <script type="text/javascript">
     function reporte(){
-      
-       //grafico(<?php echo $j; ?>,"seccion");//contructor del grafico
         tabla(<?php echo $j; ?>)      
-        } 
+    } 
 </script>
 <body onload="reporte();">
 <form action="<?php echo base_url();?>index.php/vales/consumo_pdf_dos" method="POST">
-    <input type="text" id="html" name="html">
+    <input type="hidden" id="html" name="html">
     <button type="submit" id="submit">imprimir</button>
 </form>
+<div id="vista">
+<table style="width: 100%;">
+        <tr style="font-size: 20px; vertical-align: middle; font-family: "Poppins", sans-serif;">
+            <td width="110px" colspan="2"><img src="<?php echo base_url(); ?>img/logo_izquierdo.jpg" width="110px"></td>
+            <td align="center" style="font-size: 13px; font-weight: bold; line-height: 1.3;">
+                <h6>MINISTERIO DE TRABAJO Y PREVISIÓN SOCIAL</h6>
+                <h6>DEPARTAMENTO DE SERVICIOS GENERALES</h6>
+                <h6>REPORTE DE VALES DE COMBUSTIBLE</h6>
+            </td>
+            <td width="110px" align="right"><img src="<?php echo base_url(); ?>img/logo_derecho.jpg"  width="110px"></td>
+        </tr>
+    </table>
   <div id="datos">
     </div>
-    <br>
-<div style="height: 700px; background:#FFFFFF;" id="chartdiv">
 </div>
     
 </body>
 <script language="javascript" >
 function imprimir() {
-    var html = $("#datos").html();
+    var html = $("#vista").html();
     $("#html").val(html);
     $("#submit").click();
+    setTimeout( function(){ window.close(); } , 500);
 }
 setTimeout ("imprimir();", 500);
 ///llamada al finalizar la contrucion del archivo
 </script>
-    <!------------------------------------------Plantilla de carga de grafico y tabla----------------------------------------------------------------------- -->
-    
-
-
-    <!----------------------------------------------------------------------------------------------------------------- -->
 </html>
 <script src="<?php echo base_url()?>js/views/reporte_consumo.js" type="text/javascript"></script>

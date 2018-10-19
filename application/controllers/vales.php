@@ -1355,6 +1355,31 @@ $data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usu
 	*	Observaciones: Ninguna
 	*/
 
+	function encabezado_tabla($titulo){
+		$meses = array('','Enero', 'Febrero', "Marzo","Abril","Mayo","Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+		$mes = inval(substr($titulo, -2));
+			  if($titulo != ""){
+			    $titulo = "Mes: ".$meses[$mes]." ".substr($titulo, 0,4);
+			  }else{
+			    $titulo = "RESUMEN TOTAL DE EN CADA MES";
+			  }
+			  $fila = "<table border='1' cellspacing='0' align='center' class='table_design'>".
+			  "<thead>".
+			  "<tr><th colspan='9'>".$titulo."</th></tr>".
+			     "<tr><th>N°</th>".
+			      "<th>Seccion</th>".
+			      "<th>Sobrante anterior</th>".
+			      "<th>Asignado</th>".
+			      "<th>Disponible</th>".
+			      "<th>Consumido</th>".
+			      "<th>Sobrante actual</th>".
+			      "<th>Consumido ($)</th>".             
+			      "<th width='160px'>Series</th></tr>".  
+			  "</thead>".
+			  "<tbody>";
+			  return $fila;
+	}
+
 	function consumo_pdf()
 	{		
 
@@ -1399,17 +1424,86 @@ $data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usu
 			}
 			$data['f']=$f;
 
-			$data=$this->vales_model->consumo_seccion_fuente($id_seccion, $id_fuente_fondo, $fecha_inicio, $fecha_fin, $agrupar);
-			$data['j'] = json_encode($data);
+			$data2=$this->vales_model->consumo_seccion_fuente($id_seccion, $id_fuente_fondo, $fecha_inicio, $fecha_fin, $agrupar);
+			$data['j'] = json_encode($data2);
 			
-
-			//print_r($data);
-			//$this->load->view('vales/consumo_pdf',$data);
-
-			///¿$data['l']=$this->vales_model->liquidacion_mensual2($mes, $id_fuente_fondo);
-			$this->load->view('vales/consumo_pdf',$data);	
+			if($this->input->post('tipo_archivo') == 'excel'){
+				$this->load->view('vales/consumo_pdf',$data);
+			}else{
+				$this->mpdf->mPDF('utf-8','letter-L',0, '', 15, 15, 40, 17, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
+				$stylesheet = file_get_contents('css/bootstrap2.min.css'); /*Selecionamos la hoja de estilo del pdf*/
+				$table_head = '<table style="width: 100%;">
+					        <tr style="font-size: 20px; vertical-align: middle; font-family: "Poppins", sans-serif;">
+					            <td width="110px"><img src="'.base_url().'img/logo_izquierdo.jpg" width="110px"></td>
+					            <td align="center" style="font-weight: bold; line-height: 1.3;">
+					                <h6>MINISTERIO DE TRABAJO Y PREVISIÓN SOCIAL<br>
+					                DEPARTAMENTO DE SERVICIOS GENERALES<br>
+					                REPORTE DE VALES DE COMBUSTIBLE</h6>
+					            </td>
+					            <td width="110px" align="right"><img src="'.base_url().'img/logo_derecho.jpg"  width="110px"></td>
+					        </tr>
+					    </table>';
 				
-				
+				$pie = '<table width="100%" style="font-size: 12px; font-weight: bold;">
+				    <tr>
+				        <td width="40%">Generada por: '.$this->session->userdata('nombre').'</td>
+				        <td width="40%">Fecha y hora de generación: '.date("d/m/Y - h:i A").'</td>
+				        <td width="20%" align="right">{PAGENO} de {nbpg} páginas</td>
+				    </tr>
+					</table>';
+
+				$html = "<table border='1' width='100%' style='border-collapse: collapse;'>
+					<thead>
+						<tr>
+							<td>No.</td>
+							<td>Sección</td>
+							<td>Sobrante anterior</td>
+							<td>Asignado</td>
+							<td>Disponible</td>
+							<td>Consumido</td>
+							<td>Sobrante actual</td>
+							<td>Consumido ($)</td>
+							<td>Series</td>
+						</tr>
+					</thead>
+					<tbody>";
+				$cont = 0;
+				foreach ($data2 as $row){
+					/*if($i == 0){
+				        $fila .= $this->encabezado_tabla($row->mes);
+				        $mesant = $row->mes;
+				    }else if($mesant != $row->mes){
+				        $fila += pie_tabla($sobrantes_anterior2, $asignado2, $consumo2, $disponibles2, $sobrantes_despues2, $total2);
+				        $subtotales += subtotal_tabla($mesant, $sobrantes_anterior2, $asignado2, $consumo2, $disponibles2, $sobrantes_despues2, $total2);
+				        $fila +=encabezado_tabla($row->mes);
+				        $mesant = $row->mes;
+				        $sobrantes_anterior2 = 0; $asignado2 = 0; $consumo2 = 0; $disponibles2 = 0; $total2 = 0; $sobrantes_despues2 = 0;
+				        $cont=0;
+				    }*/
+					$cont++;
+					$html .= "<tr>
+							<td>".$cont."</td>
+							<td>".$row->seccion."</td>
+							<td align='right'>".$row->sobrantes_anterior."</td>
+							<td align='right'>".$row->asignado."</td>
+							<td align='right'>".$row->disponibles."</td>
+							<td align='right'>".$row->consumidos."</td>
+							<td align='right'>".$row->sobrantes_despues."</td>
+							<td align='right'>".number_format($row->dinero,2)."</td>
+							<td align='center'>".$row->inicial."</td>
+						</tr>";
+				}
+
+					$html .= "</tbody>
+				</table>";
+
+				$this->mpdf->SetHTMLHeader($table_head);
+				$this->mpdf->setHTMLFooter($pie);
+				$mpdf->autoPageBreak = true;
+				$this->mpdf->WriteHTML($stylesheet,1); /*lo escribimos en el pdf*/
+				$this->mpdf->WriteHTML($html,2); /*la escribimos en el pdf*/
+				$this->mpdf->Output(); /*Salida del pdf*/
+			}
 
 		}else {
 			echo 'No tiene permisos para acceder';
@@ -1418,29 +1512,14 @@ $data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usu
 	}
 
 	function consumo_pdf_dos(){
-
+		header("Content-type: application/octet-stream");
+		header("Content-Disposition: attachment; filename=consumo_vales.xls");
+		header("Pragma: no-cache");
+		header("Expires: 0");
+		$data['base']=true;
 		$html = $this->input->post('html');
-
-	
-
-		$this->mpdf->mPDF('utf-8','letter-L',0, '', 20, 20, 15, 17, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
-
-		$pie = '<table width="100%" style="font-size: 11px; font-weight: bold;">
-		    <tr>
-		        <td width="40%">Generada por: '.$this->session->userdata('nombre').'</td>
-		        <td width="40%">Fecha y hora de generación: {DATE d/m/Y - h:i A}</td>
-		        <td width="20%" align="right">{PAGENO} de {nbpg} páginas</td>
-		    </tr>
-			</table>';
-			$this->mpdf->setHTMLFooter($pie);
-
-			$stylesheet = file_get_contents('css/bootstrap2.min.css'); /*Selecionamos la hoja de estilo del pdf*/
-		$this->mpdf->WriteHTML($stylesheet,1); /*lo escribimos en el pdf*/
-		$this->mpdf->WriteHTML($html,2); /*la escribimos en el pdf*/
-
-		$this->mpdf->Output(); /*Salida del pdf*/
+		echo $html;
 	}
-
 	
 	public function consumo_xls()
 	{

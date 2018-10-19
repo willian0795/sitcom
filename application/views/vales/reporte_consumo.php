@@ -59,11 +59,13 @@
 
 
             </p>
+            <input type="hidden" id="tipo_archivo" name="tipo_archivo">
 
             <p align="center">
-                    <button type="button" id="Filtrar" class="button tam-1" >Filtrar</button>                    
-                    <button   id="imp1" class="button tam-1" >Imprimir</button
-
+                <button type="button" id="Filtrar" class="button tam-1" >Filtrar</button>                    
+                <button id="imp1" type="input" class="button tam-1"  style="display: none;">Exportar Excel</button>
+                <button type="button" onclick="export_file('excel');" class="button tam-1" >Exportar Excel</button>
+                <button type="button" onclick="export_file('pdf');" class="button tam-1" >Exportar PDF</button>
             </p>
 </form>
 <br><br>
@@ -87,6 +89,11 @@
 
         reporte(formu);
         });
+
+    function export_file(tipo){
+        $("#tipo_archivo").val(tipo);
+        $("#imp1").click();
+    }
 
     function reporte(formu){  
                 $.ajax({

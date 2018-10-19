@@ -7576,7 +7576,7 @@ function _puthtmlheaders() {
 		else { $pntstr = ''; }
 		$html = str_replace($this->aliasNbPgGp,$pntstr,$html );	// {nbpg}
 		$html = str_replace($this->aliasNbPg,$nb,$html );	// {nb}
-		$html = preg_replace('/\{DATE\s+(.*?)\}/e',"date('\\1')",$html );
+		////$html = preg_replace('/\{DATE\s+(.*?)\}/e',"date('\\1')",$html );
 
 		$this->HTMLheaderPageLinks = array();
 		$this->HTMLheaderPageAnnots = array();
@@ -7659,7 +7659,7 @@ function _puthtmlheaders() {
 		else { $pntstr = ''; }
 		$html = str_replace($this->aliasNbPgGp,$pntstr,$html );	// {nbpg}
 		$html = str_replace($this->aliasNbPg,$nb,$html );	// {nb}
-		$html = preg_replace('/\{DATE\s+(.*?)\}/e',"date('\\1')",$html );
+		//$html = preg_replace('/\{DATE\s+(.*?)\}/e',"date('\\1')",$html );
 
 
 		$this->HTMLheaderPageLinks = array();
@@ -12054,7 +12054,7 @@ function _getHtmlHeight($html) {
 		$html = str_replace('{PAGENO}',$this->pagenumPrefix.$this->docPageNum($this->page).$this->pagenumSuffix,$html);
 		$html = str_replace($this->aliasNbPgGp,$this->nbpgPrefix.$this->docPageNumTotal($this->page).$this->nbpgSuffix,$html );
 		$html = str_replace($this->aliasNbPg,$this->page,$html );
-		$html = preg_replace('/\{DATE\s+(.*?)\}/e',"date('\\1')",$html );
+		//$html = preg_replace('/\{DATE\s+(.*?)\}/e',"date('\\1')",$html );
 		$this->HTMLheaderPageLinks = array();
 		$this->HTMLheaderPageAnnots = array();
 		$this->HTMLheaderPageForms = array();
@@ -12960,8 +12960,8 @@ function WriteHTML($html,$sub=0,$init=true,$close=true) {
 		}
 	}
 /*-- END HTMLHEADERS-FOOTERS --*/
-	$html = preg_replace('/<htmlpageheader.*?<\/htmlpageheader>/si','',$html);
-	$html = preg_replace('/<htmlpagefooter.*?<\/htmlpagefooter>/si','',$html);
+	//$html = preg_replace('/<htmlpageheader.*?<\/htmlpageheader>/si','',$html);
+	//$html = preg_replace('/<htmlpagefooter.*?<\/htmlpagefooter>/si','',$html);
 
 	if($this->state==0 && $sub!=1 && $sub!=3 && $sub!=4) {
 		$this->AddPage($this->CurOrientation);
@@ -21928,7 +21928,7 @@ function Reset() {
 function ReadMetaTags($html) {
 	// changes anykey=anyvalue to anykey="anyvalue" (only do this when this happens inside tags)
 	$regexp = '/ (\\w+?)=([^\\s>"]+)/si'; 
- 	$html = preg_replace($regexp," \$1=\"\$2\"",$html);
+ 	//$html = preg_replace($regexp," \$1=\"\$2\"",$html);
 	if (preg_match('/<title>(.*?)<\/title>/si',$html,$m)) {
 		$this->SetTitle($m[1]); 
 	}
@@ -30655,7 +30655,7 @@ function purify_utf8($html,$lo=true) {
 		echo $html;
 		$this->Error(""); 
 	}
-	$html = preg_replace("/\r/", "", $html );
+	//$html = preg_replace("/\r/", "", $html );
 
 	// converts html_entities > ASCII 127 to UTF-8 
 	// Leaves in particular &lt; to distinguish from tag marker
@@ -32053,7 +32053,7 @@ function AdjustHTML($html, $tabSpaces=8) {
 	if (count($m[1])) { 
 		for($i=0;$i<count($m[1]);$i++) {
 			$sub = preg_replace("/\n/si", "\xbb\xa4\xac", $m[1][$i]);
-			$html = preg_replace('/'.preg_quote($m[1][$i], '/').'/si', $sub, $html); 
+			//$html = preg_replace('/'.preg_quote($m[1][$i], '/').'/si', $sub, $html); 
 		}
 	}
 /*-- END ANNOTATIONS --*/
@@ -32069,39 +32069,39 @@ function AdjustHTML($html, $tabSpaces=8) {
 	}
 
 	//Remove javascript code from HTML (should not appear in the PDF file)
-	$html = preg_replace('/<script.*?<\/script>/is','',$html);
+	//$html = preg_replace('/<script.*?<\/script>/is','',$html);
 
 	//Remove special comments
-	$html = preg_replace('/<!--mpdf/i','',$html);
-	$html = preg_replace('/mpdf-->/i','',$html);
+	//$html = preg_replace('/<!--mpdf/i','',$html);
+	//$html = preg_replace('/mpdf-->/i','',$html);
 
 	//Remove comments from HTML (should not appear in the PDF file)
-	$html = preg_replace('/<!--.*?-->/s','',$html);
+	//$html = preg_replace('/<!--.*?-->/s','',$html);
 
-	$html = preg_replace('/\f/','',$html); //replace formfeed by nothing
-	$html = preg_replace('/\r/','',$html); //replace carriage return by nothing
+	//$html = preg_replace('/\f/','',$html); //replace formfeed by nothing
+	//$html = preg_replace('/\r/','',$html); //replace carriage return by nothing
 
 	// Well formed XHTML end tags
-	$html = preg_replace('/<(br|hr)\/>/i',"<\\1 />",$html);
+	//$html = preg_replace('/<(br|hr)\/>/i',"<\\1 />",$html);
 	// Get rid of empty <thead></thead>
-	$html = preg_replace('/<thead>\s*<\/thead>/i','',$html);
-	$html = preg_replace('/<tfoot>\s*<\/tfoot>/i','',$html);
-	$html = preg_replace('/<table[^>]*>\s*<\/table>/i','',$html);
-	$html = preg_replace('/<tr>\s*<\/tr>/i','',$html);
+	//$html = preg_replace('/<thead>\s*<\/thead>/i','',$html);
+	//$html = preg_replace('/<tfoot>\s*<\/tfoot>/i','',$html);
+	//$html = preg_replace('/<table[^>]*>\s*<\/table>/i','',$html);
+	//$html = preg_replace('/<tr>\s*<\/tr>/i','',$html);
 
 	// Remove spaces at end of table cells
-	$html = preg_replace("/[ \n\r]+<\/t(d|h)/",'</t\\1',$html);		// mPDF 5.5.09
+	//$html = preg_replace("/[ \n\r]+<\/t(d|h)/",'</t\\1',$html);		// mPDF 5.5.09
 
-	$html = preg_replace("/[ ]*<dottab\s*[\/]*>[ ]*/",'<dottab />',$html);
+	//$html = preg_replace("/[ ]*<dottab\s*[\/]*>[ ]*/",'<dottab />',$html);
 
 	// Concatenates any Substitute characters from symbols/dingbats
 	$html = str_replace('</tts><tts>','|',$html);
 	$html = str_replace('</ttz><ttz>','|',$html);
 	$html = str_replace('</tta><tta>','|',$html);
 
-	$html = preg_replace('/<br \/>\s*/is',"<br />",$html);
+	//$html = preg_replace('/<br \/>\s*/is',"<br />",$html);
 
-	$html = preg_replace('/<wbr[ \/]*>\s*/is',"&#173;",$html);	// mPDF 5.6.04
+	//$html = preg_replace('/<wbr[ \/]*>\s*/is',"&#173;",$html);	// mPDF 5.6.04
 
 	// Preserve '\n's in content between the tags <pre> and </pre>
 	if (preg_match('/<pre/',$html)) {
@@ -32120,19 +32120,19 @@ function AdjustHTML($html, $tabSpaces=8) {
 	$thereispre = preg_match_all('#<pre(.*?)>(.*?)</pre>#si',$html,$temp);
 	// Preserve '\n's in content between the tags <textarea> and </textarea>
 	$thereistextarea = preg_match_all('#<textarea(.*?)>(.*?)</textarea>#si',$html,$temp2);
-	$html = preg_replace('/[\n]/',' ',$html); //replace linefeed by spaces
-	$html = preg_replace('/[\t]/',' ',$html); //replace tabs by spaces
+	//$html = preg_replace('/[\n]/',' ',$html); //replace linefeed by spaces
+	//$html = preg_replace('/[\t]/',' ',$html); //replace tabs by spaces
 
 	// Converts < to &lt; when not a tag
-	$html = preg_replace('/<([^!\/a-zA-Z])/i','&lt;\\1',$html);
-	$html = preg_replace("/[ ]+/",' ',$html);
+	//$html = preg_replace('/<([^!\/a-zA-Z])/i','&lt;\\1',$html);
+	//$html = preg_replace("/[ ]+/",' ',$html);
 
-	$html = preg_replace('/\/li>\s+<\/(u|o)l/i','/li></\\1l',$html);
-	$html = preg_replace('/\/(u|o)l>\s+<\/li/i','/\\1l></li',$html);
-	$html = preg_replace('/\/li>\s+<\/(u|o)l/i','/li></\\1l',$html);
-	$html = preg_replace('/\/li>\s+<li/i','/li><li',$html);
-	$html = preg_replace('/<(u|o)l([^>]*)>[ ]+/i','<\\1l\\2>',$html);
-	$html = preg_replace('/[ ]+<(u|o)l/i','<\\1l',$html);
+	//$html = preg_replace('/\/li>\s+<\/(u|o)l/i','/li></\\1l',$html);
+	//$html = preg_replace('/\/(u|o)l>\s+<\/li/i','/\\1l></li',$html);
+	//$html = preg_replace('/\/li>\s+<\/(u|o)l/i','/li></\\1l',$html);
+	//$html = preg_replace('/\/li>\s+<li/i','/li><li',$html);
+	//$html = preg_replace('/<(u|o)l([^>]*)>[ ]+/i','<\\1l\\2>',$html);
+	//$html = preg_replace('/[ ]+<(u|o)l/i','<\\1l',$html);
 
 	$iterator = 0;
 	while($thereispre) //Recover <pre attributes>content</pre>
@@ -32142,7 +32142,7 @@ function AdjustHTML($html, $tabSpaces=8) {
 
 		$temp[2][$iterator] = preg_replace('/\n/',"<br />",$temp[2][$iterator]);
 		$temp[2][$iterator] = str_replace('\\',"\\\\",$temp[2][$iterator]);
-		$html = preg_replace('#<pre(.*?)>(.*?)</pre>#si','<erp'.$temp[1][$iterator].'>'.$temp[2][$iterator].'</erp>',$html,1);
+		//$html = preg_replace('#<pre(.*?)>(.*?)</pre>#si','<erp'.$temp[1][$iterator].'>'.$temp[2][$iterator].'</erp>',$html,1);
 		$thereispre--;
 		$iterator++;
 	}
@@ -32151,7 +32151,7 @@ function AdjustHTML($html, $tabSpaces=8) {
 	{
 		$temp2[2][$iterator] = preg_replace('/\t/',str_repeat(" ",$tabSpaces),$temp2[2][$iterator]);
 		$temp2[2][$iterator] = str_replace('\\',"\\\\",$temp2[2][$iterator]);	// mPDF 5.3.88
-		$html = preg_replace('#<textarea(.*?)>(.*?)</textarea>#si','<aeratxet'.$temp2[1][$iterator].'>'.trim($temp2[2][$iterator]) .'</aeratxet>',$html,1);
+		//$html = preg_replace('#<textarea(.*?)>(.*?)</textarea>#si','<aeratxet'.$temp2[1][$iterator].'>'.trim($temp2[2][$iterator]) .'</aeratxet>',$html,1);
 		$thereistextarea--;
 		$iterator++;
 	}
@@ -32163,10 +32163,10 @@ function AdjustHTML($html, $tabSpaces=8) {
 	$html = str_replace("</innerpre","</pre",$html); 
 	$html = str_replace("<innerpre","<pre",$html); 
 
-	$html = preg_replace('/<textarea([^>]*)><\/textarea>/si','<textarea\\1> </textarea>',$html);
-	$html = preg_replace('/(<table[^>]*>)\s*(<caption)(.*?<\/caption>)(.*?<\/table>)/si','\\2 position="top"\\3\\1\\4\\2 position="bottom"\\3',$html);	// *TABLES*
-	$html = preg_replace('/<(h[1-6])([^>]*)(>(?:(?!h[1-6]).)*?<\/\\1>\s*<table)/si','<\\1\\2 keep-with-table="1"\\3',$html);	// *TABLES*
-	$html = preg_replace("/\xbb\xa4\xac/", "\n", $html);
+	//$html = preg_replace('/<textarea([^>]*)><\/textarea>/si','<textarea\\1> </textarea>',$html);
+	//$html = preg_replace('/(<table[^>]*>)\s*(<caption)(.*?<\/caption>)(.*?<\/table>)/si','\\2 position="top"\\3\\1\\4\\2 position="bottom"\\3',$html);	// *TABLES*
+	//$html = preg_replace('/<(h[1-6])([^>]*)(>(?:(?!h[1-6]).)*?<\/\\1>\s*<table)/si','<\\1\\2 keep-with-table="1"\\3',$html);	// *TABLES*
+	//$html = preg_replace("/\xbb\xa4\xac/", "\n", $html);
 
 	return $html;
 }

@@ -151,7 +151,7 @@ function encabezado_tabla(titulo){
   }else{
     titulo = "RESUMEN TOTAL DE EN CADA MES";
   }
-  var fila = "<table cellspacing='0' align='center' class='table_design'>"+
+  var fila = "<table border='1' cellspacing='0' align='center' class='table_design'>"+
   "<thead>"+
   "<tr><th colspan='9'>"+titulo+"</th></tr>"+
      "<tr><th>N°</th>"+
