@@ -33,7 +33,7 @@
 function imprimir() {
     var html = $("#datos").html();
     $("#html").val(html);
-    //$("#submit").click();
+    $("#submit").click();
 }
 setTimeout ("imprimir();", 500);
 ///llamada al finalizar la contrucion del archivo
