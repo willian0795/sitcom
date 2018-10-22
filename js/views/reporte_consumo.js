@@ -195,7 +195,7 @@ function pie_tabla(sobrantes_anterior, asignado, consumo, disponibles, sobrantes
         "<th align='center'>" + disponibles.toString() + "</th>" +
         "<th align='center'>" + consumo + "</th>" +
         "<th align='center'>" + sobrantes_despues.toString() + "</th>" +
-        "<th align='center'>$" + total.toFixed(2) + "</th>" +
+        "<th align='center'>" + total.toFixed(2) + "</th>" +
         "<th align='center'></th>" +
       "</tr>";
     return fila+"</tbody></table><br><br>";
@@ -209,14 +209,14 @@ function pie_tabla2(sobrantes_anterior, asignado, consumo, disponibles, sobrante
         "<th align='center'>" + disponibles.toString() + "</th>" +
         "<th align='center'>" + consumo + "</th>" +
         "<th align='center'>" + sobrantes_despues.toString() + "</th>" +
-        "<th align='center'>$" + total.toFixed(2) + "</th>" +
+        "<th align='center'>" + total.toFixed(2) + "</th>" +
       "</tr>";
     return fila+"</tbody></table><br><br>";
 }
 
 function subtotal_tabla(titulo,sobrantes_anterior, asignado, consumo, disponibles, sobrantes_despues, total){
   mes = parseInt(titulo.substr(4));
-  titulo = "Mes: "+meses[mes]+" "+titulo.substr(0,4);
+  titulo = meses[mes]+" "+titulo.substr(0,4);
   var fila = "<tr>" +
         "<td align='center'>"+titulo+"</td>" +
         "<td align='center'>" + sobrantes_anterior.toString() + "</td>" +
@@ -224,7 +224,7 @@ function subtotal_tabla(titulo,sobrantes_anterior, asignado, consumo, disponible
         "<td align='center'>" + disponibles.toString() + "</td>" +
         "<td align='center'>" + consumo + "</td>" +
         "<td align='center'>" + sobrantes_despues.toString() + "</td>" +
-        "<td align='center'>$" + total.toFixed(2) + "</td>" +
+        "<td align='center'>" + total.toFixed(2) + "</td>" +
       "</tr>";
     return fila;
 }
@@ -277,7 +277,7 @@ function tabla (json) {
       "<td align='center'>" + json[i].disponibles + "</td>" +
       "<td align='center'>" + json[i].consumidos + "</td>" +
       "<td align='center'>" + json[i].sobrantes_despues + "</td>" +
-      "<td align='center'>$" + n.toFixed(2) + "</td>" +
+      "<td align='center'>" + n.toFixed(2) + "</td>" +
       "<td align='center'>";
 
       var series1=json[i].inicial.split(",");
@@ -341,14 +341,22 @@ function tabla2 (json) {
                 }  
 
                          var total= "<tr>" +
-              "<td align='center'><strong>TOTAL</strong></td>" +
-              "<td align='center'></td>" +
-              "<td align='center'><strong>" + suma_vales + "</strong></td>" +
-              "<td align='center'><strong>" + suma_gal.toFixed(2) + "</strong></td>" +
-              "<td align='center'><strong>" + suma_rec + "<strong></td>" +
-              "<td align='center'> </td>" +
+              "<th align='center'><strong>TOTAL</strong></th>" +
+              "<th align='center'></th>" +
+              "<th align='center'><strong>" + suma_vales + "</strong></th>" +
+              "<th align='center'><strong>" + suma_gal.toFixed(2) + "</strong></th>" +
+              "<th align='center'><strong>" + suma_rec + "<strong></th>" +
+              "<th align='center'> </th>" +
             "</tr>";    
             $('#datos').append(total);
+
+            $('#datos3 tbody').remove(); 
+            var resumen= "<tr>" +
+              "<td align='center'>Consumo vehículos</td>" +
+              "<td align='center'><strong>" + suma_vales + "</strong></td>" +
+              "<td align='center'><strong>" + suma_gal.toFixed(2) + "</strong></td>" +
+            "</tr>";
+            $('#datos3').append(resumen);
 
 }
 function tabla2_2(json) {
@@ -371,12 +379,29 @@ function tabla2_2(json) {
                 }  
 
                 var total= "<tr>" +
-              "<td align='center'><strong>TOTAL</strong></td>" +
-              "<td align='center'></td>" +
-              "<td align='center'><strong>" + suma_vales + "</strong></td>" +
-              "<td align='center'><strong>" + suma_gal.toFixed(2) + "</strong></td>" +
+              "<th align='center'><strong>TOTAL</strong></th>" +
+              "<th align='center'></th>" +
+              "<th align='center'><strong>" + suma_vales + "</strong></th>" +
+              "<th align='center'><strong>" + suma_gal.toFixed(2) + "</strong></th>" +
             "</tr>";    
             $('#datos2').append(total);
+
+            var row_sub = $('#datos3 tbody').find('tr');
+            var cells_vehiculo = $(row_sub[0]).find("td");
+            var total_vales = parseInt($(cells_vehiculo[1]).text().trim());
+            var total_consumo = parseFloat($(cells_vehiculo[2]).text().trim());
+            var resumen= "<tr>" +
+              "<td align='center'>Consumo Herramientas y otros artículos</td>" +
+              "<td align='center'><strong>" + suma_vales + "</strong></td>" +
+              "<td align='center'><strong>" + suma_gal.toFixed(2) + "</strong></td>" +
+            "</tr>";
+
+            resumen += "<tr>" +
+              "<th align='center'>TOTAL</th>" +
+              "<th align='center'><strong>" + (suma_vales+total_vales) + "</strong></th>" +
+              "<th align='center'><strong>" + (suma_gal+total_consumo).toFixed(2) + "</strong></th>" +
+            "</tr>";
+            $('#datos3').append(resumen);
 
 }
 

@@ -13,7 +13,7 @@
 </section>
 
 
-<form name="filtro" method="post" id="filtro" action="<? echo base_url()?>index.php/vales/reporte_vehiculo_pdf" target="_blank">
+<form name="filtro" method="post" id="filtro" action="<?php echo base_url(); ?>index.php/vales/reporte_vehiculo_pdf" target="_blank">
 
             <p> 
                 <label for="start" >Fecha Inicio:</label><input id="start" name="start" style="width: 200px" tabindex="1"/>
@@ -105,6 +105,23 @@
             </tbody>
         </table>
 
+        <br><h3>Resumen total</h3>
+        <table cellspacing='0' align='center' class='table_design' id="datos3" >
+            <thead> 
+                <th>
+                    Categoría
+                </th>
+                <th>
+                    Vales aplicados
+                </th>
+                 <th>
+                    Combustible Aplicado (gal)
+                </th>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
     <!----------------------------------------------------------------------------------------------------------------- -->
 
 <script language="javascript" >
@@ -127,27 +144,30 @@
             success: function(data){
                 tabla2(data) 
 
-                },
+                $.ajax({  //para vehiculos
+                    async:  true, 
+                    url:    base_url()+"index.php/vales/reporte_vehiculo_json/2",
+                    dataType:"json",
+                     type: "POST",
+                    data: formu,
+                    success: function(data){
+                        tabla2_2(data) 
+
+                        },
+                    error:function(data){
+                            alertify.alert('Error al cargar datos de Herramientas');
+
+                        }
+                }); 
+
+
+            },
             error:function(data){
                     alertify.alert('Error al cargar datos de vehiculos');
 
                 }
         });          
-                    $.ajax({  //para vehiculos
-            async:  true, 
-            url:    base_url()+"index.php/vales/reporte_vehiculo_json/2",
-            dataType:"json",
-             type: "POST",
-            data: formu,
-            success: function(data){
-                tabla2_2(data) 
-
-                },
-            error:function(data){
-                    alertify.alert('Error al cargar datos de Herramientas');
-
-                }
-        });          
+                             
         
     }
 

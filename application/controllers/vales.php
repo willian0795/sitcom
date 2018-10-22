@@ -1357,27 +1357,85 @@ $data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usu
 
 	function encabezado_tabla($titulo){
 		$meses = array('','Enero', 'Febrero', "Marzo","Abril","Mayo","Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
-		$mes = inval(substr($titulo, -2));
-			  if($titulo != ""){
-			    $titulo = "Mes: ".$meses[$mes]." ".substr($titulo, 0,4);
-			  }else{
-			    $titulo = "RESUMEN TOTAL DE EN CADA MES";
-			  }
-			  $fila = "<table border='1' cellspacing='0' align='center' class='table_design'>".
-			  "<thead>".
-			  "<tr><th colspan='9'>".$titulo."</th></tr>".
-			     "<tr><th>N°</th>".
-			      "<th>Seccion</th>".
-			      "<th>Sobrante anterior</th>".
-			      "<th>Asignado</th>".
-			      "<th>Disponible</th>".
-			      "<th>Consumido</th>".
-			      "<th>Sobrante actual</th>".
-			      "<th>Consumido ($)</th>".             
-			      "<th width='160px'>Series</th></tr>".  
-			  "</thead>".
-			  "<tbody>";
-			  return $fila;
+		$mes = intval(substr($titulo, -2));
+	  	if($titulo != ""){ $titulo = "Mes: ".$meses[$mes]." ".substr($titulo, 0,4);
+	 	}else{ $titulo = "RESUMEN TOTAL DE EN CADA MES"; }
+		$fila = "<table border='1' width='100%' style='border-collapse: collapse;'>
+		  	<thead>
+		  	<tr><th colspan='9' align='center'>".$titulo."</th></tr>
+		     	<tr><th>N°</th>
+		      	<th>Seccion</th>
+		      	<th>Sobrante anterior</th>
+		      	<th>Asignado</th>
+		      	<th>Disponible</th>
+		      	<th>Consumido</th>
+		      	<th>Sobrante actual</th>
+		      	<th>Consumido ($)</th>             
+		      	<th width='160px'>Series</th></tr>  
+		  	</thead><tbody>";
+		  return $fila;
+	}
+
+	function encabezado_tabla2($titulo){
+		$titulo = "RESUMEN TOTAL POR CADA MES";
+		$fila = "<table border='1' width='100%' style='border-collapse: collapse;'>
+		  	<thead>
+		  	<tr><th colspan='7' align='center'>".$titulo."</th></tr>
+		    <tr>
+		      	<th>MES</th>
+		      	<th>Sobrante anterior</th>
+		      	<th>Asignado</th>
+		      	<th>Disponible</th>
+		      	<th>Consumido</th>
+		      	<th>Sobrante actual</th>
+		      	<th>Consumido ($)</th>             
+		    </tr>  
+		  	</thead><tbody>";
+		return $fila;
+	}
+
+	function pie_tabla($sobrantes_anterior, $asignado, $consumo, $disponibles, $sobrantes_despues, $total){
+	  	$fila = "<tr>
+	        <th align='center' colspan='2'>TOTAL</th>
+	        <th align='center'>".$sobrantes_anterior."</th>
+	        <th align='center'>".$asignado."</th>
+	        <th align='center'>".$disponibles."</th>
+	        <th align='center'>".$consumo."</th>
+	        <th align='center'>".$sobrantes_despues."</th>
+	        <th align='center'>".$total."</th>
+	        <th align='center'></th>
+	      	</tr>";
+	    return $fila."</tbody></table><br><br>";
+	}
+
+	function pie_tabla2($sobrantes_anterior, $asignado, $consumo, $disponibles, $sobrantes_despues, $total){
+	  	$fila = "<tr>
+	        <th align='center'>TOTAL</th>
+	        <th align='center'>".$sobrantes_anterior."</th>
+	        <th align='center'>".$asignado."</th>
+	        <th align='center'>".$disponibles."</th>
+	        <th align='center'>".$consumo."</th>
+	        <th align='center'>".$sobrantes_despues."</th>
+	        <th align='center'>".$total."</th>
+	      	</tr>";
+	    return $fila."</tbody></table><br><br>";
+	}
+
+	function subtotal_tabla($titulo,$sobrantes_anterior, $asignado, $consumo, $disponibles, $sobrantes_despues, $total){
+		$meses = array('','Enero', 'Febrero', "Marzo","Abril","Mayo","Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+		$mes = intval(substr($titulo, -2));
+	  	$titulo = $meses[$mes]." ".substr($titulo, 0,4);
+
+	  	$fila = "<tr>
+	        <td align='center'>".$titulo."</td>
+	        <td align='center'>".$sobrantes_anterior."</td>
+	        <td align='center'>".$asignado."</td>
+	        <td align='center'>".$disponibles."</td>
+	        <td align='center'>".$consumo."</td>
+	        <td align='center'>".$sobrantes_despues."</td>
+	        <td align='center'>".$total."</td>
+	      	</tr>";
+	    return $fila;
 	}
 
 	function consumo_pdf()
@@ -1452,37 +1510,41 @@ $data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usu
 				    </tr>
 					</table>';
 
-				$html = "<table border='1' width='100%' style='border-collapse: collapse;'>
-					<thead>
-						<tr>
-							<td>No.</td>
-							<td>Sección</td>
-							<td>Sobrante anterior</td>
-							<td>Asignado</td>
-							<td>Disponible</td>
-							<td>Consumido</td>
-							<td>Sobrante actual</td>
-							<td>Consumido ($)</td>
-							<td>Series</td>
-						</tr>
-					</thead>
-					<tbody>";
-				$cont = 0;
+				$html = "";
+				$i = 0; $mesant = ""; $subtotales = ""; $cont = 0;
+				$sobrantes_anterior = 0; $asignado = 0; $consumo = 0; $disponibles = 0; $total = 0; $sobrantes_despues = 0; 
+  				$sobrantes_anterior2 = 0; $asignado2 = 0; $consumo2 = 0; $disponibles2 = 0; $total2 = 0; 
+  				$sobrantes_despues2 = 0;
 				foreach ($data2 as $row){
-					/*if($i == 0){
-				        $fila .= $this->encabezado_tabla($row->mes);
-				        $mesant = $row->mes;
-				    }else if($mesant != $row->mes){
-				        $fila += pie_tabla($sobrantes_anterior2, $asignado2, $consumo2, $disponibles2, $sobrantes_despues2, $total2);
-				        $subtotales += subtotal_tabla($mesant, $sobrantes_anterior2, $asignado2, $consumo2, $disponibles2, $sobrantes_despues2, $total2);
-				        $fila +=encabezado_tabla($row->mes);
+					if($i == 0){
+						$html .= $this->encabezado_tabla($row->mes);
+						$mesant = $row->mes;
+					}else if($mesant != $row->mes){
+						$html .= $this->pie_tabla($sobrantes_anterior2, $asignado2, $consumo2, $disponibles2, $sobrantes_despues2, $total2);
+				        $subtotales .= $this->subtotal_tabla($mesant, $sobrantes_anterior2, $asignado2, $consumo2, $disponibles2, $sobrantes_despues2, $total2);
+				        $html .= $this->encabezado_tabla($row->mes);
 				        $mesant = $row->mes;
 				        $sobrantes_anterior2 = 0; $asignado2 = 0; $consumo2 = 0; $disponibles2 = 0; $total2 = 0; $sobrantes_despues2 = 0;
 				        $cont=0;
-				    }*/
+					}
 					$cont++;
+
+				    $sobrantes_anterior += intval($row->sobrantes_anterior);
+				    $asignado += intval($row->asignado);
+				    $consumo += intval($row->consumidos);
+				    $disponibles += intval($row->disponibles);
+				    $sobrantes_despues += intval($row->sobrantes_despues);
+				    $total += $row->dinero;
+
+				    $sobrantes_anterior2 += intval($row->sobrantes_anterior);
+				    $asignado2 += intval($row->asignado);
+				    $consumo2 += intval($row->consumidos);
+				    $disponibles2 += intval($row->disponibles);
+				    $sobrantes_despues2 += intval($row->sobrantes_despues);
+				    $total2 += $row->dinero;
+
 					$html .= "<tr>
-							<td>".$cont."</td>
+							<td>".$i."</td>
 							<td>".$row->seccion."</td>
 							<td align='right'>".$row->sobrantes_anterior."</td>
 							<td align='right'>".$row->asignado."</td>
@@ -1490,12 +1552,32 @@ $data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usu
 							<td align='right'>".$row->consumidos."</td>
 							<td align='right'>".$row->sobrantes_despues."</td>
 							<td align='right'>".number_format($row->dinero,2)."</td>
-							<td align='center'>".$row->inicial."</td>
+							<td align='center'>";
+							
+						$series1=explode(",", $row->inicial);
+						$series2=explode(",", $row->final);
+						      
+						  for ($j= 0; $j < count($series1); $j++) {
+						      $html .= $series1[$j]." - ".$series2[$j];
+						      if($j!=count($series1)-1){ $html .= "<br>"; }
+						  }
+
+						$html .= "</td>
 						</tr>";
+
+
+					if(($i+1) == count($data2)){
+				        $html .= $this->pie_tabla($sobrantes_anterior2, $asignado2, $consumo2, $disponibles2, $sobrantes_despues2, $total2);
+				        $subtotales .= $this->subtotal_tabla($row->mes, $sobrantes_anterior2, $asignado2, $consumo2, $disponibles2, $sobrantes_despues2, $total2);
+				        $mesant = $row->mes;
+				    }
+
+					$i++;
 				}
 
-					$html .= "</tbody>
-				</table>";
+				$html .= $this->encabezado_tabla2('');
+				$html .= $subtotales;
+				$html .= $this->pie_tabla2($sobrantes_anterior, $asignado, $consumo, $disponibles, $sobrantes_despues, $total);
 
 				$this->mpdf->SetHTMLHeader($table_head);
 				$this->mpdf->setHTMLFooter($pie);
