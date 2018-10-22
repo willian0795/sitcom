@@ -1102,63 +1102,9 @@ LEFT JOIN
 GROUP BY r.id_seccion, r.mes) AS q1 ON q1.id_seccion = q2.id_seccion GROUP BY q2.id_seccion, q2.mes ORDER BY q2.mes, q2.seccion");
 	    return $query->result();
 
-		/*$fechaF = " DATE_FORMAT(DATE(fecha_factura),'%Y-%m') = DATE_FORMAT(CURDATE(),'%Y-%m')	";
-		$fuenteF = "";
-		$seccionF = "";
-		if ($fecha_inicio != NULL && $fecha_fin != NULL) {
-
-			$fechaF = "  fecha_factura  BETWEEN DATE('" . $fecha_inicio . "') AND DATE('" . $fecha_fin . "')";
-		}
-		if ($id_seccion != NULL) {
-
-			$seccionF = " AND r.id_seccion = " . $id_seccion;
-		}
-		if ($id_fuente_fondo != NULL) {
-
-			$fuenteF = " AND r.id_fuente_fondo = " . $id_fuente_fondo;
-		}
-
-		if ($agrupar == NULL || $agrupar == 2) { //por mes
-
-			$selecM = "	CONCAT( s.nombre_seccion, ' <br>', f.nombre_fuente_fondo, ' - ',DATE_FORMAT(DATE( CONCAT_WS('-',LEFT(r.mes,4),RIGHT(r.mes,2),'01')),'%M %Y'))  as seccion,";
-			$mes = "r.mes";
-
-		} else { // por año
-			$selecM = "	CONCAT( s.nombre_seccion, ' <br>', f.nombre_fuente_fondo, '-', r.mes) as seccion,";
-			$mes = "LEFT(r.mes,4)";
-
-		}
-
-		$where = $fechaF . $seccionF . $fuenteF;
-		$query = $this->db->query(" SET lc_time_names = 'es_ES'");
-		$query = $this->db->query(" SET @row_number:=0;");
-		$q = "SELECT
-					@row_number:=@row_number+1 AS row_number, 
-					r.id_seccion, 
-							" . $selecM . "
-					r.asignado asignado,
-					SUM( cv.cantidad_vales) consumido, 
-					SUM(cv.cantidad_vales) * v.valor_nominal as  dinero, 
-					fecha_factura
-				FROM
-					tcm_consumo_vehiculo cv
-				INNER JOIN tcm_consumo c ON c.id_consumo = cv.id_consumo
-				INNER JOIN tcm_requisicion_vale_consumo_vehiculo rvcv ON rvcv.id_consumo_vehiculo = cv.id_consumo_vehiculo
-				INNER JOIN tcm_requisicion_vale rv ON rv.id_requisicion_vale = rvcv.id_requisicion_vale
-				INNER JOIN tcm_requisicion r ON r.id_requisicion = rv.id_requisicion
-				INNER JOIN org_seccion s ON s.id_seccion= r.id_seccion
-				INNER JOIN tcm_vale v ON v.id_vale  = rv.id_vale
-				INNER JOIN tcm_fuente_fondo f ON f.id_fuente_fondo = r.id_fuente_fondo 
-				 
-				WHERE " . $where . "	
-				 GROUP BY r.id_seccion, " . $mes;
-
-		# comentar la linea de abajo para ver SQL
-		$query = $this->db->query($q);
-		#echo  $q;
-
-		return $query->result();*/
 	}
+
+
 	# Función sumaba asignación de vales por refuerzos 26.10.16
 	/*function consumo_seccion_fuente($id_seccion='', $id_fuente_fondo="", $fecha_inicio=NULL, $fecha_fin=NULL, $agrupar=NULL)
 	{
@@ -1864,8 +1810,8 @@ GROUP BY r.mes, r.id_seccion";
       //  echo "<pre> er  ".$this->db->_error_message()."'<br> $q</pre>";
     return $query->result_array();
    }   
-   function liquidacion_mensual2($mes=NULL, $fuente=NULL){
-   	$query=$this->db->query("SELECT lc.mes_liquidacion AS mes,
+   function liquidacion_mensual2($mes=NULL, $id_fuente_fondo=NULL){
+   	/*$query=$this->db->query("SELECT lc.mes_liquidacion AS mes,
         					'22222222222' AS inicial,
         					'44444444444' AS final,
         					SUM(lc.sobrantes_anterior) AS anterior, 
@@ -1878,7 +1824,61 @@ GROUP BY r.mes, r.id_seccion";
         					JOIN org_seccion s ON s.id_seccion = lc.id_seccion 
         					WHERE lc.mes_liquidacion = '".$mes."' 
         					GROUP BY lc.mes_liquidacion, lc.id_seccion");
+	    return $query->result_array();*/
+
+	    $year = substr($mes, 0,4);
+
+
+
+	    $queryadds = ""; $queryadds2 = "";
+        /*if($id_seccion!=NULL){
+            $queryadds=" AND lc.id_seccion = '".$id_seccion."' ";
+            $queryadds2=" AND s.id_seccion = '".$id_seccion."' ";
+        }*/
+        if($id_fuente_fondo!=NULL){
+            $queryadds=" AND lc.id_fuente_fondo = '".$id_fuente_fondo."' ";
+            $queryadds2=" AND f.id_fuente_fondo = '".$id_fuente_fondo."' ";
+        }
+
+        $query=$this->db->query("SELECT q2.id_seccion, q2.mes, q2.sobrantes_anterior, q2.asignado, q2.disponibles, q2.consumidos, q2.sobrantes_despues, q2.seccion, 
+							q1.consumido, COALESCE(q1.valor_nominal * q2.consumidos,0) dinero, COALESCE(q1.inicial, '') inicial, COALESCE(q1.final,'') final FROM 
+(SELECT lc.id_seccion, lc.mes_liquidacion AS mes,
+        					SUM(lc.sobrantes_anterior) AS sobrantes_anterior, 
+        					COALESCE(SUM(lc.entregados),0) AS asignado, 
+        					SUM(lc.disponibles) AS disponibles, 
+        					COALESCE(SUM(lc.consumidos),0) AS consumidos, 
+        					SUM(lc.sobrantes_despues) sobrantes_despues,
+        					CONCAT(s.nombre_seccion) seccion FROM tcm_liquidacion_combustible lc 
+        					JOIN org_seccion s ON s.id_seccion = lc.id_seccion 
+        					WHERE lc.mes_liquidacion = '".$mes."' ".$queryadds."
+        					GROUP BY lc.mes_liquidacion, lc.id_seccion) AS q2
+LEFT JOIN
+(SELECT
+					s.id_seccion,
+					SUM( cv.cantidad_vales) consumido, 
+					v.valor_nominal valor_nominal, 
+					fecha_factura,
+					GROUP_CONCAT(DISTINCT rv2.inicial) as inicial ,
+          GROUP_CONCAT(DISTINCT rv2.final) as final
+				FROM
+					tcm_consumo_vehiculo cv
+				INNER JOIN tcm_consumo c ON c.id_consumo = cv.id_consumo
+				INNER JOIN tcm_requisicion_vale_consumo_vehiculo rvcv ON rvcv.id_consumo_vehiculo = cv.id_consumo_vehiculo
+				INNER JOIN tcm_requisicion_vale rv ON rv.id_requisicion_vale = rvcv.id_requisicion_vale
+				INNER JOIN tcm_requisicion r ON r.id_requisicion = rv.id_requisicion
+				INNER JOIN tcm_requisicion_vale2 rv2 ON r.id_requisicion = rv2.id_requisicion
+				INNER JOIN org_seccion s ON s.id_seccion= r.id_seccion
+				INNER JOIN tcm_vale v ON v.id_vale  = rv.id_vale
+				INNER JOIN tcm_fuente_fondo f ON f.id_fuente_fondo = r.id_fuente_fondo
+	WHERE YEAR(fecha_factura) = '".$year."' AND  MONTH(fecha_factura) = '".substr($mes, -2)."' ".$queryadds2."
+GROUP BY r.id_seccion, r.mes) AS q1 ON q1.id_seccion = q2.id_seccion GROUP BY q2.id_seccion, q2.mes ORDER BY q2.mes, q2.seccion");
+
+        
+
 	    return $query->result_array();
+
+
+
 
    }
 function name_mes($mes)
@@ -2094,7 +2094,7 @@ function consumo_herramientas($id_seccion, $id_fuente_fondo, $fecha_inicio, $fec
 				if($fecha_inicio !=NULL && $fecha_fin!=NULL){
 				
 
-					$fechaF1=" WHERE  c.fecha_factura > DATE('".$fecha_inicio."') AND c.fecha_factura < DATE('".$fecha_fin."')";
+					$fechaF1=" WHERE  c.fecha_factura >= DATE('".$fecha_inicio."') AND c.fecha_factura <= DATE('".$fecha_fin."')";
 
 				}
 				if($id_seccion!=NULL){

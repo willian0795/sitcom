@@ -2477,7 +2477,7 @@ function liquidacion_pdf()
 				$pie = '<table width="100%" style="font-size: 11px; font-weight: bold;">
 				    <tr>
 				        <td width="40%">Generada por: '.$this->session->userdata('nombre').'</td>
-				        <td width="40%">Fecha y hora de generación: {DATE d/m/Y - h:i A}</td>
+				        <td width="40%">Fecha y hora de generación: '.date('d/m/Y - h:i A').'</td>
 				        <td width="20%" align="right">{PAGENO} de {nbpg} páginas</td>
 				    </tr>
 					</table>';

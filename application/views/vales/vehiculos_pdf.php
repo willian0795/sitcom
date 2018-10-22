@@ -67,7 +67,7 @@
     </tbody>
     </table>
         <br>
-        <h4 align="center">Herramientas</h4>
+        <h4 align="center">Herramientas y otros artículos</h4>
         <br>
         <table align="center"   cellspacing="0" class='table_design'>    
         <thead>
@@ -105,9 +105,35 @@
         ?>
     </tbody>
     </table>
+    <br>
+        <h4 align="center">Resumen total</h4>
+    <br>
+    <table align="center"   cellspacing="0" class='table_design'>    
+        <thead>
+        <tr>
+            <th>Categoría</th>
+            <th>Vales aplicados</th>
+            <th>Combustible aplicado (gal)</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Consumo vehículos</td>
+                <td><?=$s1?></td>
+                <td><?=$s2?></td>
+            </tr>
+            <tr>
+                <td>Consumo Herramientas y otros artículos</td>
+                <td><?=$s4?></td>
+                <td><?=$s5?></td>
+            </tr>
+            <tr>
+                <th>TOTAL</th>
+                <th><?=$st1?></th>
+                <th><?=$st2?></th>
+            </tr>
+        </tbody>
+    </table>
 
 </body>
-        <br><br>
-        <p style="width:650px; margin:auto;"> <?php echo$f.". Total de vales aplicados <strong>".$st1."</strong>. para <strong>".$st2."</strong> galones";  ?></p>
-
 </html>
