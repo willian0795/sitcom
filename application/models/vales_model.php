@@ -1076,7 +1076,7 @@ FROM (SELECT lc.id_seccion, lc.mes_liquidacion AS mes, SUM(lc.sobrantes_anterior
 	        	COALESCE(SUM(lc.entregados),0) AS asignado,  SUM(lc.disponibles) AS disponibles, 
 				COALESCE(SUM(lc.consumidos),0) AS consumidos, SUM(lc.sobrantes_despues) sobrantes_despues,
 				CONCAT(s.nombre_seccion) seccion 
-		FROM tcm_liquidacion_combustible lc 
+		FROM (SELECT * FROM tcm_liquidacion_combustible  UNION SELECT id_liquidacion_planta AS id_liquidacion_combustible, 0 AS id_seccion, mes_liquidacion, 0 AS sobrantes_anterior, entregados, entregados AS disponibles, entregados AS consumidos, 0 sobrantes_despues, id_fuente_fondo  FROM tcm_liquidacion_planta) lc 
 		JOIN (SELECT * FROM org_seccion UNION SELECT 0, 'PLANTA ELECTRICA',0,1) s ON s.id_seccion = lc.id_seccion 
 	    WHERE lc.mes_liquidacion BETWEEN DATE_FORMAT(DATE('".$fecha_inicio."'),'%Y%m') 
 	        	AND DATE_FORMAT(DATE('".$fecha_fin."'),'%Y%m') ".$queryadds."
