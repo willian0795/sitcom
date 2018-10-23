@@ -23,7 +23,7 @@
     <table align="center" border="1" cellspacing="0" class='table_design' width="100%">    
         <thead>
         <tr>
-            <th colspan="6" align="center" style="padding: 5px; font-size: 16px;">
+            <th colspan="7" align="center" style="padding: 5px; font-size: 16px;">
                 Liquidación del mes de <?php echo $mesn ?>
             </th>
         </tr>
@@ -33,26 +33,29 @@
             <th align="center">Entregado <br><?php echo $mesn;?></th>  
             <th align="center">Disponibles</th>
             <th align="center">Consumidos<br> <?php echo $mesn;?></th>
-            <th align="center">Sobrante<br>  <?php echo $mesn;?> </th>                                                    
+            <th align="center">Sobrante<br>  <?php echo $mesn;?> </th>
+            <th align="center">Consumido ($)<br> <?php echo $mesn;?></th>                                                    
         </tr>
         </thead>
         <tbody> 
     <?php 
 
     foreach ($l as $key ) {
-        $s1+=$key['anterior'];
-        $s2+=$key['entregado'];
+        $s1+=$key['sobrantes_anterior'];
+        $s2+=$key['asignado'];
         $s3+=$key['disponibles'];
-        $s4+=$key['consumido'];
-        $s5+=$key['sobrante'];
+        $s4+=$key['consumidos'];
+        $s5+=$key['sobrantes_despues'];
+        $s6+=$key['dinero'];
     ?>          
         <tr>
             <td style="padding: 5px;"><?php echo $key['seccion']; ?></td>
-            <td style="padding: 5px;"><?php echo $key['anterior']; ?></td>
-            <td style="padding: 5px;"><?php echo $key['entregado']; ?></td>
+            <td style="padding: 5px;"><?php echo $key['sobrantes_anterior']; ?></td>
+            <td style="padding: 5px;"><?php echo $key['asignado']; ?></td>
             <td style="padding: 5px;"><?php echo $key['disponibles']; ?></td>
-            <td style="padding: 5px;"><?php echo $key['consumido']; ?></td>
-            <td style="padding: 5px;"><?php echo $key['sobrante']; ?></td>                                 
+            <td style="padding: 5px;"><?php echo $key['consumidos']; ?></td>
+            <td style="padding: 5px;"><?php echo $key['sobrantes_despues']; ?></td>
+            <td style="padding: 5px;"><?php echo $key['dinero']; ?></td>                                 
         </tr>
     <?php 
             }
@@ -63,7 +66,8 @@
             <th style="padding: 5px;"> <strong><?php echo $s2;?></strong></th>
             <th style="padding: 5px;"> <strong><?php echo $s3;?></strong></th>
             <th style="padding: 5px;"> <strong><?php echo $s4;?></strong></th>
-            <th style="padding: 5px;"> <strong><?php echo $s5;?></strong></th>                             
+            <th style="padding: 5px;"> <strong><?php echo $s5;?></strong></th>  
+            <th style="padding: 5px;"> <strong><?php echo $s6;?></strong></th>                             
         </tr>          
     </tbody>
     </table>
