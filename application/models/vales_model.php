@@ -1077,7 +1077,7 @@ por lo tanto la logica de niveles se manejara de forma diferente
         					COALESCE(SUM(lc.consumidos),0) AS consumidos, 
         					SUM(lc.sobrantes_despues) sobrantes_despues,
         					CONCAT(s.nombre_seccion) seccion FROM tcm_liquidacion_combustible lc 
-        					JOIN org_seccion s ON s.id_seccion = lc.id_seccion 
+        					LEFT JOIN org_seccion s ON s.id_seccion = lc.id_seccion 
         					WHERE lc.mes_liquidacion BETWEEN DATE_FORMAT(DATE('".$fecha_inicio."'),'%Y%m') AND DATE_FORMAT(DATE('".$fecha_fin."'),'%Y%m') ".$queryadds."
         					GROUP BY lc.mes_liquidacion, lc.id_seccion) AS q2
 LEFT JOIN
@@ -1087,7 +1087,7 @@ LEFT JOIN
 					v.valor_nominal valor_nominal, 
 					fecha_factura,
 					GROUP_CONCAT(DISTINCT rv2.inicial) as inicial ,
-          GROUP_CONCAT(DISTINCT rv2.final) as final
+          			GROUP_CONCAT(DISTINCT rv2.final) as final
 				FROM
 					tcm_consumo_vehiculo cv
 				INNER JOIN tcm_consumo c ON c.id_consumo = cv.id_consumo
@@ -1095,11 +1095,11 @@ LEFT JOIN
 				INNER JOIN tcm_requisicion_vale rv ON rv.id_requisicion_vale = rvcv.id_requisicion_vale
 				INNER JOIN tcm_requisicion r ON r.id_requisicion = rv.id_requisicion
 				INNER JOIN tcm_requisicion_vale2 rv2 ON r.id_requisicion = rv2.id_requisicion
-				INNER JOIN org_seccion s ON s.id_seccion= r.id_seccion
+				LEFT JOIN org_seccion s ON s.id_seccion= r.id_seccion
 				INNER JOIN tcm_vale v ON v.id_vale  = rv.id_vale
 				INNER JOIN tcm_fuente_fondo f ON f.id_fuente_fondo = r.id_fuente_fondo
 	WHERE fecha_factura BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."' ".$queryadds2."
-GROUP BY r.id_seccion, r.mes) AS q1 ON q1.id_seccion = q2.id_seccion GROUP BY q2.id_seccion, q2.mes ORDER BY q2.mes, q2.seccion");
+GROUP BY r.mes, r.id_seccion) AS q1 ON q1.id_seccion = q2.id_seccion GROUP BY q2.id_seccion, q2.mes ORDER BY q2.mes, q2.seccion");
 	    return $query->result();
 
 	}
@@ -1615,34 +1615,19 @@ function consumo_seccion_fuente_d($id_seccion='', $id_fuente_fondo="", $fecha_in
 			WHERE
 				rv.id_vale = $id_vale
 			UNION
-			
-			SELECT 
-				rv.numero_inicial AS del,
-				rv.numero_inicial + rv.cantidad_entregado - 1 AS al,
-				'Planta de Emergencia' AS seccion,
-				id_vale,
-				rv.id_requisicion_vale,
-				rv.cantidad_entregado AS cantidad,
-				rv.cantidad_restante AS restante
-			FROM tcm_requisicion_vale rv
-			JOIN tcm_requisicion r ON rv.id_requisicion = r.id_requisicion
-			WHERE rv.id_vale = $id_vale AND r.id_seccion = 0
-
-			UNION
-
-			SELECT
-				v.final - v.cantidad_restante + 1 AS del,
-				v.final AS al,
-				'No entregados',
-				id_vale,
-				0,
-				v.final - (v.final - v.cantidad_restante),
-				v.cantidad_restante 
-			FROM
-				tcm_vale v
-			WHERE
-				v.cantidad_restante >0 AND
-				v.id_vale = $id_vale";
+				SELECT
+					v.final - v.cantidad_restante + 1 AS del,
+					v.final AS al,
+					'No entregados',
+					id_vale,
+					0,
+					v.final - (v.final - v.cantidad_restante),
+					v.cantidad_restante 
+				FROM
+					tcm_vale v
+				WHERE
+					v.cantidad_restante >0 AND
+					v.id_vale = $id_vale";
 				$query=$this->db->query($q);
 			return $query->result_array();
 
@@ -1691,7 +1676,6 @@ function detalleF($id_consumo=NULL)
 				inicial + cv.cantidad_vales - 1 AS al,
 				cv.cantidad_vales AS cantidad, 
 								CASE 1
-								WHEN cv.id_vehiculo IS NULL AND cv.id_herramienta IS NULL THEN 'Planta Emergencia'
 								WHEN cv.id_vehiculo IS NULL THEN
 									h.nombre 
 								WHEN cv.id_herramienta IS NULL THEN
@@ -1887,7 +1871,7 @@ LEFT JOIN
 				INNER JOIN tcm_vale v ON v.id_vale  = rv.id_vale
 				INNER JOIN tcm_fuente_fondo f ON f.id_fuente_fondo = r.id_fuente_fondo
 	WHERE YEAR(fecha_factura) = '".$year."' AND  MONTH(fecha_factura) = '".substr($mes, -2)."' ".$queryadds2."
-GROUP BY r.id_seccion, r.mes) AS q1 ON q1.id_seccion = q2.id_seccion GROUP BY q2.id_seccion, q2.mes ORDER BY q2.mes, q2.seccion");
+GROUP BY r.mes, r.id_seccion) AS q1 ON q1.id_seccion = q2.id_seccion GROUP BY q2.id_seccion, q2.mes ORDER BY q2.mes, q2.seccion");
 
         
 
