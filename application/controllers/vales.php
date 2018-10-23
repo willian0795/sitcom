@@ -2965,7 +2965,7 @@ function Combustible_para_todos()
 			}
 
 			$factura = array(
-				'fecha_factura'=> $this->input->post('fecha_factura'),
+				'fecha_factura'=> date("Y-m-d", strtotime(str_replace("/","-",$this->input->post('fecha_factura')))),
 				'numero_factura'=> $this->input->post('numero_factura'),
 				'valor_super'=> $super,
 				'valor_regular'=> $regular,

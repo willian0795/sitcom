@@ -1615,19 +1615,34 @@ function consumo_seccion_fuente_d($id_seccion='', $id_fuente_fondo="", $fecha_in
 			WHERE
 				rv.id_vale = $id_vale
 			UNION
-				SELECT
-					v.final - v.cantidad_restante + 1 AS del,
-					v.final AS al,
-					'No entregados',
-					id_vale,
-					0,
-					v.final - (v.final - v.cantidad_restante),
-					v.cantidad_restante 
-				FROM
-					tcm_vale v
-				WHERE
-					v.cantidad_restante >0 AND
-					v.id_vale = $id_vale";
+			
+			SELECT 
+				rv.numero_inicial AS del,
+				rv.numero_inicial + rv.cantidad_entregado - 1 AS al,
+				'Planta de Emergencia' AS seccion,
+				id_vale,
+				rv.id_requisicion_vale,
+				rv.cantidad_entregado AS cantidad,
+				rv.cantidad_restante AS restante
+			FROM tcm_requisicion_vale rv
+			JOIN tcm_requisicion r ON rv.id_requisicion = r.id_requisicion
+			WHERE rv.id_vale = $id_vale AND r.id_seccion = 0
+
+			UNION
+
+			SELECT
+				v.final - v.cantidad_restante + 1 AS del,
+				v.final AS al,
+				'No entregados',
+				id_vale,
+				0,
+				v.final - (v.final - v.cantidad_restante),
+				v.cantidad_restante 
+			FROM
+				tcm_vale v
+			WHERE
+				v.cantidad_restante >0 AND
+				v.id_vale = $id_vale";
 				$query=$this->db->query($q);
 			return $query->result_array();
 
@@ -1676,6 +1691,7 @@ function detalleF($id_consumo=NULL)
 				inicial + cv.cantidad_vales - 1 AS al,
 				cv.cantidad_vales AS cantidad, 
 								CASE 1
+								WHEN cv.id_vehiculo IS NULL AND cv.id_herramienta IS NULL THEN 'Planta Emergencia'
 								WHEN cv.id_vehiculo IS NULL THEN
 									h.nombre 
 								WHEN cv.id_herramienta IS NULL THEN
