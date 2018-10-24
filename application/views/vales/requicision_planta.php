@@ -87,7 +87,7 @@
             
             <p>
             	<label for="justificacion" id="ljustificacion" class="label_textarea">Justificación </label>
-              	<textarea class="tam-4" id="justificacion" tabindex="3" name="justificacion"/></textarea>
+              	<textarea class="tam-4" id="justificacion" tabindex="3" name="justificacion" >PARA PLANTA DE EMERGENCIA DEL MINISTERIO DE TRABAJO Y PREVISIÓN SOCIAL</textarea>
             </p>
 
             <br>
