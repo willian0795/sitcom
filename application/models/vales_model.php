@@ -1645,7 +1645,22 @@ function detalleR($id_requisicion=NULL)
 				rvcv.id_requisicion_vale = $id_requisicion
 			GROUP BY
 				c.id_consumo
-			UNION 
+			UNION
+
+			SELECT 
+				rv.numero_inicial AS del,
+				rv.numero_inicial + rv.cantidad_entregado - 1 AS al,
+				'Planta de Emergencia' AS seccion,
+				id_vale,
+				rv.id_requisicion_vale,
+				rv.cantidad_entregado AS cantidad,
+				rv.cantidad_restante AS restante
+			FROM tcm_requisicion_vale rv
+			JOIN tcm_requisicion r ON rv.id_requisicion = r.id_requisicion
+			WHERE rv.id_vale = $id_vale AND r.id_seccion = 0
+
+			UNION
+
 			SELECT 
 			0, 
 			'--', 
@@ -1671,6 +1686,7 @@ function detalleF($id_consumo=NULL)
 				inicial + cv.cantidad_vales - 1 AS al,
 				cv.cantidad_vales AS cantidad, 
 								CASE 1
+								WHEN cv.id_vehiculo IS NULL AND cv.id_herramienta IS NULL THEN 'Planta Emergencia'
 								WHEN cv.id_vehiculo IS NULL THEN
 									h.nombre 
 								WHEN cv.id_herramienta IS NULL THEN
