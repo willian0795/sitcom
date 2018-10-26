@@ -1610,19 +1610,34 @@ function consumo_seccion_fuente_d($id_seccion='', $id_fuente_fondo="", $fecha_in
 			WHERE
 				rv.id_vale = $id_vale
 			UNION
-				SELECT
-					v.final - v.cantidad_restante + 1 AS del,
-					v.final AS al,
-					'No entregados',
-					id_vale,
-					0,
-					v.final - (v.final - v.cantidad_restante),
-					v.cantidad_restante 
-				FROM
-					tcm_vale v
-				WHERE
-					v.cantidad_restante >0 AND
-					v.id_vale = $id_vale";
+
+			SELECT 
+				rv.numero_inicial AS del,
+				rv.numero_inicial + rv.cantidad_entregado - 1 AS al,
+				'Planta de Emergencia' AS seccion,
+				id_vale,
+				rv.id_requisicion_vale,
+				rv.cantidad_entregado AS cantidad,
+				rv.cantidad_restante AS restante
+			FROM tcm_requisicion_vale rv
+			JOIN tcm_requisicion r ON rv.id_requisicion = r.id_requisicion
+			WHERE rv.id_vale = $id_vale AND r.id_seccion = 0
+
+			UNION
+
+			SELECT
+				v.final - v.cantidad_restante + 1 AS del,
+				v.final AS al,
+				'No entregados',
+				id_vale,
+				0,
+				v.final - (v.final - v.cantidad_restante),
+				v.cantidad_restante 
+			FROM
+				tcm_vale v
+			WHERE
+				v.cantidad_restante >0 AND
+				v.id_vale = $id_vale";
 				$query=$this->db->query($q);
 			return $query->result_array();
 
@@ -1645,20 +1660,6 @@ function detalleR($id_requisicion=NULL)
 				rvcv.id_requisicion_vale = $id_requisicion
 			GROUP BY
 				c.id_consumo
-			UNION
-
-			SELECT 
-				rv.numero_inicial AS del,
-				rv.numero_inicial + rv.cantidad_entregado - 1 AS al,
-				'Planta de Emergencia' AS seccion,
-				id_vale,
-				rv.id_requisicion_vale,
-				rv.cantidad_entregado AS cantidad,
-				rv.cantidad_restante AS restante
-			FROM tcm_requisicion_vale rv
-			JOIN tcm_requisicion r ON rv.id_requisicion = r.id_requisicion
-			WHERE rv.id_vale = $id_vale AND r.id_seccion = 0
-
 			UNION
 
 			SELECT 
