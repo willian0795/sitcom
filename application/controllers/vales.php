@@ -24,8 +24,7 @@
 class Vales extends CI_Controller
 {
 
-    function Vales()
-	{
+    function __construct() {
 		//error_reporting(0);
         parent::__construct();
 		date_default_timezone_set('America/El_Salvador');

@@ -12,7 +12,7 @@ class Transporte_model extends CI_Model {
 		$sentencia="SELECT id_empleado FROM sir_empleado WHERE nr like '".$nr."'";
 		$query=$this->db->query($sentencia);
 		
-		$datos=(array)$query->row();
+		$datos=$query->row_array();
 				
 		$sentencia="SELECT
 			sir_empleado_informacion_laboral.id_empleado_informacion_laboral,
@@ -30,8 +30,8 @@ class Transporte_model extends CI_Model {
 		";
 		$query=$this->db->query($sentencia);
 		
-		if($query->num_rows>0) {
-			return (array)$query->row();
+		if($query->num_rows() > 0) {
+			return $query->row_array();
 		}
 		else {
 			return array(
@@ -73,8 +73,8 @@ class Transporte_model extends CI_Model {
 					FROM sir_empleado
 					WHERE sir_empleado.id_estado=1 and sir_empleado.NR<>'".$nr."'".$where;
 		$query=$this->db->query($sentencia);
-		if($query->num_rows>0) {
-			return (array)$query->result_array();
+		if($query->num_rows() > 0) {
+			return $query->result_array();
 		}
 		else {
 			return 0;
@@ -90,8 +90,8 @@ class Transporte_model extends CI_Model {
 					FROM sir_empleado
 					WHERE sir_empleado.NR='".$nr."'";
 		$query=$this->db->query($sentencia);
-		if($query->num_rows>0) {
-			return (array)$query->result_array();		}
+		if($query->num_rows() > 0) {
+			return $query->result_array();		}
 		else {
 			return 0;
 		}
@@ -101,8 +101,8 @@ class Transporte_model extends CI_Model {
 	{
 		$sentencia="SELECT id_empleado FROM tcm_empleado where nr like '$nr'";
 		$query=$this->db->query($sentencia);
-		if($query->num_rows>0) {
-			return (array)$query->result_array();
+		if($query->num_rows() > 0) {
+			return $query->result_array();
 		}
 		else {
 			return 0;
@@ -119,8 +119,8 @@ class Transporte_model extends CI_Model {
 			inner join sir_cargo_funcional as f on i.id_cargo_funcional=f.id_cargo_funcional
 			where e.id_empleado='$id'
 			");
-			if($query->num_rows>0) {
-				return (array)$query->result_array();
+			if($query->num_rows() > 0) {
+				return $query->result_array();
 			}
 			else {
 				return 0;
@@ -136,8 +136,8 @@ class Transporte_model extends CI_Model {
 					org_departamento
 					LIMIT 0, 14";
 		$query=$this->db->query($sentencia);
-		if($query->num_rows>0) {
-			return (array)$query->result_array();
+		if($query->num_rows() > 0) {
+			return $query->result_array();
 		}
 		else {
 			return 0;
@@ -154,8 +154,8 @@ class Transporte_model extends CI_Model {
 					INNER JOIN org_departamento ON org_municipio.id_departamento_pais = org_departamento.id_departamento
 					ORDER BY org_departamento.departamento, org_municipio.municipio";
 		$query=$this->db->query($sentencia);
-		if($query->num_rows>0) {
-			return (array)$query->result_array();
+		if($query->num_rows() > 0) {
+			return $query->result_array();
 		}
 		else {
 			return 0;
@@ -666,7 +666,7 @@ function solicitudes_por_asignar_depto(){
 		and avm.id_vehiculo='$id_veh'
 		");
 		
-		if($query->num_rows>0)
+		if($query->num_rows() > 0)
 		{
 			return $query->result();
 		}
@@ -1122,7 +1122,7 @@ function solicitudes_por_asignar_depto(){
 		$query=$this->db->query($consulta);
 		return $query->result_array();
 		/*if($query->num_rows()>0) {
-			return (array)$query->result_array();
+			return $query->result_array();
 		}
 		else {
 			return 0;
@@ -1281,8 +1281,8 @@ where s.id_solicitud_transporte='$id'");
 					WHERE tcm_empleado.id_empleado='".$id_empleado."'";
 		$query=$this->db->query($sentencia);
 	
-		if($query->num_rows>0) {
-			return (array)$query->row();
+		if($query->num_rows() > 0) {
+			return $query->row_array();
 		}
 		else {
 			return array(
@@ -1341,8 +1341,8 @@ where s.id_solicitud_transporte='$id'");
 
 
 		$query=$this->db->query($sentencia);
-		if($query->num_rows>0) {
-			return (array)$query->result_array();
+		if($query->num_rows() > 0) {
+			return $query->result_array();
 		}
 		else {
 			return 0;
@@ -1467,7 +1467,7 @@ function salida_vehiculo($id, $km_inicial,$hora_salida,$acces,$gas){
 				);";
 		$this->db->query($q);
 
-				foreach($acces as  $row)://insert de accesorio
+				foreach($acces as $row)://insert de accesorio
 
 
 			$this->db->query("INSERT INTO tcm_chekeo_accesorio(id_solicitud_transporte, 
@@ -1498,7 +1498,7 @@ function regreso_vehiculo($id, $km, $hora, $gas,$acces){
 	
 		$this->db->query($q);
 		
-		foreach($acces as  $row)://insert de accesorio
+		foreach($acces as $row)://insert de accesorio
 
 		$this->db->query("UPDATE tcm_chekeo_accesorio SET regreso = 1	
 				WHERE id_solicitud_transporte = $id AND id_accesorio = $row ;"); 
@@ -1619,11 +1619,11 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 		";
 		
 		$query=$this->db->query($sentencia);
-		if($query->num_rows>0) {
-			return (array)$query->result_array();
+		if($query->num_rows() > 0) {
+			return $query->result_array();
 		}
 		else {
-			return (array)$query->result_array();
+			return $query->result_array();
 		}
 	}
 	
@@ -1631,7 +1631,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 	{
 		$sentencia="SELECT lugar_destino, direccion_destino, mision_encomendada, LOWER(CONCAT_WS(', ',departamento,municipio)) AS lugar, tcm_destino_mision.id_municipio FROM tcm_destino_mision INNER JOIN org_municipio ON org_municipio.id_municipio = tcm_destino_mision.id_municipio INNER JOIN org_departamento ON org_departamento.id_departamento = org_municipio.id_departamento_pais WHERE id_solicitud_transporte='".$id_solicitud."'";
 		$query=$this->db->query($sentencia);
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 	
 	function eliminar_solicitud($id_solicitud, $real=false)
@@ -1682,8 +1682,8 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 					LEFT JOIN tcm_observacion ON tcm_observacion.id_solicitud_transporte = tcm_solicitud_transporte.id_solicitud_transporte
 					WHERE tcm_solicitud_transporte.id_solicitud_transporte='".$id_solicitud."' ".$where_estado;
 		$query=$this->db->query($sentencia);
-		if($query->num_rows>0) {
-			return (array)$query->row();
+		if($query->num_rows() > 0) {
+			return $query->row_array();
 		}
 		else {
 			return array(
@@ -1751,7 +1751,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 					WHERE tcm_asignacion_sol_veh_mot.id_solicitud_transporte = '".$id_solicitud_transporte."'";
 		$query=$this->db->query($sentencia);
 		
-		return (array)$query->row();
+		return $query->row_array();
 	}
 	function datos_salida_entrada_real($id_solicitud_transporte)
 	{
@@ -1779,7 +1779,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 					WHERE id_solicitud_transporte='".$id_solicitud_transporte."'";
 		$query=$this->db->query($sentencia);
 		
-		return (array)$query->row();
+		return $query->row_array();
 	}
 	function observaciones($id_solicitud_transporte)
 	{
@@ -1790,7 +1790,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 					WHERE id_solicitud_transporte='".$id_solicitud_transporte."'";
 		$query=$this->db->query($sentencia);
 		
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 
 	public function is_departamental($id_seccion=NULL)
@@ -1816,7 +1816,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 						ORDER BY e.id_empleado";
 		$query=$this->db->query($sentencia);
 
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 	
 	public function buscar_solicitudes_depto($estado=NULL)
@@ -1878,7 +1878,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 					GROUP BY k.id";
 		$query=$this->db->query($sentencia);
 
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 
 	function update_combustible($id, $gas)
@@ -1907,7 +1907,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 				)";
 		
 		$query=$this->db->query($q);
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 
 
@@ -1964,7 +1964,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 				ON (tpm.id_presupuesto=r.id_presupuesto)".$where;
 				
 		$query=$this->db->query($query);
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 	/*****************************************************************************************************************/
 	
@@ -1977,7 +1977,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 				WHERE tpm.id_presupuesto='$id_presupuesto'";
 				
 		$query=$this->db->query($query);
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 	/*****************************************************************************************************************/
 	
@@ -2030,7 +2030,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 				WHERE tfp.id_presupuesto='$id_presupuesto'";
 				
 		$query=$this->db->query($query);
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 	/*****************************************************************************************************************/
 	
@@ -2039,7 +2039,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 	{
 		$query="select id_presupuesto, presupuesto from tcm_presupuesto_mantenimiento where activo=1";
 		$query=$this->db->query($query);
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 	/******************************************************************************************************************/
 	/*******************************************FUNCIÓN PARA OBTENER EL PRESUPUESTO DE MTTO********************************************/
@@ -2199,7 +2199,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 			}
 		}
 		$query=$this->db->query($query);
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 	/*******************************************************************************************************************************************/
 	
@@ -2230,7 +2230,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 		$query="SELECT art.id_articulo, art.nombre, art.id_unidad_medida, tum.unidad_medida, art.descripcion, art.cantidad, art.precio_promedio FROM tcm_articulo_bodega AS art
 				INNER JOIN tcm_unidad_medida AS tum ON (art.id_unidad_medida=tum.id_unidad_medida) ".$where;
 		$query=$this->db->query($query);
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 	/******************************************************************************************************************/
 	
@@ -2241,7 +2241,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 		if($id!=NULL) $where=" where id_unidad_medida='$id'";
 		$query="SELECT * FROM tcm_unidad_medida".$where;
 		$query=$this->db->query($query);
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 	/******************************************************************************************************************/
 	
@@ -2263,7 +2263,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 				where tta.fecha between '$fecha_inicial2' and '$fecha_final2'
 				".$where;
 		$query=$this->db->query($query);
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 	/******************************************************************************************************************/
 	
@@ -2523,7 +2523,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 		}
 		
 		$query=$this->db->query($query);
-		return (array) $query->result_array();
+		return  $query->result_array();
 	}
 	/*******************************************************************************************************************************************/
 	
@@ -2534,7 +2534,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 	{
 		$query="SELECT * FROM tcm_revision WHERE estado=1";
 		$query=$this->db->query($query);
-		return (array) $query->result_array();
+		return  $query->result_array();
 	}
 	/*********************************************************************************************************************************************/
 	
@@ -2547,7 +2547,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 				WHERE tcr.id_ingreso_taller='$id_ingreso_taller'
 				ORDER BY tcr.id_revision ASC";
 		$query=$this->db->query($query);
-		return (array) $query->result_array();
+		return  $query->result_array();
 	}
 	/*********************************************************************************************************************************************/
 	
@@ -2556,7 +2556,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 	{
 		$query="SELECT * FROM tcm_reparacion WHERE estado=1";
 		$query=$this->db->query($query);
-		return (array) $query->result_array();
+		return  $query->result_array();
 	}
 	/*********************************************************************************************************************************************/
 	
@@ -2569,7 +2569,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 				WHERE tcr.id_mantenimiento_interno='$id_mantenimiento_interno'
 				ORDER BY tcr.id_reparacion ASC";
 		$query=$this->db->query($query);
-		return (array) $query->result_array();
+		return  $query->result_array();
 	}
 	/*********************************************************************************************************************************************/
 	
@@ -2587,7 +2587,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 					inner join tcm_vehiculo_modelo as vmo on (v.id_modelo=vmo.id_vehiculo_modelo)
 					inner join tcm_vehiculo_clase as vc on (v.id_clase=vc.id_vehiculo_clase)";
 		$query=$this->db->query($query);
-		return (array) $query->result_array();
+		return  $query->result_array();
 	}
 	/*********************************************************************************************************************************************/
 	
@@ -2610,7 +2610,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 					ORDER BY YEAR(fecha) DESC, MONTH(fecha) DESC, DAY(fecha) DESC";
 			
 			$query=$this->db->query($query);
-			return (array) $query->result_array();
+			return  $query->result_array();
 		}
 		elseif($id_ingreso_taller!=NULL)
 		{
@@ -2625,7 +2625,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 					ORDER BY YEAR(fecha) DESC, MONTH(fecha) DESC, DAY(fecha) DESC";
 			
 			$query=$this->db->query($query);
-			return (array) $query->result_array();
+			return  $query->result_array();
 		}
 		else return 0;
 	}
@@ -2658,7 +2658,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 					GROUP BY tmi.id_mantenimiento_interno
 					ORDER BY tmi.id_mantenimiento_interno DESC";
 		$query=$this->db->query($query);
-		return (array) $query->result_array();
+		return  $query->result_array();
 	}
 	/*********************************************************************************************************************************************/
 	
@@ -2696,7 +2696,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 				".$where."
 				GROUP BY it.id_ingreso_taller";
 		$query=$this->db->query($query);
-		return (array) $query->result_array();
+		return  $query->result_array();
 	}
 	/*********************************************************************************************************************************************/
 	
@@ -2710,7 +2710,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 		if($this->db->query($consulta))
 		{
 			$bandera=1;
-			$revision=array_merge((array)$revision1, (array)$revision2);
+			$revision=array_merge($revision1, $revision2);
 			if(!empty($revision))
 			{
 				$id_ingreso_taller=$this->ultimo_id_ingreso_taller();
@@ -2760,7 +2760,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 			if($this->db->query($query2)) $bandera=$bandera*1;
 			else $bandera=$bandera*0;
 			
-			$revision=array_merge((array)$revision1, (array)$revision2);
+			$revision=array_merge($revision1, $revision2);
 			if(!empty($revision))
 			{
 				$n=count($revision);
@@ -2850,7 +2850,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 	{
 		$query="SELECT * FROM tcm_reparacion WHERE estado=1";
 		$query=$this->db->query($query);
-		return (array) $query->result_array();
+		return  $query->result_array();
 	}
 	/*********************************************************************************************************************************************/
 	
@@ -2866,7 +2866,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 			$fecha3=date('Y-m-d');
 			$bandera=1;
 			$id_mantenimiento_interno=$this->ultimo_id_mantenimiento_interno();
-			$reparacion=array_merge((array)$reparacion1, (array)$reparacion2);
+			$reparacion=array_merge($reparacion1, $reparacion2);
 			if(!empty($reparacion))
 			{
 				$n=count($reparacion);
@@ -3050,7 +3050,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 				inner join tcm_taller_externo as te on (te.id_taller_externo=itx.id_taller_externo) ".$where."
 				GROUP BY itx.id_ingreso_taller_ext";
 		$query=$this->db->query($query);
-		return (array) $query->result_array();
+		return  $query->result_array();
 	}
 	/*******************************************************************************************************************************************/
 	
@@ -3068,7 +3068,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 				INNER JOIN tcm_ingreso_taller AS tit ON (tit.id_ingreso_taller=itx.id_ingreso_taller) ".$where."
 				ORDER BY YEAR(itx.fecha_entrega) DESC, MONTH(itx.fecha_entrega) DESC, DAY(itx.fecha_entrega) DESC";
 		$query=$this->db->query($query);
-		return (array) $query->result_array();
+		return  $query->result_array();
 	}
 	/*******************************************************************************************************************************************/
 	
@@ -3247,7 +3247,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 				INNER JOIN sir_cargo_nominal AS scn ON (scn.cargo_nominal=e.nominal)
 				WHERE (scf.id_cargo_funcional=248 OR scf.id_cargo_funcional=289) OR (scn.id_cargo_nominal=99)";
 		$query=$this->db->query($query);
-		return (array) $query->result_array();
+		return  $query->result_array();
 	}
 	/*********************************************************************************************************************************************/
 	
@@ -3388,7 +3388,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 		}
 		
 		$query=$this->db->query($query);
-		return (array) $query->result_array();
+		return  $query->result_array();
 	}
 	/*********************************************************************************************************************************************/
 	
@@ -3400,7 +3400,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 		
 		$query="SELECT id_taller_externo, nombre as taller FROM tcm_taller_externo WHERE estado=1 ".$where;
 		$query=$this->db->query($query);
-		return (array) $query->result_array();
+		return  $query->result_array();
 	}
 	/*********************************************************************************************************************************************/
 

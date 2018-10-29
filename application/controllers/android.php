@@ -2,7 +2,7 @@
 
 
 class Android extends CI_Controller {
-	function Android()
+	function __construct()
 	{
         parent::__construct();
 		date_default_timezone_set('America/El_Salvador');

@@ -21,7 +21,7 @@ define ("SISTEMA","5");
 class Vehiculo extends CI_Controller
 {
     
-    function Vehiculo()
+    function __construct()
 	{
         parent::__construct();
 		date_default_timezone_set('America/El_Salvador');

@@ -4,7 +4,7 @@ define ("APROBADOR_AUTOMATICO",39);
 class Transporte extends CI_Controller
 {
     
-    function Transporte()
+    function __construct()
 	{
         parent::__construct();
 		date_default_timezone_set('America/El_Salvador');
@@ -28,7 +28,7 @@ class Transporte extends CI_Controller
 	*	Objetivo: Carga la vista para la creacion del solicitudes de transporte
 	*	Hecha por: Leonel
 	*	Modificada por: Oscar
-	*	Última Modificación: 03/07/2014
+	*	ï¿½ltima Modificaciï¿½n: 03/07/2014
 	*	Observaciones: Ninguna.
 	*/
 	function solicitud($estado_transaccion=NULL,$id_solicitud=NULL)
@@ -85,7 +85,7 @@ class Transporte extends CI_Controller
 	*	Objetivo: Control 
 	*	Hecha por: Jhonatan
 	*	Modificada por: Oscar
-	*	Última Modificación: 03/07/2014
+	*	ï¿½ltima Modificaciï¿½n: 03/07/2014
 	*	Observaciones: Ninguna
 	*/
 	function control_solicitudes($estado_transaccion=NULL,$accion=NULL)
@@ -148,7 +148,7 @@ class Transporte extends CI_Controller
 	*	Objetivo: Mostrar informacion General de una mision, a fin de que el Jefe de Unidad o Departamento tenga una aplia vision para aprobar o denegar un solicitud
 	*	Hecha por: Jhonatan
 	*	Modificada por: Oscar
-	*	Última Modificación: 03/07/2014
+	*	ï¿½ltima Modificaciï¿½n: 03/07/2014
 	*	Observaciones: Cargada mediante Ajax desde la pantalla de control de solicitudes
 	*/
 	function datos_de_solicitudes($id)
@@ -173,7 +173,7 @@ class Transporte extends CI_Controller
 	*	Objetivo: Registrar la aprobacion hecha por un Jefe de Unidad o Departamento
 	*	Hecha por: Jhonatan
 	*	Modificada por: Oscar
-	*	Última Modificación: 03/07/2014
+	*	ï¿½ltima Modificaciï¿½n: 03/07/2014
 	*	Observaciones: Ninguna
 	*/
 	function aprobar_solicitud()
@@ -204,14 +204,14 @@ class Transporte extends CI_Controller
 				}
 				enviar_correo_automatico_usuarios($id_solicitud_transporte);
 				
-				/********************************************FUNCIÓN DE BITÁCORA************************************************/
+				/********************************************FUNCIï¿½N DE BITï¿½CORA************************************************/
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				$id_user=$this->session->userdata('id_usuario');
 				$user=$this->session->userdata('usuario');
 				if($estado==2)
-					$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." aprobó la solicitud de transporte con ID ".$id_solicitud_transporte,4);
+					$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." aprobï¿½ la solicitud de transporte con ID ".$id_solicitud_transporte,4);
 				else if ($estado==0)
-					$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." denegó la solicitud de transporte con ID ".$id_solicitud_transporte,4);
+					$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." denegï¿½ la solicitud de transporte con ID ".$id_solicitud_transporte,4);
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				
 				ir_a("index.php/transporte/control_solicitudes/".$tr."/".$estado);
@@ -229,10 +229,10 @@ class Transporte extends CI_Controller
 	
 	/*
 	*	Nombre: asignar_vehiculo_motorista
-	*	Objetivo: Carga la vista de Asignaciones de vehículos y Motoristas
+	*	Objetivo: Carga la vista de Asignaciones de vehï¿½culos y Motoristas
 	*	Hecha por: Oscar
 	*	Modificada por: Oscar
-	*	Última Modificación: 03/07/2014
+	*	ï¿½ltima Modificaciï¿½n: 03/07/2014
 	*	Observaciones: Ninguna
 	*/
 	function asignar_vehiculo_motorista($estado_transaccion=NULL,$accion=NULL)
@@ -289,10 +289,10 @@ class Transporte extends CI_Controller
 
 	/*
 	*	Nombre: cargar_datos_solicitud
-	*	Objetivo: Función para cargar datos de solicitudes
+	*	Objetivo: Funciï¿½n para cargar datos de solicitudes
 	*	Hecha por: Oscar
 	*	Modificada por: Oscar
-	*	Última Modificación: 16/07/2014
+	*	ï¿½ltima Modificaciï¿½n: 16/07/2014
 	*	Observaciones: Ninguna
 	*/
 	function cargar_datos_solicitud($id)
@@ -317,17 +317,17 @@ class Transporte extends CI_Controller
 				if(($data['id_permiso']==2 || $data['id_permiso']==4) && ($id_seccion['id_seccion']==52 || $id_seccion['id_seccion']==53 || $id_seccion['id_seccion']==54 || $id_seccion['id_seccion']==55 || $id_seccion['id_seccion']==56 || $id_seccion['id_seccion']==57 || $id_seccion['id_seccion']==58 || $id_seccion['id_seccion']==59 || $id_seccion['id_seccion']==60 || $id_seccion['id_seccion']==61 || $id_seccion['id_seccion']==64 || $id_seccion['id_seccion']==65 || $id_seccion['id_seccion']==66))//Oficinas departamentales//
 				{
 					$vehiculos_disponibles=$this->transporte_model->vehiculos_disponibles($fecha,$entrada,$salida,$id_seccion['id_seccion']);
-					/*aquí se comparan la fecha, hora de entrada y de salida de la solicitud actual con las que ya tiene vehículo asignado, para mostrar únicamente los posibles vehiculos a utilizar */
+					/*aquï¿½ se comparan la fecha, hora de entrada y de salida de la solicitud actual con las que ya tiene vehï¿½culo asignado, para mostrar ï¿½nicamente los posibles vehiculos a utilizar */
 				}
 				else if($data['id_permiso']==4)
 				{
 					$vehiculos_disponibles=$this->transporte_model->vehiculos_disponibles_central($fecha,$entrada,$salida);
-					/*aquí se comparan la fecha, hora de entrada y de salida de la solicitud actual con las que ya tiene vehículo asignado, para mostrar únicamente los posibles vehiculos a utilizar */
+					/*aquï¿½ se comparan la fecha, hora de entrada y de salida de la solicitud actual con las que ya tiene vehï¿½culo asignado, para mostrar ï¿½nicamente los posibles vehiculos a utilizar */
 				}
 				else if($data['id_permiso']==3)
 				{
 					$vehiculos_disponibles=$this->transporte_model->vehiculos_disponibles_nacional($fecha,$entrada,$salida);
-					/*aquí se comparan la fecha, hora de entrada y de salida de la solicitud actual con las que ya tiene vehículo asignado, para mostrar únicamente los posibles vehiculos a utilizar */
+					/*aquï¿½ se comparan la fecha, hora de entrada y de salida de la solicitud actual con las que ya tiene vehï¿½culo asignado, para mostrar ï¿½nicamente los posibles vehiculos a utilizar */
 				}
 								
 				echo 
@@ -337,7 +337,7 @@ class Transporte extends CI_Controller
 				<input type='hidden' name='id_solicitud' value='".$id."' />
 				
 				<fieldset>      
-					<legend align='left'>Información de la Solicitud</legend>
+					<legend align='left'>Informaciï¿½n de la Solicitud</legend>
 					";
 					foreach($d as $datos)
 					{
@@ -353,9 +353,9 @@ class Transporte extends CI_Controller
 					}
 				
 				echo "Nombre: <strong>".$nombre."</strong> <br>
-				Sección: <strong>".$seccion."</strong> <br>
+				Secciï¿½n: <strong>".$seccion."</strong> <br>
 				Fecha de solicitud: <strong>".$fechaS."</strong> <br>
-				Fecha de misión: <strong>".$fechaM."</strong> <br>
+				Fecha de misiï¿½n: <strong>".$fechaM."</strong> <br>
 				Hora de salida: <strong>".$salida."</strong> <br>
 				Hora de regreso: <strong>".$entrada."</strong> <br>
 				
@@ -402,10 +402,10 @@ class Transporte extends CI_Controller
 								Lugar de destino
 							</th>
 							<th>
-								Dirección
+								Direcciï¿½n
 							</th>
 							<th>
-								Misión Encomendada
+								Misiï¿½n Encomendada
 							</th>
 						</thead>
 						<tbody>
@@ -426,7 +426,7 @@ class Transporte extends CI_Controller
 			    <br />
 			   
 				<fieldset>
-					<legend align='left'>Acompañantes</legend>
+					<legend align='left'>Acompaï¿½antes</legend>
 					
 					";
 					foreach($a as $acompa)
@@ -440,7 +440,7 @@ class Transporte extends CI_Controller
 				</fieldset>
 				<br>
 				<fieldset>
-				<legend align='left'>Informaci&oacute;n del Vehículo</legend>
+				<legend align='left'>Informaci&oacute;n del Vehï¿½culo</legend>
 					<p>
 					<label>N&deg; Placa <font color='#FF0000'>*</font></label>
 				   <select class='select' name='vehiculo' id='vehiculo' style='width:100px;' onchange='motoristaf(this.value,".$id.")'>
@@ -478,7 +478,7 @@ class Transporte extends CI_Controller
        	<br>
 		<fieldset>
 			<legend align='left'>Informaci&oacute;n  Adicional</legend>
-					<label for='observacion' id='lobservacion' class='label_textarea'>Observación</label>
+					<label for='observacion' id='lobservacion' class='label_textarea'>Observaciï¿½n</label>
 					<textarea class='tam-4' id='observacion' tabindex='2' name='observacion'/></textarea>
 				</fieldset>
 				<p style='text-align: center;'>
@@ -519,10 +519,10 @@ class Transporte extends CI_Controller
 	
 	/*
 	*	Nombre: verificar_motoristas
-	*	Objetivo: Función para conocer el motorista que se ha de asignar a la misión oficial
+	*	Objetivo: Funciï¿½n para conocer el motorista que se ha de asignar a la misiï¿½n oficial
 	*	Hecha por: Oscar
 	*	Modificada por: Oscar
-	*	Última Modificación: 03/07/2014
+	*	ï¿½ltima Modificaciï¿½n: 03/07/2014
 	*	Observaciones: Ninguna
 	*/
 	function verificar_motoristas($id_vehiculo,$id_solicitud_actual)
@@ -542,7 +542,7 @@ class Transporte extends CI_Controller
 				$vehiculo_mision_local=$this->transporte_model->vehiculo_en_mision_local($fecha,$salida,$entrada,$id_vehiculo);
 				
 				if($vehiculo_mision_local!=0) { ///el vehiculo se encuentra en mision local
-					echo "El vehículo se encuentra reservado para esta hora";
+					echo "El vehï¿½culo se encuentra reservado para esta hora";
 				}
 				
 				if($id_seccion['id_seccion']==52 || $id_seccion['id_seccion']==53 || $id_seccion['id_seccion']==54 || $id_seccion['id_seccion']==55 || $id_seccion['id_seccion']==56 || $id_seccion['id_seccion']==57 || $id_seccion['id_seccion']==58 || $id_seccion['id_seccion']==59 || $id_seccion['id_seccion']==60 || $id_seccion['id_seccion']==61 || $id_seccion['id_seccion']==64 || $id_seccion['id_seccion']==65 || $id_seccion['id_seccion']==66)//Oficinas departamentales//
@@ -575,10 +575,10 @@ class Transporte extends CI_Controller
 
 	/*
 	*	Nombre: asignar_veh_mot
-	*	Objetivo: Función para registrar una asignación de vehículo con su correspondiente motorista
+	*	Objetivo: Funciï¿½n para registrar una asignaciï¿½n de vehï¿½culo con su correspondiente motorista
 	*	Hecha por: Oscar
 	*	Modificada por: Oscar
-	*	Última Modificación: 03/07/2014
+	*	ï¿½ltima Modificaciï¿½n: 03/07/2014
 	*	Observaciones: Ninguna
 	*/
 	
@@ -598,7 +598,7 @@ class Transporte extends CI_Controller
 				$estado=$this->input->post('resp');//futuro estado de la solicitud
 				$fecha_m=date('Y-m-d H:i:s');
 				$nr=$this->session->userdata('nr'); //NR del usuario Logueado
-				$observaciones=$this->input->post('observacion');//observación, si es que hay
+				$observaciones=$this->input->post('observacion');//observaciï¿½n, si es que hay
 				
 				if($estado==3) {
 					$this->transporte_model->asignar_veh_mot($id_solicitud,$id_motorista,$id_vehiculo, $estado, $fecha_m,$nr, $id_empleado);
@@ -609,11 +609,11 @@ class Transporte extends CI_Controller
 
 					if($tr==1)
 					{
-						/********************************************FUNCIÓN DE BITÁCORA************************************************/
+						/********************************************FUNCIï¿½N DE BITï¿½CORA************************************************/
 						/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 						$id_user=$this->session->userdata('id_usuario');
 						$user=$this->session->userdata('usuario');
-						$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." asignó vehículo/motorista, correspondiente a la solicitud de transporte con ID ".$id_solicitud,4);
+						$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." asignï¿½ vehï¿½culo/motorista, correspondiente a la solicitud de transporte con ID ".$id_solicitud,4);
 						/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 						enviar_correo_automatico_usuarios($id_solicitud);
 					}
@@ -628,11 +628,11 @@ class Transporte extends CI_Controller
 					$tr=($this->db->trans_status()===FALSE)?0:1;
 						if($tr==1)
 						{
-							/********************************************FUNCIÓN DE BITÁCORA************************************************/
+							/********************************************FUNCIï¿½N DE BITï¿½CORA************************************************/
 							/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 							$id_user=$this->session->userdata('id_usuario');
 							$user=$this->session->userdata('usuario');
-							$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." denegó la asignación de vehículo/motorista, correspondiente a la solicitud de transporte con ID ".$id_solicitud,4);
+							$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." denegï¿½ la asignaciï¿½n de vehï¿½culo/motorista, correspondiente a la solicitud de transporte con ID ".$id_solicitud,4);
 							/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 							enviar_correo_automatico_usuarios($id_solicitud);
 						}
@@ -655,7 +655,7 @@ class Transporte extends CI_Controller
 	*	Objetivo: Mostrar la informacion del puesto del empleado que necesita el transporte
 	*	Hecha por: Leonel
 	*	Modificada por: Oscar
-	*	Última Modificación: 03/07/2014
+	*	ï¿½ltima Modificaciï¿½n: 03/07/2014
 	*	Observaciones: Ninguna
 	*/
 	function buscar_info_adicional()
@@ -697,7 +697,7 @@ class Transporte extends CI_Controller
 	*	Objetivo: Guardar el formulario de solicitud de transporte
 	*	Hecha por: Leonel
 	*	Modificada por: Oscar
-	*	Última Modificación: 03/07/2014
+	*	ï¿½ltima Modificaciï¿½n: 03/07/2014
 	*	Observaciones: Ninguna
 	*/
 
@@ -778,7 +778,7 @@ class Transporte extends CI_Controller
 								'id_solicitud_transporte'=>$id_solicitud_transporte,
 								'id_empleado'=>$acompanantes[$i]
 							);
-							$this->transporte_model->guardar_acompanantes($formuInfo); /*Guardando acompañantes*/
+							$this->transporte_model->guardar_acompanantes($formuInfo); /*Guardando acompaï¿½antes*/
 						}
 						$destinos=$this->input->post('values');
 						for($i=0;$i<count($destinos);$i++)
@@ -804,13 +804,13 @@ class Transporte extends CI_Controller
 					
 					$id_modul=66;
 					$band=$this->usuario_model->get_rol(APROBADOR_AUTOMATICO,$id_usuario_crea);
-					if($band==true)/*Si el usuario posee el rol de aprobador automático se aprobará la solicitud*/
+					if($band==true)/*Si el usuario posee el rol de aprobador automï¿½tico se aprobarï¿½ la solicitud*/
 					{
 						$id_modul=68;
 						if($this->transporte_model->aprobar($id_solicitud_transporte,2, $id_usuario_crea))
 						{
 							if($correo_cc!="") enviar_correo_cc($id_solicitud_transporte,$id_usuario_crea,$correo_cc,1);
-							else echo "No se envió ningún correo de copia";
+							else echo "No se enviï¿½ ningï¿½n correo de copia";
 						}
 					}
 					else if($correo_cc!="") enviar_correo_cc($id_solicitud_transporte,$id_usuario_crea,$correo_cc,2);
@@ -824,14 +824,14 @@ class Transporte extends CI_Controller
 					if($id_solicitud_old!="")
 					{
 						
-						/********************************************FUNCIÓN DE BITÁCORA************************************************/
+						/********************************************FUNCIï¿½N DE BITï¿½CORA************************************************/
 						/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 						$id_user=$this->session->userdata('id_usuario');
 						$user=$this->session->userdata('usuario');
-						if($modifica_solicitud==true)/*Si está modificando la solicitud*/
-							$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." modificó la solicitud de transporte con ID ".$_POST['id_solicitud_old'],4);
-						else/*Si está creando la solicitud*/
-							$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." creó una solicitud de transporte para ".$_POST['nombre_input'],3);
+						if($modifica_solicitud==true)/*Si estï¿½ modificando la solicitud*/
+							$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." modificï¿½ la solicitud de transporte con ID ".$_POST['id_solicitud_old'],4);
+						else/*Si estï¿½ creando la solicitud*/
+							$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." creï¿½ una solicitud de transporte para ".$_POST['nombre_input'],3);
 						/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 						
 						ir_a('index.php/transporte/ver_solicitudes/'.$tr.'/1');
@@ -856,7 +856,7 @@ class Transporte extends CI_Controller
 	*	Objetivo: Mostrar la salida o ingreso de un vehiculo
 	*	Hecha por: Jhonatan
 	*	Modificada por: Oscar
-	*	Última Modificación: 03/07/2014
+	*	ï¿½ltima Modificaciï¿½n: 03/07/2014
 	*	Observaciones: Falta mostrar datos segun el permiso que posea
 	*/
 	function control_salidas_entradas($estado_transaccion=NULL,$accion=NULL)
@@ -906,7 +906,7 @@ class Transporte extends CI_Controller
 	*	Objetivo: cargar una lista de cheakbox para selccionar los accesorios que un vehiculo lleva
 	*	Hecha por: Jhonatan
 	*	Modificada por: Jhonatan
-	*	Última Modificación: 10/05/2014
+	*	ï¿½ltima Modificaciï¿½n: 10/05/2014
 	*	Observaciones: Falta mostrar datos segun el permiso que posea
 	*/
 	function accesoriosABordo($id_solicitud_transporte,$estado)
@@ -928,7 +928,7 @@ class Transporte extends CI_Controller
 	*	Objetivo: Registrar la salida o ingreso de un vehiculo
 	*	Hecha por: Jhonatan
 	*	Modificada por: Oscar
-	*	Última Modificación: 03/07/2014
+	*	ï¿½ltima Modificaciï¿½n: 03/07/2014
 	*	Observaciones: Ninguna
 	*/
 	function guardar_despacho()
@@ -991,14 +991,14 @@ class Transporte extends CI_Controller
 
 
 			
-			/********************************************FUNCIÓN DE BITÁCORA************************************************/
+			/********************************************FUNCIï¿½N DE BITï¿½CORA************************************************/
 			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			$id_user=$this->session->userdata('id_usuario');
 			$user=$this->session->userdata('usuario');
 			if($estado==3)/*Si va de salida*/
-				$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." registró la salida a misión oficial correspondiente a la solicitud de transporte con ID ".$id,3);
+				$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." registrï¿½ la salida a misiï¿½n oficial correspondiente a la solicitud de transporte con ID ".$id,3);
 			elseif($estado==4)/*Si viene de regreso*/
-				$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." registró el regreso(entrada) de misión oficial correspondiente a la solicitud de transporte con ID ".$id,3);
+				$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." registrï¿½ el regreso(entrada) de misiï¿½n oficial correspondiente a la solicitud de transporte con ID ".$id,3);
 			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			
 			$this->db->trans_complete();
@@ -1025,7 +1025,7 @@ class Transporte extends CI_Controller
 	*	Objetivo: Ver datos de interes para el encargado de despacho sobre la mision
 	*	Hecha por: Jhonatan
 	*	Modificada por: Jhonatan
-	*	Última Modificación: 23/03/2014
+	*	ï¿½ltima Modificaciï¿½n: 23/03/2014
 	*	Observaciones: Falta llevar el control de permiso para ver esta informacion
 	*/
 	function infoSolicitud($id)
@@ -1040,7 +1040,7 @@ class Transporte extends CI_Controller
 	*	Objetivo: Extraer el kilometraje recorrido de un vehiculo
 	*	Hecha por: Jhonatan
 	*	Modificada por: Jhonatan
-	*	Última Modificación: 26/03/2014
+	*	ï¿½ltima Modificaciï¿½n: 26/03/2014
 	*	Observaciones: Falta llevar el control de permiso para ver esta informacion
 	*/
 	function kilometraje($id)
@@ -1055,7 +1055,7 @@ class Transporte extends CI_Controller
 	*	Objetivo: Ver el estado actual de las solicitudes. Permite editar o eliminar solicitudes
 	*	Hecha por: Leonel
 	*	Modificada por: Oscar
-	*	Última Modificación: 03/07/2014
+	*	ï¿½ltima Modificaciï¿½n: 03/07/2014
 	*	Observaciones: Ninguna
 	*/
 	function ver_solicitudes($estado_transaccion=NULL, $tipo=NULL)
@@ -1091,8 +1091,8 @@ class Transporte extends CI_Controller
 			{
 				switch($tipo)
 				{
-					case 1: $msj = 'La solicitud de transporte ha sido creada con éxito'; break;
-					case 2: $msj = 'La solicitud de transporte ha sido eliminada éxitosamente'; break;
+					case 1: $msj = 'La solicitud de transporte ha sido creada con ï¿½xito'; break;
+					case 2: $msj = 'La solicitud de transporte ha sido eliminada ï¿½xitosamente'; break;
 				}
 				
 				$data['msj']=$msj;
@@ -1111,7 +1111,7 @@ class Transporte extends CI_Controller
 	*	Objetivo: Elimina (desactiva) una solicitud de transporte
 	*	Hecha por: Leonel
 	*	Modificada por: Oscar
-	*	Última Modificación: 03/07/2014
+	*	ï¿½ltima Modificaciï¿½n: 03/07/2014
 	*	Observaciones: Ninguna
 	*/
 	function eliminar_solicitud($id_solicitud=NULL)
@@ -1125,11 +1125,11 @@ class Transporte extends CI_Controller
 			$tr=($this->db->trans_status()===FALSE)?0:1;
 			if($tr==1)
 			{
-				/********************************************FUNCIÓN DE BITÁCORA************************************************/
+				/********************************************FUNCIï¿½N DE BITï¿½CORA************************************************/
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				$id_user=$this->session->userdata('id_usuario');
 				$user=$this->session->userdata('usuario');
-				$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." eliminó (desactivó) la solicitud de transporte con ID ".$id_solicitud,5);
+				$this->seguridad_model->bitacora(SISTEMA,$id_user,"El usuario ".$user." eliminï¿½ (desactivï¿½) la solicitud de transporte con ID ".$id_solicitud,5);
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			}
 			redirect('index.php/transporte/ver_solicitudes/'.$tr.'/2');
@@ -1144,7 +1144,7 @@ class Transporte extends CI_Controller
 	*	Objetivo: Muestra solicitudes que ya tienen asignado vehiculo y motorista. Permite exportar a pdf
 	*	Hecha por: Leonel
 	*	Modificada por: Oscar
-	*	Última Modificación: 03/07/2014
+	*	ï¿½ltima Modificaciï¿½n: 03/07/2014
 	*	Observaciones: Ninguna
 	*/
 	function reporte_solicitud()
@@ -1213,9 +1213,9 @@ class Transporte extends CI_Controller
 			$stylesheet = file_get_contents('css/pdf/solicitud.css'); /*Selecionamos la hoja de estilo del pdf*/
 			$this->mpdf->WriteHTML($stylesheet,1); /*lo escribimos en el pdf*/
 			$data['nombre'] = "Renatto NL";
-			$html = $this->load->view('transporte/solicitud_pdf.php', $data, true); /*Seleccionamos la vista que se convertirá en pdf*/
+			$html = $this->load->view('transporte/solicitud_pdf.php', $data, true); /*Seleccionamos la vista que se convertirï¿½ en pdf*/
 			$this->mpdf->WriteHTML($html,2); /*la escribimos en el pdf*/
-			if(count($data['destinos'])>1) { /*si la solicitud tiene varios detinos tenemos que crear otra hoja en el pdf y escribirlos allí*/
+			if(count($data['destinos'])>1) { /*si la solicitud tiene varios detinos tenemos que crear otra hoja en el pdf y escribirlos allï¿½*/
 				$this->mpdf->AddPage();
 				$html = $this->load->view('transporte/reverso_solicitud_pdf.php', $data, true);
 				$this->mpdf->WriteHTML($html,2);
@@ -1305,9 +1305,9 @@ class Transporte extends CI_Controller
 	*	Hecha por: Oscar
 	*	Modificada por: Oscar
 	*	Ultima Modificacion: 25/09/2014
-	*	Observaciones: Ninguna
+	*	Observaciones: Recibe como parametro a $_POST que no puede ser reasignada
 	*/
-	function filtrar($_POST) 
+	function filtrar() 
 	{
 		$data['datos']=$this->transporte_model->filtro_informes($_POST);
 		pantalla('transporte/informes_solicitudes_pdf',$data);

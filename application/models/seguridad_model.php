@@ -24,8 +24,8 @@ class Seguridad_model extends CI_Model {
 					FROM org_usuario".$where;
 		$query=$this->db->query($sentencia);
 	
-		if($query->num_rows>0) {
-			return (array)$query->row();
+		if($query->num_rows() > 0) {
+			return $query->row_array();
 		}
 		else {
 			return array(
@@ -40,9 +40,8 @@ class Seguridad_model extends CI_Model {
 					FROM org_usuario
 					WHERE usuario='$login' AND estado=1";
 		$query=$this->db->query($sentencia);
-	
-		if($query->num_rows>0) {
-			return (array)$query->row();
+		if($query->num_rows() > 0) {
+			return $query->row_array();
 		}
 		else {
 			return array(
@@ -57,8 +56,8 @@ class Seguridad_model extends CI_Model {
 					WHERE id_usuario='$id_usuario' AND estado=1";
 		$query=$this->db->query($sentencia);
 	
-		if($query->num_rows>0) {
-			return (array)$query->row();
+		if($query->num_rows() > 0) {
+			return $query->row_array();
 		}
 		else {
 			return array(
@@ -83,7 +82,7 @@ class Seguridad_model extends CI_Model {
 					WHERE
 						id_usuario =".$id_usuario;
 			$query=$this->db->query($sentencia);
-			return (array)$query->result_array();
+			return $query->result_array();
 	}
 	
 	function buscar_menus2($id) 
@@ -121,8 +120,8 @@ class Seguridad_model extends CI_Model {
 					GROUP BY id_padre
 					ORDER BY id_padre, orden";
 		$query=$this->db->query($sentencia);
-		if($query->num_rows>0) {
-			return (array)$query->result_array();
+		if($query->num_rows() > 0) {
+			return $query->result_array();
 		}
 		else {
 			return 0;
@@ -152,7 +151,7 @@ class Seguridad_model extends CI_Model {
 					ORDER BY m2.id_modulo, org_modulo.orden";
 		$query=$this->db->query($sentencia);
 		
-		$result=(array)$query->result_array();
+		$result=$query->result_array();
 		
 		$new_menu=array();
 		foreach($result as $r) {
@@ -172,7 +171,7 @@ class Seguridad_model extends CI_Model {
 			}			
 		}
 		
-		if($query->num_rows>0) {
+		if($query->num_rows() > 0) {
 			return $new_menu;
 		}
 		else {
@@ -203,8 +202,8 @@ class Seguridad_model extends CI_Model {
 						
 		$query=$this->db->query($sentencia);
 			
-		if($query->num_rows>0) {
-			return (array)$query->row();
+		if($query->num_rows() > 0) {
+			return $query->row_array();
 		}
 		else {
 			return array(
@@ -224,7 +223,7 @@ class Seguridad_model extends CI_Model {
         			OR nr LIKE '".$usuario."'";
         $sentencia="SELECT ".$select." FROM tcm_empleado WHERE TRUE ".$where;
         $query=$this->db->query($sentencia);
-        return (array)$query->row();
+        return $query->row_array();
     }
 	
 	function guardar_caso($formuInfo)
@@ -244,8 +243,8 @@ class Seguridad_model extends CI_Model {
                     FROM glb_caso
                     WHERE estado_caso=1 AND DATEDIFF(CURDATE(),fecha_caso)<=3 AND codigo_caso LIKE '".$codigo_caso."'";
         $query=$this->db->query($sentencia);
-		$caso=(array)$query->row();
-        $count=0+$query->num_rows;
+		$caso=$query->row_array();
+        $count=0+$query->num_rows();
 		if($count>0) {
 			$sentencia="UPDATE glb_caso SET estado_caso=0 WHERE codigo_caso LIKE '".$codigo_caso."'";
 			$this->db->query($sentencia);
@@ -260,14 +259,14 @@ class Seguridad_model extends CI_Model {
 
         $sentencia="SELECT id_usuario, usuario FROM org_usuario WHERE md5(id_usuario)= '$usuarioe'";
         $query=$this->db->query($sentencia);
-        return (array)$query->row();
+        return $query->row_array();
     }
 		 function verificar_solicitud($solicitude=NULL)
     {
 
         $sentencia="SELECT id_solicitud_transporte, estado_solicitud_transporte as estado FROM tcm_solicitud_transporte WHERE md5(id_solicitud_transporte)= '$solicitude'";
         $query=$this->db->query($sentencia);
-        return (array)$query->row();
+        return $query->row_array();
     }
 	
 	function bitacora($id_sistema,$id_usuario,$descripcion,$id_accion)

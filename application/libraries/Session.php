@@ -9,12 +9,11 @@
 * @author      Dariusz Debowczyk
 * @link        http://www.codeigniter.com/user_guide/libraries/sessions.html
 */
-class CI_Session {
+class Session {
 
 	var $flash_key = 'flash'; // prefix for "flash" variables (eg. flash:new:message)
 
-	function CI_Session()
-	{
+	function  __construct() {
 		$this->object =& get_instance();
 		log_message('debug', "Native_session Class Initialized");
 		$this->_sess_run();

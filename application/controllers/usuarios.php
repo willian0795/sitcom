@@ -2,7 +2,7 @@
 class Usuarios extends CI_Controller
 {
     
-    function Usuarios()
+    function __construct()
 	{
         parent::__construct();
 		date_default_timezone_set('America/El_Salvador');

@@ -2,7 +2,7 @@
 class Inicio extends CI_Controller
 {
     
-    function Inicio()
+    function __construct()
 	{
         parent::__construct();
 		date_default_timezone_set('America/El_Salvador');

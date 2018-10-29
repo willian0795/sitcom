@@ -5,7 +5,7 @@
 class Peticiones extends CI_Controller {
 
 		
-	function Peticiones()
+	function __construct()
 	{
         parent::__construct();
 		date_default_timezone_set('America/El_Salvador');

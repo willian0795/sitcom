@@ -18,7 +18,7 @@ class Vales_model extends CI_Model {
 		$sentencia="SELECT tcm_gasolinera.id_gasolinera, tcm_gasolinera.nombre, tcm_gasolinera.telefono  FROM tcm_gasolinera WHERE estadoF= 1 ".$where;
 		$query=$this->db->query($sentencia);
 	
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 
 
@@ -111,7 +111,7 @@ class Vales_model extends CI_Model {
 					) as x ; ";
 
 		$query=$this->db->query($sentencia);	
-		return (array)$query->result_array();
+		return $query->result_array();
 
 	}
 		function consultar_oficinas_fuente($id_fuente_fondo =NULL)
@@ -127,7 +127,7 @@ class Vales_model extends CI_Model {
 				 GROUP BY s.id_seccion";
 //print($query);
 		$query=$this->db->query($sentencia);	
-		return (array)$query->result_array();
+		return $query->result_array();
 
 	}
 
@@ -141,7 +141,7 @@ class Vales_model extends CI_Model {
 									 GROUP BY s.id_seccion";
 
 		$query=$this->db->query($sentencia);	
-		return (array)$query->result_array();
+		return $query->result_array();
 
 	}
 		function consultar_todas_oficinas()
@@ -151,7 +151,7 @@ class Vales_model extends CI_Model {
 									FROM 	org_seccion s ";
 
 		$query=$this->db->query($sentencia);	
-		return (array)$query->result_array();
+		return $query->result_array();
 
 	}
 
@@ -220,7 +220,7 @@ $qin="			AND v.id_vehiculo NOT IN ($t2) ";
 			//echo $sentencia;
 		$query=$this->db->query($sentencia);
 		
-		return (array)$query->result_array();
+		return $query->result_array();
 	
 	}
 	function vehiculos($id_seccion=NULL,$id_fuente_fondo= NULL)	
@@ -249,7 +249,7 @@ $qin="			AND v.id_vehiculo NOT IN ($t2) ";
 			$sentencia.="	ORDER BY placa";
 		$query=$this->db->query($sentencia);
 		
-		return (array)$query->result_array();
+		return $query->result_array();
 	
 	}
 	function otros($id_seccion=NULL, $id_fuente_fondo= NULL)	
@@ -275,7 +275,7 @@ $qin="			AND v.id_vehiculo NOT IN ($t2) ";
 			$sentencia.="	ORDER BY nombre";
 		$query=$this->db->query($sentencia);
 		
-		return (array)$query->result_array();
+		return $query->result_array();
 	
 	}
 	function otros_req($id_seccion=NULL, $id_fuente_fondo= NULL,$id_requisicion= NULL)	
@@ -317,7 +317,7 @@ $qin="			AND v.id_vehiculo NOT IN ($t2) ";
 
 							$query=$this->db->query($q);
 
-			return (array)$query->result_array();
+			return $query->result_array();
 
 	}
 	
@@ -332,7 +332,7 @@ $qin="			AND v.id_vehiculo NOT IN ($t2) ";
 								WHERE 	tv.id_seccion NOT BETWEEN 52 AND 66
 								GROUP BY
 									id_fuente_fondo");
-			return (array)$query->result_array();
+			return $query->result_array();
 
 	}
 	
@@ -435,7 +435,7 @@ $qin="			AND v.id_vehiculo NOT IN ($t2) ";
 											".$where."
 								ORDER BY
 									fecha DESC");
-			return (array)$query->result_array();
+			return $query->result_array();
 
 
 	}
@@ -463,7 +463,7 @@ $qin="			AND v.id_vehiculo NOT IN ($t2) ";
 									//echo $q;
 
 		$query=$this->db->query($q);
-			return (array)$query->result_array();
+			return $query->result_array();
 	}
 
 	function info_requisicion($id)
@@ -592,7 +592,7 @@ GROUP BY r.id_requisicion");
 
 		$sentencia="SELECT id_vale, (final-cantidad_restante+1) AS inicial, cantidad_restante FROM tcm_vale WHERE tipo_vehiculo='".$id_fuente_fondo."' AND cantidad_restante>0 ORDER BY fecha_recibido, id_vale";
 		$query=$this->db->query($sentencia);
-		$res=(array)$query->result_array();
+		$res=$query->result_array();
 		foreach($res as $r) {
 			if($cantidad>0) {
 				if($r[cantidad_restante]>=$cantidad) {
@@ -637,7 +637,7 @@ GROUP BY r.id_requisicion");
 
 		$sentencia="SELECT cantidad_entregado, id_fuente_fondo FROM tcm_requisicion WHERE id_requisicion = ".$id;
 		$query=$this->db->query($sentencia);
-		$res=(array)$query->result_array();
+		$res=$query->result_array();
 		
 		foreach($res as $r) {
 		$cantidad=$r['cantidad_entregado'];
@@ -646,7 +646,7 @@ GROUP BY r.id_requisicion");
 
 		$sentencia="SELECT id_vale, (final-cantidad_restante+1) AS inicial, cantidad_restante FROM tcm_vale WHERE tipo_vehiculo='".$id_fuente_fondo."' AND cantidad_restante>0 ORDER BY fecha_recibido, id_vale";
 		$query=$this->db->query($sentencia);
-		$res=(array)$query->result_array();
+		$res=$query->result_array();
 
 
 		$pila =  array();
@@ -685,10 +685,10 @@ GROUP BY r.id_requisicion");
 	{
 		$sentencia="SELECT id_fuente_fondo FROM tcm_requisicion WHERE id_requisicion='".$id."'";	
 		$query=$this->db->query($sentencia);
-		$res=(array)$query->row();
+		$res=$query->row_array();
 		$sentencia="SELECT SUM(cantidad_restante) AS cantidad_restante FROM tcm_vale WHERE tipo_vehiculo='".$res['id_fuente_fondo']."'";	
 		$query=$this->db->query($sentencia);
-		return (array)$query->row();
+		return $query->row_array();
 	}
 
 
@@ -811,7 +811,7 @@ GROUP BY r.id_requisicion");
 					";
 
 		$query=$this->db->query($sentencia);
-		return (array)$query->result_array();	
+		return $query->result_array();	
 	}
 	function consultar_tipos_combustible($id_seccion=NULL, $id_gasolinera=NULL, $fecha_factura=NULL)
 	{
@@ -852,7 +852,7 @@ GROUP BY r.id_requisicion");
 					h.combustible";
 					
 		$query=$this->db->query($sentencia);
-		return (array)$query->result_array();	
+		return $query->result_array();	
 	}
 
 	function consultar_vales_seccion($id_seccion=NULL, $id_gasolinera=NULL, $fecha_factura=NULL)
@@ -882,7 +882,7 @@ GROUP BY r.id_requisicion");
 					WHERE tcm_requisicion_vale.cantidad_restante>0 AND ".$where." 
 					GROUP BY tcm_requisicion.id_fuente_fondo";
 		$query=$this->db->query($sentencia);
-		return (array)$query->result_array();	
+		return $query->result_array();	
 	}
 
 	function asignaciones($id_seccion=NULL,$id_fuente_fondo=NULL)
@@ -903,7 +903,7 @@ GROUP BY r.id_requisicion");
 			INNER JOIN org_seccion s ON a.id_seccion = s.id_seccion".$where;
 
 		$query=$this->db->query($sentencia);
-		return (array)$query->result_array();		
+		return $query->result_array();		
 	}
 
 	function modificar_asignaciones($post)
@@ -973,7 +973,7 @@ por lo tanto la logica de niveles se manejara de forma diferente
 					WHERE tcm_requisicion_vale.cantidad_restante>0 AND tcm_vale.id_gasolinera=".$id_gasolinera." ".$where." ORDER BY fecha_entregado ASC, tcm_requisicion_vale.id_requisicion_vale ASC";
 
 		$query=$this->db->query($sentencia);
-		$res=(array)$query->result_array();
+		$res=$query->result_array();
 		foreach($res as $r) {
 			if($cantidad>0) {
 				if($r[cantidad_restante]>=$cantidad) {
@@ -1003,7 +1003,7 @@ por lo tanto la logica de niveles se manejara de forma diferente
 		else
 			echo "Se entregaron todos los vales solicitados";*/
 		
-		/*return (array)$query->row();*/
+		/*return $query->row();*/
 	}
 	
 	function guardar_consumo($formuInfo)
@@ -1271,7 +1271,7 @@ GROUP BY r.mes, r.id_seccion) AS q1
 
 			$query=$this->db->query("SELECT @asignado as asignado,  @sobrante as restante, ROUND(@asignado - @sobrante,0) AS peticion; ");
 			}			
-			return (array) $query->row();
+			return  $query->row_array();
 
 	}
 #Checar esta función
@@ -1355,7 +1355,7 @@ GROUP BY r.mes, r.id_seccion) AS q1
 						INNER JOIN org_seccion s ON s.id_seccion = h.id_seccion_vale ".$where;
 
 		$query=$this->db->query($sentencia);
-		return (array)$query->result_array();		
+		return $query->result_array();		
 	}
 
 	function modificar_herramienta($post)
@@ -1392,7 +1392,7 @@ GROUP BY r.mes, r.id_seccion) AS q1
 						INNER JOIN org_seccion s ON h.id_seccion_vale = s.id_seccion
 						WHERE  id_herramienta = ".$id_herramienta;
 		$query=$this->db->query($sentencia);
-		return (array)$query->result();		
+		return $query->result();		
 	}
 	function secciones_vales($san_salvador=false)
 	{
@@ -1412,7 +1412,7 @@ GROUP BY r.mes, r.id_seccion) AS q1
 				a.id_seccion
 			ORDER BY a.id_seccion ";
 		$query=$this->db->query($query);
-		return (array)$query->result_array();		
+		return $query->result_array();		
 
 	}
 
@@ -2358,12 +2358,12 @@ function info_seccion($id_seccion){
 					UPPER(tcm_empleado.abuelo) AS nivel_3
 					FROM tcm_empleado WHERE tcm_empleado.id_seccion = $id_seccion";
 	$query = $this->db->query($q);
-	return (array) $query->row();
+	return  $query->row_array();
 }
 function id_seccion_requisicion($id_requisicion){
 	$q="SELECT id_seccion FROM tcm_requisicion WHERE id_requisicion = $id_requisicion";
 	$query = $this->db->query($q);
-	$t=(array) $query->row();
+	$t= $query->row_array();
 	return $t['id_seccion'];
 }
 
@@ -2382,7 +2382,7 @@ function Combustible_para_todos($value=NULL)
 	if ($value==NULL) {
 		$q="SELECT * FROM tcm_configuracion WHERE id_configuracion='1';";
 		$query = $this->db->query($q);
-		$t=(array) $query->row();	
+		$t= $query->row_array();	
 		$t=$t['valor'];
 		return $t;
 	}else{

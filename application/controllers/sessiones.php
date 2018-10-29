@@ -6,8 +6,7 @@ define ("SISTEMA","5");
 class Sessiones extends CI_Controller {
 
 		
-	function Sessiones()
-	{
+	function __construct() {
         parent::__construct();
 		date_default_timezone_set('America/El_Salvador');
 		$this->load->model('seguridad_model');
@@ -54,13 +53,13 @@ class Sessiones extends CI_Controller {
 	*/
 	function iniciar_session()
 	{
-		$in=$this->verificar();
+		$in=0; //$this->verificar();
 		
 		if ($in<=50)
 		{				
 			$login =$this->input->post('user');
 			$clave =$this->input->post('pass');		
-		$v=$this->seguridad_model->consultar_usuario2($login); //verifica únicamente por el nombre de usuario
+			$v=$this->seguridad_model->consultar_usuario2($login); //verifica únicamente por el nombre de usuario
 		
 		if($v['id_usuario']!=0){/*se verifica que el usuario exista*/
 			/////////////////////////////verificacion de usuario con la contraseña////////////////////////////

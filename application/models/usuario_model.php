@@ -12,7 +12,7 @@ class Usuario_model extends CI_Model {
 	{
 		$sentencia="SELECT id_modulo, id_permiso FROM org_rol_modulo_permiso WHERE estado=1 AND id_rol='".$id_rol."'";
 		$query=$this->db->query($sentencia);
-		$m=(array)$query->result_array();
+		$m=$query->result_array();
 		$id_mod=array();
 		$id_per=array();
 		foreach($m as $val) { 
@@ -21,7 +21,7 @@ class Usuario_model extends CI_Model {
 		}
 		$sentencia="SELECT id_sistema, nombre_sistema FROM org_sistema WHERE id_sistema=5 OR id_sistema=7 OR id_sistema = 9 OR id_sistema = 10 OR id_sistema = 11";
 		$query0=$this->db->query($sentencia);
-		$m0=(array)$query0->result_array();
+		$m0=$query0->result_array();
 		$result='';
 		foreach($m0 as $val0) { 
 			$id_sistema=$val0['id_sistema'];
@@ -32,7 +32,7 @@ class Usuario_model extends CI_Model {
 				$result.='<ul class="treeview" style="max-width: 600px; width: 100%; margin: 0 auto;"><li data-expanded="false">'.$nombre_sistema;
 			$sentencia="SELECT id_modulo, nombre_modulo, descripcion_modulo, opciones_modulo FROM org_modulo where (dependencia IS NULL OR dependencia = 0) AND id_modulo<>71 AND id_sistema=".$id_sistema." ORDER BY orden";
 			$query1=$this->db->query($sentencia);
-			$m1=(array)$query1->result_array();
+			$m1=$query1->result_array();
 			
 			$result.='<ul>';
 			foreach($m1 as $val1) { 
@@ -43,9 +43,9 @@ class Usuario_model extends CI_Model {
 				
 				$sentencia="SELECT id_modulo, nombre_modulo, descripcion_modulo, opciones_modulo FROM org_modulo where dependencia = ".$id_modulo." ORDER BY orden";
 				$query2=$this->db->query($sentencia);
-				$m2=(array)$query2->result_array();
+				$m2=$query2->result_array();
 				
-				if($query2->num_rows>0) {
+				if($query2->num_rows()>0) {
 					$expanded="false";
 					for($i=0;$i<count($id_mod);$i++) {
 						$ancestros=$this->buscar_padre_permisos_rol($id_mod[$i]);
@@ -95,7 +95,7 @@ class Usuario_model extends CI_Model {
 					$result.='<select class="oculto select_rol" name="permiso[]" style="height: 16px; float: right; padding: 0px;"><option value=""></option>'.$op.'</select>';
 				}	
 				
-				if($query2->num_rows>0)
+				if($query2->num_rows()>0)
 					$result.=' <ul>';
 				
 				foreach($m2 as $val2) {
@@ -106,9 +106,9 @@ class Usuario_model extends CI_Model {
 					
 					$sentencia="SELECT id_modulo, nombre_modulo, descripcion_modulo, opciones_modulo FROM org_modulo where dependencia = ".$id_modulo." ORDER BY orden";
 					$query3=$this->db->query($sentencia);
-					$m3=(array)$query3->result_array();
+					$m3=$query3->result_array();
 					
-					if($query3->num_rows>0){
+					if($query3->num_rows()>0){
 						$expanded="false";
 						for($i=0;$i<count($id_mod);$i++) {
 							$ancestros=$this->buscar_padre_permisos_rol($id_mod[$i]);
@@ -158,7 +158,7 @@ class Usuario_model extends CI_Model {
 						$result.='<select class="oculto select_rol" name="permiso[]" style="height: 16px; float: right; padding: 0px;"><option value=""></option>'.$op.'</select>';
 					}
 					
-					if($query3->num_rows>0)
+					if($query3->num_rows()>0)
 						$result.=' <ul>';
 					
 					foreach($m3 as $val3) {
@@ -207,11 +207,11 @@ class Usuario_model extends CI_Model {
 						$result.='<select class="oculto select_rol" name="permiso[]" style="height: 16px; float: right; padding: 0px;"><option value=""></option>'.$op.'</select>';
 						$result.=' </li>';				
 					}
-					if($query3->num_rows>0)
+					if($query3->num_rows()>0)
 						$result.=' </ul>';
 					$result.=' </li>';
 				}
-				if($query2->num_rows>0)
+				if($query2->num_rows()>0)
 					$result.=' </ul>';
 				$result.=' </li>';
 			}
@@ -283,7 +283,7 @@ class Usuario_model extends CI_Model {
 					LEFT JOIN sir_empleado_informacion_laboral ON sir_empleado_informacion_laboral.id_empleado = sir_empleado.id_empleado
 					WHERE sir_empleado.nr NOT IN (SELECT nr FROM org_usuario WHERE nr IS NOT NULL AND nr<>'') ".$where_seccion;
 		$query=$this->db->query($sentencia);
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 	
 	function mostrar_roles($id_rol=NULL)
@@ -294,7 +294,7 @@ class Usuario_model extends CI_Model {
 			$where_rol="";
 		$sentencia="SELECT id_rol, LOWER(nombre_rol) AS nombre_rol, descripcion_rol FROM org_rol".$where_rol." ORDER BY id_rol DESC";
 		$query=$this->db->query($sentencia);
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 	
 	function info_adicional($id_empleado)
@@ -310,7 +310,7 @@ class Usuario_model extends CI_Model {
 					WHERE sir_empleado.id_empleado='".$id_empleado."'
 					ORDER BY id_empleado_informacion_laboral DESC LIMIT 0,1";
 		$query=$this->db->query($sentencia);
-		return (array)$query->row();
+		return $query->row_array();
 	}
 	
 	function guardar_usuario($formuInfo) 
@@ -347,7 +347,7 @@ class Usuario_model extends CI_Model {
 					LEFT JOIN org_modulo AS m4 ON m4.id_modulo = m3.dependencia
 					WHERE m1.id_modulo=".$id_modulo;
 		$query=$this->db->query($sentencia);
-		return (array)$query->row();
+		return $query->row_array();
 	}
 	
 	function buscar_padre_modulo_rol($id_rol,$id_modulo)
@@ -356,7 +356,7 @@ class Usuario_model extends CI_Model {
 		$query=$this->db->query($sentencia);
 	
 		/*return $query->num_rows;*/
-		return (array)$query->row();
+		return $query->row_array();
 	}
 	
 	function eliminar_permisos_rol($id_rol)
@@ -408,7 +408,7 @@ class Usuario_model extends CI_Model {
 			
 
 		$query=$this->db->query($sentencia);
-		return (array)$query->result_array();
+		return $query->result_array();
 	}
 	
 	function eliminar_permisos_usuario($id_usuario)
@@ -445,8 +445,8 @@ class Usuario_model extends CI_Model {
 					WHERE e.correo NOT LIKE ''
 					GROUP BY id_empleado;";
 		$query=$this->db->query($sentencia);
-		if($query->num_rows>0) {
-			return (array)$query->result_array();
+		if($query->num_rows()>0) {
+			return $query->result_array();
 		}
 		else {
 			$sentencia="SELECT e.nombre, e.correo, e.nominal, e.id_usuario
@@ -464,8 +464,8 @@ class Usuario_model extends CI_Model {
 						WHERE e.correo NOT LIKE ''
 						GROUP BY id_empleado;";
 			$query=$this->db->query($sentencia);
-			if($query->num_rows>0) {
-				return (array)$query->result_array();
+			if($query->num_rows()>0) {
+				return $query->result_array();
 			}
 			else {
 				$sentencia="SELECT e.nombre, e.correo, e.nominal, e.id_usuario
@@ -477,7 +477,7 @@ class Usuario_model extends CI_Model {
 							WHERE e.correo NOT LIKE ''
 							GROUP BY id_empleado;";
 				$query=$this->db->query($sentencia);
-				return (array)$query->result_array();
+				return $query->result_array();
 			}
 		}
 	}
@@ -497,7 +497,7 @@ class Usuario_model extends CI_Model {
 					WHERE tcm_solicitud_transporte.id_solicitud_transporte= ".$id_solicitud_transporte."
 				GROUP BY id_empleado";
 		$query=$this->db->query($sentencia);
-		return (array)$query->row();
+		return $query->row();
 	}
 	
 	function eliminar_roles_usuario($id_usuario)
@@ -530,13 +530,13 @@ class Usuario_model extends CI_Model {
 			$sentencia="SELECT correo FROM  sir_empleado  WHERE nr =
 						(SELECT o.nr FROM org_usuario o  WHERE id_usuario=$id_usuario) ";
 			$query=$this->db->query($sentencia);
-			return (array)$query->row();
+			return $query->row();
 	}
 	function datos_modulo($id_modulo)
 	{
 		$sentencia="SELECT * FROM org_modulo WHERE id_modulo = ". $id_modulo;
 		$query=$this->db->query($sentencia);
-		return (array)$query->row();	
+		return $query->row();	
 	}
 	
 	function get_rol($id_rol,$id_usuario)
@@ -562,7 +562,7 @@ class Usuario_model extends CI_Model {
 					LEFT JOIN sir_empleado_informacion_laboral as info ON e.id_empleado = info.id_empleado 
 					WHERE u.estado=1 and u.id_usuario='$id_usuario'";
 		$query=$this->db->query($sentencia);
-		return (array)$query->row();
+		return $query->row();
 	}
 
 		function get_ayuda($id_modulo=NULL)
