@@ -513,7 +513,7 @@ function consultar_refuerzo($id_seccion, $id_fuente_fondo, $mes)
 
 				$html =$this->load->view("vales/requisicion_pdf",$datos, true);
 
-				$this->mpdf->mPDF('utf-8','letter',0, '', 4, 4, 6, 6, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
+				$this->mpdf = new mPDF('utf-8','letter',0, '', 4, 4, 6, 6, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
 				$stylesheet = file_get_contents('css/style-base.css'); /*Selecionamos la hoja de estilo del pdf*/
 				$this->mpdf->WriteHTML($stylesheet,1); /*lo escribimos en el pdf*/
 				$this->mpdf->WriteHTML($html,2); /*la escribimos en el pdf*/
@@ -1487,7 +1487,7 @@ $data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usu
 			if($this->input->post('tipo_archivo') == 'excel'){
 				$this->load->view('vales/consumo_pdf',$data);
 			}else{
-				$this->mpdf->mPDF('utf-8','letter-L',0, '', 15, 15, 40, 17, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
+				$this->mpdf = new mPDF('utf-8','letter-L',0, '', 15, 15, 40, 17, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
 				$stylesheet = file_get_contents('css/bootstrap2.min.css'); /*Selecionamos la hoja de estilo del pdf*/
 				$table_head = '<table style="width: 100%;">
 					        <tr style="font-size: 20px; vertical-align: middle; font-family: "Poppins", sans-serif;">
@@ -2107,7 +2107,7 @@ function reporte_vehiculo_pdf()
 			echo $html;
 		}elseif ($salida==1) { //PDF
 			$data['base']=false;
-			$this->mpdf->mPDF('utf-8','letter',0, '', 4, 4, 6, 6, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
+			$this->mpdf = new mPDF('utf-8','letter',0, '', 4, 4, 6, 6, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
 			$stylesheet = file_get_contents('css/style-base.css'); /*Selecionamos la hoja de estilo del pdf*/
 			$html = $this->load->view('vales/vehiculos_pdf', $data, true); /*Seleccionamos la vista que se convertirá en pdf*/
 			$this->mpdf->WriteHTML($stylesheet,1); /*lo escribimos en el pdf*/
@@ -2471,7 +2471,7 @@ function liquidacion_pdf()
 
 				$data['l']=$this->vales_model->liquidacion_mensual2($mes, $id_fuente_fondo);
 				$html = $this->load->view('vales/liquidacion_pdf', $data, true); /*Seleccionamos la vista que se convertirá en pdf*/
-				$this->mpdf->mPDF('utf-8','letter-L',0, '', 20, 20, 15, 17, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
+				$this->mpdf = new mPDF('utf-8','letter-L',0, '', 20, 20, 15, 17, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
 
 				$pie = '<table width="100%" style="font-size: 11px; font-weight: bold;">
 				    <tr>
@@ -2509,7 +2509,7 @@ function liquidacion_pdf()
 //				echo "<pre>"; 		print_r($data);		echo "</pre>";
 
 				$html = $this->load->view('vales/liquidacion_seccion_pdf', $data, true); /*Seleccionamos la vista que se convertirá en pdf*/
-				$this->mpdf->mPDF('utf-8','letter',0, '', 20, 20, 15, 17, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
+				$this->mpdf = new mPDF('utf-8','letter',0, '', 20, 20, 15, 17, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
 
 			}
 

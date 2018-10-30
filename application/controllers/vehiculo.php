@@ -1137,7 +1137,7 @@ class Vehiculo extends CI_Controller
 		if($data['id_permiso']==3)
 		{
 			$data['datos']=$this->transporte_model->filtro_vehiculo($_POST);
-			$this->mpdf->mPDF('utf-8','A4-L'); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
+			$this->mpdf = new mPDF('utf-8','A4-L'); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
 			$stylesheet = file_get_contents('css/pdf/solicitud.css'); /*Selecionamos la hoja de estilo del pdf*/
 			$this->mpdf->WriteHTML($stylesheet,1); /*lo escribimos en el pdf*/
 			$html = $this->load->view('mantenimiento/vehiculos_pdf', $data, true); /*Seleccionamos la vista que se convertirá en pdf*/
@@ -1632,7 +1632,7 @@ class Vehiculo extends CI_Controller
 			$data['revisiones']=$this->transporte_model->consultar_revisiones();
 			$data['revision']=$this->transporte_model->consultar_revisiones2($id);
 			
-			$this->mpdf->mPDF('utf-8','A4'); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
+			$this->mpdf = new mPDF('utf-8','A4'); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
 			$this->mpdf->SetHTMLHeader('
 									<table align="center" cellpadding="0" cellspacing="0">
 										<tr>
@@ -1795,7 +1795,7 @@ class Vehiculo extends CI_Controller
 			$data['reparaciones']=$this->transporte_model->consultar_reparaciones();
 			$data['reparacion']=$this->transporte_model->consultar_reparaciones2($id);
 			
-			$this->mpdf->mPDF('utf-8','A4-L'); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
+			$this->mpdf = new mPDF('utf-8','A4-L'); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
 			$this->mpdf->SetHTMLHeader('
 									<table align="center" cellpadding="0" cellspacing="0">
 										<tr>
