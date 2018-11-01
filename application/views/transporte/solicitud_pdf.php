@@ -4,23 +4,27 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
-    <table align="center" border="0" cellspacing="0" style="width:100%;">
-        <tr>
-            <td align="left" id="imagen">
-                <img src="img/mtps.jpg" width=200.25, heigth=105.75/>
-
+    <table style="width: 100%;">
+        <tr style="font-size: 20px; vertical-align: middle; font-family: "Poppins", sans-serif;">
+            <td width="110px"><img src="<?php if($base){ echo base_url();} ?>img/logo_izquierdo.jpg" width="110px"></td>
+            <td align="center" style="font-size: 18px; font-weight: bold; line-height: 1.3;">
+                <h6>MINISTERIO DE TRABAJO Y PREVISIÓN SOCIAL</h6>
+                <h6>DEPARTAMENTO DE SERVICIOS GENERALES</h6>
+                <h6>SOLICITUD DE USO DE VEHICULO</h6>
             </td>
-            <td align="right">
-                <h3>SOLICITUD DE USO DE VEHICULO</h3>
-                <h6>ID solicitud: <strong><?php echo $info_solicitud['id_solicitud_transporte']; ?></strong> </h6>
+            <td width="110px"><img src="<?php if($base){ echo base_url();} ?>img/logo_derecho.jpg"  width="110px"></td>
+        </tr>
+        <tr>
+            <td align="right" colspan="3">
+                <h5>ID solicitud: <strong><?php echo $info_solicitud['id_solicitud_transporte']; ?><br></strong> </h5>
             </td>
         </tr>
         <tr>
-        	<td colspan="2" align="center">
-            	<strong id="titulo">DATOS DE SOLICITANTE</strong>
+            <td align="center" colspan="3">
+                <strong id="titulo">DATOS DE SOLICITANTE</strong>
             </td>
         </tr>
-  	</table>
+    </table>
     <table align="center" class="tabla" cellspacing="0">    
         <tr>
         	<td colspan="2" align="center">
@@ -126,6 +130,78 @@
         </tr>
         <tr>
         	<td align="left">
+                <table>
+                    <tr>
+                        <td colspan="2" style="padding-left: 20px;">
+                            Departamento: <strong><?php if($info_empleado['nivel_2']!="") echo $info_empleado['nivel_2']."."; else echo "_____________________________________________________________________________________________________________________";?></strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding-left: 20px;">
+                            Secci&oacute;n: <strong><?php if($info_empleado['nivel_1']!="") echo $info_empleado['nivel_1']."."; else echo "____________________________________________________________________________________________________________________________";?></strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding-left: 20px;">
+                            Acompa&ntilde;ante(s): 
+                            <strong>
+                                <?php 
+                                    $i=0;
+                                    $cadena="";
+                                    foreach($acompanantes as $val) {
+                                        $x=substr(ucwords($val->nombre), 0, -1);
+                                        if($i==1)
+                                            $cadena.=", ";
+                                        $cadena.=$x;
+                                        $i=1;
+                                    }
+                                    echo strtoupper($cadena);
+                                    if($i==1 && $info_solicitud['acompanante']!="")
+                                        echo ", ";
+                                    echo strtoupper($info_solicitud['acompanante']);
+                                    if($i==1 || $info_solicitud['acompanante']!="")
+                                        echo ".";
+                                    else
+                                        echo "NINGUNO.";
+                                ?>
+                            </strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding-left: 20px;">
+                            Lugar de destino: 
+                            <strong>
+                                <?php 
+                                    if(count($destinos)>1) {
+                                        echo "VER ATRÁS";
+                                    }
+                                    else {
+                                        foreach($destinos as $val) {
+                                            echo strtoupper($val->destino.", ".$val->municipio).".";
+                                        }
+                                    }
+                                ?>
+                            </strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding-left: 20px;">
+                            Misi&oacute;n encomendada:  
+                            <strong>
+                                <?php 
+                                    if(count($destinos)>1) {
+                                        echo "VER ATRÁS";
+                                    }
+                                    else {
+                                        foreach($destinos as $val) {
+                                            echo strtoupper($val->mision).".";
+                                        }
+                                    }
+                                ?>
+                            </strong>
+                        </td>
+                    </tr>
+                </table>
             </td>
         	<td align="left">
             	<table align="right">
@@ -175,76 +251,7 @@
                 </table>
             </td>
         </tr>
-        <tr>
-        	<td colspan="2">
-            	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Departamento: <strong><?php if($info_empleado['nivel_2']!="") echo $info_empleado['nivel_2']."."; else echo "_____________________________________________________________________________________________________________________";?></strong>
-            </td>
-        </tr>
-        <tr>
-        	<td colspan="2">
-            	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Secci&oacute;n: <strong><?php if($info_empleado['nivel_1']!="") echo $info_empleado['nivel_1']."."; else echo "____________________________________________________________________________________________________________________________";?></strong>
-            </td>
-        </tr>
-        <tr>
-        	<td colspan="2">
-            	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Acompa&ntilde;ante(s): 
-                <strong>
-					<?php 
-                        $i=0;
-						$cadena="";
-                        foreach($acompanantes as $val) {
-							$x=substr(ucwords($val->nombre), 0, -1);
-                            if($i==1)
-                                $cadena.=", ";
-                            $cadena.=$x;
-                            $i=1;
-                        }
-						echo strtoupper($cadena);
-                        if($i==1 && $info_solicitud['acompanante']!="")
-                            echo ", ";
-                        echo strtoupper($info_solicitud['acompanante']);
-						if($i==1 || $info_solicitud['acompanante']!="")
-							echo ".";
-						else
-							echo "NINGUNO.";
-                    ?>
-                </strong>
-            </td>
-        </tr>
-        <tr>
-        	<td colspan="2">
-            	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lugar de destino: 
-                <strong>
-					<?php 
-                        if(count($destinos)>1) {
-                            echo "VER ATRÁS";
-                        }
-                        else {
-                            foreach($destinos as $val) {
-                                echo strtoupper($val->destino.", ".$val->municipio).".";
-                            }
-                        }
-                    ?>
-                </strong>
-            </td>
-        </tr>
-        <tr>
-        	<td colspan="2">
-            	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Misi&oacute;n encomendada:  
-                <strong>
-					<?php 
-                        if(count($destinos)>1) {
-                            echo "VER ATRÁS";
-                        }
-                        else {
-                            foreach($destinos as $val) {
-                                echo strtoupper($val->mision).".";
-                            }
-                        }
-                    ?>
-                </strong>
-        	</td>
-        </tr>
+        
         <tr><td colspan="2">&nbsp;</td></tr>
         <!--<tr>
         	<td align="center" style="width:50%">
@@ -371,6 +378,7 @@
                    	</tr>
                     <tr>
                         <td align="center" colspan="3">
+                            <br><br><br>
                             F. _____________________________________________<br />
                             Motorista
                         </td>
@@ -378,7 +386,57 @@
                  </table>
             </td>
         </tr>
-    </table>
+    </table><br>
+    <table align="left" border="0" cellspacing="0" style="width:100%;">
+        <tr>
+            <td align="left" style="width:60%">
+                 <table align="left" class="tabla" cellspacing="0">
+                    <tr>
+                        <td><h5 align="center"><strong>USO EXCLUSIVO SERVICIOS GENERALES</strong></h5></td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 1px solid #000;" align="center" colspan="2">
+                            <strong>AUTORIZACION  DE VEHICULO A  MISION  OFICIAL</strong>
+                        </td>
+                    </tr>
+                    <tr><td>&nbsp;</td></tr>
+                    <tr>
+                        <td style="padding-left: 15px;" colspan="2">
+                            <br>Motorista: ____________________________________________________________
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 15px; width: 60%">
+                            <br>No. placa del veh&iacute;culo: ________________________
+                        </td>
+                        <td style="padding-left: 15px; width: 40%">
+                            <br>Kilometraje inicial: ___________
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 15px; width: 60%">
+                            <br>Clase del veh&iacute;culo: ____________________________
+                        </td>
+                        <td style="padding-left: 15px; width: 40%">
+                            <br>Kilometraje final: _____________
+                        </td>
+                    </tr>
+                    <tr><td>&nbsp;</td></tr>
+                    <tr><td>&nbsp;</td></tr>
+                    <tr>
+                        <td align="center" colspan="2">
+                            <!--f. _____________________________________________<br />-->
+                            Asignado por <strong><?php echo ucwords($motorista_vehiculo['nombre2']) ?> </strong><br /><?php echo ucwords($info_empleado3['funcional']) ?><br />Fecha asignaci&oacute;n: <?php echo $motorista_vehiculo['fecha_asignacion'] ?> a las <?php echo $motorista_vehiculo['hora_asignacion'] ?> 
+                        </td>
+                    </tr>
+                 </table>
+            </td>
+            <td align="center" style="width:40%; height:200px; vertical-align:bottom;">
+                F.<img src="img/firma_gerencia.png"/><br />
+                <div style="text-decoration: overline ;">Direcci&oacute;n Administrativa</div>
+            </td>
+        </tr>
+    </table><br>
     <table align="center" border="0" cellspacing="0" style="width:100%;">
     	<tr>
         	<td style="vertical-align:top; font-size: 13px;">
@@ -399,13 +457,9 @@
                             default:
                                 $quien="General";
                         }
-                        echo $quien.":<br><ul><li><strong>".strtoupper($val['observacion']).".</strong></li></ul>";					
+                        echo $quien.":<br><ul><li><strong>".strtoupper($val['observacion']).".</strong></li></ul>";			
                     }
                 ?>
-            </td>
-        	<td align="center" style="width:40%; height:200px; vertical-align:bottom;">
-            	F.<img src="img/firma_gerencia.png"/><br />
-                <div style="text-decoration: overline ;">Direcci&oacute;n Administrativa</div>
             </td>
         </tr>
     </table>
