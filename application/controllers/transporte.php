@@ -1329,7 +1329,10 @@ function enviar_solicitud($id_solicitud_transporte)
 {
 	enviar_correo_automatico_administracion($id_solicitud_transporte,66);		
 }
-			
+
+	public function prueba_correo($id_solicitud_transporte) {
+		enviar_correo_automatico_usuarios($id_solicitud_transporte);
+	}
 	
 }
 ?>

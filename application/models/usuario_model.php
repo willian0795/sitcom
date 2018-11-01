@@ -497,7 +497,7 @@ class Usuario_model extends CI_Model {
 					WHERE tcm_solicitud_transporte.id_solicitud_transporte= ".$id_solicitud_transporte."
 				GROUP BY id_empleado";
 		$query=$this->db->query($sentencia);
-		return $query->row();
+		return $query->row_array();
 	}
 	
 	function eliminar_roles_usuario($id_usuario)
