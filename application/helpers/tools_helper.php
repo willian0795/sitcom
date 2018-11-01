@@ -253,6 +253,14 @@
 					$titulo="X";
 					$mensaje="X";
 			}
+
+			$mensaje .= "<br><br>
+					<p style='font-family: arial,verdana,sans-serif;'>Atentamente,</p>
+					<p style='font-family: arial,verdana,sans-serif;'>Departamento de Transporte</p>
+					<p style='font-family: arial,verdana,sans-serif;'>Dirección Administrativa</p>
+					<img style='height: 106px; width: 173px;' src=".base_url()."'img/logo_izquierdo.jpg'>
+			";
+
 			$r=enviar_correo($correo,$titulo,$mensaje);
 			
 		}
