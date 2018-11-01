@@ -108,7 +108,7 @@
 		}	
 
 	/*function enviar_correo($correo=array(),$title,$message) */
-	function enviar_correo($correo,$title,$message) 
+	function enviar_correo($correo,$title,$message)
 	{
 
 		$title= utf8_decode($title);
@@ -211,7 +211,7 @@
 				return $r;
 	}
 	
-	function enviar_correo_automatico_administracion($id_solicitud_transporte=NULL, $id_modulo=NULL) 
+	function enviar_correo_automatico_administracion($id_solicitud_transporte=NULL, $id_modulo=NULL)
 	{
 		$CI =& get_instance();
 		$CI->load->model('usuario_model');

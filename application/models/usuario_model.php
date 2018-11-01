@@ -536,7 +536,7 @@ class Usuario_model extends CI_Model {
 	{
 		$sentencia="SELECT * FROM org_modulo WHERE id_modulo = ". $id_modulo;
 		$query=$this->db->query($sentencia);
-		return $query->row();	
+		return $query->row_array();	
 	}
 	
 	function get_rol($id_rol,$id_usuario)
