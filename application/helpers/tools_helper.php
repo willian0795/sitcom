@@ -111,29 +111,6 @@
 	function enviar_correo($correo,$title,$message) 
 	{
 
-		// $CI->load->library('email');
-
-		// $config = array(
-		// 	'protocol' => 'smtp',
-		// 	'smtp_host' => 'ssl://mtrabajo.mtps.gob.sv',
-		// 	'smtp_port' => 465,
-		// 	'smtp_user' => 'sicbaf.notificaciones@mtps.gob.sv',
-		// 	'smtp_pass' => '8gfGxTnb',
-		// 	'mailtype' => 'html',
-		// 	'charset' => 'utf-8',
-		// 	'newline' => "\r\n"
-		//   );
-  
-		// $CI->email->initialize($config);
-
-		// $CI->email->from("sicbaf.notificaciones@mtps.gob.sv");
-        // $CI->email->to($correo_receptor);
-        // $CI->email->cc($cc);
-        // $CI->email->subject($title);
-        // $CI->email->message($message);
-
-        // $CI->email->send();
-
 		$title= utf8_decode($title);
 		$message= utf8_decode($message);
 		$CI =& get_instance();
@@ -147,10 +124,8 @@
 		$mail->SMTPDebug = 4;
 		
 		$mail->Port = 465;
-		// $mail->Username = "departamento.transporte@mtps.gob.sv";
-		// $mail->Password = ".[?=)&%$";
-		$mail->Username = "sicbaf.notificaciones@mtps.gob.sv";
-		$mail->Password = "8gfGxTnb";
+		$mail->Username = "departamento.transporte@mtps.gob.sv";
+		$mail->Password = "j/82}k8AXmI&89e.-0?323";
 		$mail->From = "departamento.transporte@mtps.gob.sv";
 		$mail->FromName = "Departamento de Transporte";
 		$mail->IsHTML(true);
