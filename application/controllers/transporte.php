@@ -1209,7 +1209,7 @@ class Transporte extends CI_Controller
 			$data['observaciones']=$this->transporte_model->observaciones($id_solicitud_transporte);
 			/*$this->load->view('transporte/solicitud_pdf.php',$data);*/
 			
-			$this->mpdf = new mPDF('utf-8','letter',0, '', 4, 4, 6, 6, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
+			$this->mpdf = new mPDF('utf-8','letter',0, '', 15, 10, 10, 10, 9, 9); /*Creacion de objeto mPDF con configuracion de pagina y margenes*/
 			$stylesheet = file_get_contents('css/pdf/solicitud.css'); /*Selecionamos la hoja de estilo del pdf*/
 			$this->mpdf->WriteHTML($stylesheet,1); /*lo escribimos en el pdf*/
 			$data['nombre'] = "Renatto NL";

@@ -274,7 +274,7 @@
     	<tr>
         	<td align="center" style="width:60%">
             	<strong>USO EXCLUSIVO SERVICIOS GENERALES</strong>
-                 <table align="center" class="tabla" cellspacing="0" style="width: 100%; margin-right: 20px;">
+                 <table align="center" class="tabla" cellspacing="0" style="width: 80%;">
                  	<tr>
                     	<td style="border-bottom: 1px solid #000;" align="center">
                         	<strong>AUTORIZACION  DE VEHICULO A  MISION  OFICIAL</strong>
@@ -392,14 +392,10 @@
     <table align="left" border="0" cellspacing="0" style="width:100%;">
         <tr>
             <td align="left" style="width:60%">
-                <table align="center" style="font-size: 11px;">
+                 <table align="left" class="tabla" cellspacing="0">
                     <tr>
-                        <td align="center">
-                            <strong>USO EXCLUSIVO SERVICIOS GENERALES  </strong>
-                        </td>
+                        <td><h5 align="center"><strong>USO EXCLUSIVO SERVICIOS GENERALES</strong></h5></td>
                     </tr>
-                </table>
-                 <table align="left" class="tabla" cellspacing="0" style="font-size: 11px;">
                     <tr>
                         <td style="border-bottom: 1px solid #000;" align="center" colspan="2">
                             <strong>AUTORIZACION  DE VEHICULO A  MISION  OFICIAL</strong>
@@ -408,47 +404,41 @@
                     <tr><td>&nbsp;</td></tr>
                     <tr>
                         <td style="padding-left: 15px;" colspan="2">
-                            <br>Motorista: _____________________________________________________________________
+                            <br>Motorista: ____________________________________________________________
                         </td>
                     </tr>
                     <tr>
                         <td style="padding-left: 15px; width: 60%">
-                            <br>No. placa del veh&iacute;culo: _____________________
+                            <br>No. placa del veh&iacute;culo: ________________________
                         </td>
                         <td style="padding-left: 15px; width: 40%">
-                            <br>Kilometraje inicial: _________
+                            <br>Kilometraje inicial: ___________
                         </td>
                     </tr>
                     <tr>
                         <td style="padding-left: 15px; width: 60%">
-                            <br>Clase del veh&iacute;culo: _________________________
+                            <br>Clase del veh&iacute;culo: ____________________________
                         </td>
                         <td style="padding-left: 15px; width: 40%">
-                            <br>Kilometraje final: ___________
+                            <br>Kilometraje final: _____________
                         </td>
                     </tr>
-                    <tr>
-                        <td style="padding-left: 15px; width: 60%">
-                        </td>
-                        <td style="padding-left: 15px; width: 40%">
-                            <br>Kms. recorridos: ___________
-                        </td>
-                    </tr>
+                    <tr><td>&nbsp;</td></tr>
                     <tr><td>&nbsp;</td></tr>
                     <tr>
                         <td align="center" colspan="2">
                             <!--f. _____________________________________________<br />-->
-                            Asignado por: ________________________________________________ 
+                            Asignado por <strong><?php echo ucwords($motorista_vehiculo['nombre2']) ?> </strong><br /><?php echo ucwords($info_empleado3['funcional']) ?><br />Fecha asignaci&oacute;n: <?php echo $motorista_vehiculo['fecha_asignacion'] ?> a las <?php echo $motorista_vehiculo['hora_asignacion'] ?> 
                         </td>
                     </tr>
                  </table>
             </td>
             <td align="center" style="width:40%; height:200px; vertical-align:bottom;">
-                F.<img src="img/firma_gerencia.png"/ style="max-height: 100px;"><br />
+                F.<img src="img/firma_gerencia.png"/><br />
                 <div style="text-decoration: overline ;">Direcci&oacute;n Administrativa</div>
             </td>
         </tr>
-    </table>
+    </table><br>
     <table align="center" border="0" cellspacing="0" style="width:100%;">
     	<tr>
         	<td style="vertical-align:top; font-size: 13px;">
