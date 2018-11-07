@@ -430,7 +430,7 @@ class Usuario_model extends CI_Model {
 	}
 	function buscar_correos($id_solicitud_transporte=NULL, $id_modulo=NULL)
 	{
-		$sentencia="SELECT e.nombre, e.correo, e.nominal, e.id_usuario
+		$sentencia="SELECT e.nombre, e.correo, e.nominal, e.id_usuario, r.id_rol	
 					FROM tcm_empleado AS e
 					INNER JOIN org_usuario_rol AS ur ON ur.id_usuario=e.id_usuario
 					INNER JOIN org_rol AS r ON r.id_rol=ur.id_rol
@@ -449,7 +449,7 @@ class Usuario_model extends CI_Model {
 			return $query->result_array();
 		}
 		else {
-			$sentencia="SELECT e.nombre, e.correo, e.nominal, e.id_usuario
+			$sentencia="SELECT e.nombre, e.correo, e.nominal, e.id_usuario, r.id_rol
 						FROM tcm_empleado AS e
 						INNER JOIN org_usuario_rol AS ur ON ur.id_usuario=e.id_usuario
 						INNER JOIN org_rol AS r ON r.id_rol=ur.id_rol
@@ -468,7 +468,7 @@ class Usuario_model extends CI_Model {
 				return $query->result_array();
 			}
 			else {
-				$sentencia="SELECT e.nombre, e.correo, e.nominal, e.id_usuario
+			$sentencia="SELECT e.nombre, e.correo, e.nominal, e.id_usuario, r.id_rol
 							FROM tcm_empleado AS e
 							INNER JOIN org_usuario_rol AS ur ON ur.id_usuario=e.id_usuario
 							INNER JOIN org_rol AS r ON r.id_rol=ur.id_rol

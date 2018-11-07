@@ -16,8 +16,8 @@ $denegar=md5(0);
 			<h2 style="font-family: arial,verdana,sans-serif; margin-top: 0;">¡Bienvenida/o al Sistema de Transporte!</h2>
 			<p style="font-family: arial,verdana,sans-serif;">Estimada/o <?= $nombre ?>:</p>
 			<p style="font-family: arial,verdana,sans-serif;">
-				La solicitud No <?= $id_solicitud_transporte ?> realizada por <?= ucwords($solicitud['nombre']) ?> para el <?= $solicitud['fecha_mision']?> 
-				en el horario de <?=$solicitud['hora_salida']?> a <?=$solicitud['hora_entrada']?> requiere su aprobación.
+				La solicitud No <strong><?= $id_solicitud_transporte ?></strong> realizada por <strong><?= ucwords($solicitud['nombre']) ?></strong> para el <strong><?= $solicitud['fecha_mision']?> </strong>
+				en el horario de <strong><?=$solicitud['hora_salida']?></strong> a <strong><?=$solicitud['hora_entrada']?></strong> requiere su aprobación.
 			</p>
 
 			<p style="font-family: arial,verdana,sans-serif;">Acompañante(s):</p>

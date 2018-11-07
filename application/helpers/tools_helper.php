@@ -162,7 +162,7 @@
 			$nombre=ucwords($datos[$i]['nombre']);
 			$id_usuario=$datos[$i]['id_usuario'];
 			
-			$titulo="SOLICITUD DE TRANSPORTE N&186;".$id_solicitud;
+			$titulo="SOLICITUD DE TRANSPORTE Nº".$id_solicitud;
 			$data['id_solicitud_transporte']=$id_solicitud;
 			$data['nombre']=$nombre;
 			$data['solicitud']=$solicitud;
@@ -219,7 +219,6 @@
 		$datos=$CI->usuario_model->buscar_correos($id_solicitud_transporte, $id_modulo);
 		$solicitud=$CI->transporte_model->consultar_solicitud($id_solicitud_transporte);
 		$mod=$CI->usuario_model->datos_modulo($id_modulo);
-		$url="<p style='font-family: arial,verdana,sans-serif;'>Ingrese <a href='".base_url()."index.php/".$mod['url_modulo']."' title='Visualizar en el sistema'>aquí</a> para visualizar la solicitud en el sistema.</p>";
 		$data['a']=$CI->transporte_model->acompanantes_internos($id_solicitud_transporte);
 		$data['f']=$CI->transporte_model->destinos($id_solicitud_transporte);
 		$data['observaciones']=$CI->transporte_model->observaciones($id_solicitud_transporte);
@@ -231,11 +230,11 @@
 			
 			$nominal=ucwords($datos[$i]['nominal']);
 			$mensaje="<div style='background-color:#F5F6F8; padding: 15px;'><div style='background-color: #FFFFFF; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 4px; border: 1px solid #e1e1e1;'>
-					<h2 style='font-family: arial,verdana,sans-serif; margin-top: 0;'>&161;Bienvenida/o al Sistema de Transporte!</h2>
+					<h2 style='font-family: arial,verdana,sans-serif; margin-top: 0;'>&#161;Bienvenida/o al Sistema de Transporte!</h2>
 					<p style='font-family: arial,verdana,sans-serif;'>Estimada/o $nombre:</p>";
 			switch($id_modulo){
 				case 66:
-					$titulo="SOLICITUD DE TRANSPORTE N&186;".$id_solicitud_transporte;
+					$titulo="SOLICITUD DE TRANSPORTE Nº".$id_solicitud_transporte;
 					$data['id_solicitud_transporte']=$id_solicitud_transporte;
 					$data['nombre']=$nombre;
 					$data['solicitud']=$solicitud;
@@ -245,21 +244,27 @@
 					break;
 				case 68:
 					
-					$titulo="SOLICITUD DE TRANSPORTE N&186;".$id_solicitud_transporte;
-					$mensaje.="requiere asignaci&oacute;n de veh&iacute;culo/motorista. ".$url."<br><br>Departamento de Transporte.";
-					$mensaje.="<p style='font-family: arial,verdana,sans-serif;'>Su solicitud No $id_solicitud_transporte para el ".$datos['fecha_mision']." en el horario de ".$solicitud['hora_salida']." a ".$solicitud['hora_entrada']." requiere asignaci&oacute;n de veh&iacute;culo/motorista.</p>".$url;
+					$titulo="SOLICITUD DE TRANSPORTE Nº".$id_solicitud_transporte;
+
+					if ($datos[$i]['id_rol'] == 14) {
+						$url="<p style='font-family: arial,verdana,sans-serif;'>Ingrese <a href='".base_url()."index.php/".$mod['url_modulo']."' title='Visualizar en el sistema'>aqu&iacute;</a> para asignar veh&iacute;lo/motorista.</p>";
+						$mensaje.="<p style='font-family: arial,verdana,sans-serif;'>La solicitud Nº <strong>$id_solicitud_transporte</strong> para el horario de <strong>".$solicitud['hora_salida']."</strong> a <strong>".$solicitud['hora_entrada']."</strong> requiere asignaci&oacute;n de veh&iacute;lo/motorista.</p>".$url;
+					} else {
+						$url="<p style='font-family: arial,verdana,sans-serif;'>Ingrese <a href='".base_url()."index.php/".$mod['url_modulo']."' title='Visualizar en el sistema'>aqu&iacute;</a> para visualizar la solicitud en el sistema.</p>";
+						$mensaje.="<p style='font-family: arial,verdana,sans-serif;'>Su solicitud Nº <strong>$id_solicitud_transporte</strong> para el horario de <strong>".$solicitud['hora_salida']."</strong> a <strong>".$solicitud['hora_entrada']."</strong> ha sido registrada.</p>".$url;
+					}
+					
+					$mensaje .= "<br><br>
+							<p style='font-family: arial,verdana,sans-serif;'>Atentamente,</p>
+							<p style='font-family: arial,verdana,sans-serif;'>Departamento de Transporte</p>
+							<p style='font-family: arial,verdana,sans-serif;'>Direcci&oacute;n Administrativa</p>
+							<img style='height: 106px; width: 173px;' src=".base_url()."img/logo_izquierdo.jpg>
+						";
 					break;
 				default:
 					$titulo="X";
 					$mensaje="X";
 			}
-
-			$mensaje .= "<br><br>
-					<p style='font-family: arial,verdana,sans-serif;'>Atentamente,</p>
-					<p style='font-family: arial,verdana,sans-serif;'>Departamento de Transporte</p>
-					<p style='font-family: arial,verdana,sans-serif;'>Direcci&oacute;n Administrativa</p>
-					<img style='height: 106px; width: 173px;' src=".base_url()."img/logo_izquierdo.jpg>
-			";
 
 			$r=enviar_correo($correo,$titulo,$mensaje);
 			
@@ -279,22 +284,22 @@
 		
 		$nominal=ucwords($datos['nominal']);
 		$mensaje="<div style='background-color:#F5F6F8; padding: 15px;'><div style='background-color: #FFFFFF; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 4px; border: 1px solid #e1e1e1;'>
-					<h2 style='font-family: arial,verdana,sans-serif; margin-top: 0;'>&161;Bienvenida/o al Sistema de Transporte!</h2>
+					<h2 style='font-family: arial,verdana,sans-serif; margin-top: 0;'>&#161;Bienvenida/o al Sistema de Transporte!</h2>
 					<p style='font-family: arial,verdana,sans-serif;'>Estimada/o $nombre:</p>";
 		switch($datos['estado']){
 			case 0:	
-				$titulo="SOLICITUD DE TRANSPORTE N&186;".$id_solicitud_transporte;
-				$mensaje.="<p style='font-family: arial,verdana,sans-serif;'>Su solicitud No $id_solicitud_transporte para el ".$datos['fecha_mision']." en el horario de ".$solicitud['hora_salida']." a ".$solicitud['hora_entrada']." ha sido aprobada.</p>
+				$titulo="SOLICITUD DE TRANSPORTE Nº".$id_solicitud_transporte;
+				$mensaje.="<p style='font-family: arial,verdana,sans-serif;'>Su solicitud Nº <strong>$id_solicitud_transporte</strong> para el <strong>".$datos['fecha_mision']."</strong> en el horario de <strong>".$solicitud['hora_salida']."</strong> a <strong>".$solicitud['hora_entrada']."</strong> ha sido aprobada.</p>
 							Puede que se deba a uno de los siguientes motivos: ".$datos['observacion'];
 				break;
 			case 2:
-				$titulo="SOLICITUD DE TRANSPORTE N&186;".$id_solicitud_transporte;
-				$mensaje.="<p style='font-family: arial,verdana,sans-serif;'>Su solicitud No $id_solicitud_transporte para el ".$datos['fecha_mision']." en el horario de ".$solicitud['hora_salida']." a ".$solicitud['hora_entrada']." ha sido aprobada.</p>";
+				$titulo="SOLICITUD DE TRANSPORTE Nº".$id_solicitud_transporte;
+				$mensaje.="<p style='font-family: arial,verdana,sans-serif;'>Su solicitud Nº <strong>$id_solicitud_transporte<strong> para el <strong>".$datos['fecha_mision']."</strong> en el horario de <strong>".$solicitud['hora_salida']."</strong> a <strong>".$solicitud['hora_entrada']."</strong> ha sido aprobada.</p>";
 				break;
 			case 3:
 				$d=$CI->transporte_model->datos_motorista_vehiculo($id_solicitud_transporte);
-				$titulo="SOLICITUD DE TRANSPORTE N&186;".$id_solicitud_transporte;
-				$mensaje.= "<p style='font-family: arial,verdana,sans-serif;'>Su solicitud No $id_solicitud_transporte para el ".$datos['fecha_mision']." en el horario de ".$solicitud['hora_salida']." a ".$solicitud['hora_entrada']." ha sido asignada al vehículo con placa ". $d['placa'] .".</p>";
+				$titulo="SOLICITUD DE TRANSPORTE Nº".$id_solicitud_transporte;
+				$mensaje.= "<p style='font-family: arial,verdana,sans-serif;'>Su solicitud Nº <strong>$id_solicitud_transporte</strong> para el <strong>".$datos['fecha_mision']."</strong> en el horario de <strong>".$solicitud['hora_salida']."</strong> a <strong>".$solicitud['hora_entrada']."</strong> ha sido asignada al vehículo con placa ". $d['placa'] .".</p>";
 				break;
 			default:
 				$titulo="Y";
