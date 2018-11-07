@@ -1675,6 +1675,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 					tcm_observacion.observacion,
 					tcm_observacion.quien_realiza,
 					tcm_solicitud_transporte.requiere_motorista,
+					tcm_solicitud_transporte.estado_solicitud_transporte,
 					e1.nr AS NR
 					FROM tcm_solicitud_transporte
 					INNER JOIN sir_empleado AS e1 ON tcm_solicitud_transporte.id_empleado_solicitante=e1.id_empleado
@@ -1700,7 +1701,8 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 				'observacion' => "",
 				'quien_realiza' => "",
 				'requiere_motorista' => "",
-				'NR' => ""
+				'NR' => "",
+				'estado_solicitud_transporte' => ""
 			);
 		}
 	}

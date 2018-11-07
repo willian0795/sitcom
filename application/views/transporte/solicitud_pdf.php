@@ -294,8 +294,10 @@
                         </td>
                     </tr>
         			<tr>
-                        <td align="center" style="vertical-align:bottom;">
-                            <img src="img/firma_jefe.png" style="max-height: 60px;"><br>
+                        <td align="center" style="vertical-align:bottom; height: 60px;">
+                            <?php if($info_solicitud['estado_solicitud_transporte'] >= 3 ){ ?>
+                                <img src="img/firma_jefe.png" style="max-height: 60px;"><br>
+                            <?php } ?>
                         </td>         
                     </tr>
                     <tr>
