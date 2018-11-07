@@ -12,20 +12,19 @@
                 <h6>DEPARTAMENTO DE SERVICIOS GENERALES</h6>
                 <h6>SOLICITUD DE USO DE VEHICULO</h6>
             </td>
-            <td width="110px"><img src="<?php if($base){ echo base_url();} ?>img/logo_derecho.jpg"  width="110px"></td>
+            <td width="110px" align="right"><img src="<?php if($base){ echo base_url();} ?>img/logo_derecho.jpg"  width="110px"></td>
         </tr>
         <tr>
-            <td align="right" colspan="3">
+            <td width="25%">&nbsp;</td>
+            <td width="50%" align="center">
+                <strong id="titulo">DATOS DEL SOLICITANTE</strong>
+            </td>
+            <td width="25%" align="right">
                 <h5>Solicitud: <strong style="font-size: 18px;"><?php echo $info_solicitud['id_solicitud_transporte']; ?><br></strong> </h5>
             </td>
         </tr>
-        <tr>
-            <td align="center" colspan="3">
-                <strong id="titulo">DATOS DE SOLICITANTE</strong>
-            </td>
-        </tr>
     </table>
-    <table align="center" class="tabla" cellspacing="0">    
+    <table align="center"  class="tabla" cellspacing="0">    
         <tr>
         	<td colspan="2" align="center">
             	<?php 
@@ -123,52 +122,26 @@
             </td>
         </tr>
         <tr>
-        	<td colspan="2" align="left">
-            	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NR: <strong><?php echo $info_empleado['nr'] ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
-            	Nombre: <strong><?php echo strtoupper($info_solicitud['nombre']) ?></strong>
-            </td>
-        </tr>
-        <tr>
-        	<td align="left">
-                <table>
+        	<td align="left" width="55%">
+                <table style="font-size: 90%;">
                     <tr>
-                        <td colspan="2" style="padding-left: 20px;">
+                        <td align="left" style="padding-left: 20px;">
+                            NR: <strong><?php echo $info_empleado['nr'] ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+                            Nombre: <strong><?php echo strtoupper($info_solicitud['nombre']) ?></strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 20px;">
                             Departamento: <strong><?php if($info_empleado['nivel_2']!="") echo $info_empleado['nivel_2']."."; else echo "_____________________________________________________________________________________________________________________";?></strong>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="padding-left: 20px;">
+                        <td style="padding-left: 20px;">
                             Secci&oacute;n: <strong><?php if($info_empleado['nivel_1']!="") echo $info_empleado['nivel_1']."."; else echo "____________________________________________________________________________________________________________________________";?></strong>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="padding-left: 20px;">
-                            Acompa&ntilde;ante(s): 
-                            <strong>
-                                <?php 
-                                    $i=0;
-                                    $cadena="";
-                                    foreach($acompanantes as $val) {
-                                        $x=substr(ucwords($val->nombre), 0, -1);
-                                        if($i==1)
-                                            $cadena.=", ";
-                                        $cadena.=$x;
-                                        $i=1;
-                                    }
-                                    echo strtoupper($cadena);
-                                    if($i==1 && $info_solicitud['acompanante']!="")
-                                        echo ", ";
-                                    echo strtoupper($info_solicitud['acompanante']);
-                                    if($i==1 || $info_solicitud['acompanante']!="")
-                                        echo ".";
-                                    else
-                                        echo "NINGUNO.";
-                                ?>
-                            </strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="padding-left: 20px;">
+                        <td style="padding-left: 20px;">
                             Lugar de destino: 
                             <strong>
                                 <?php 
@@ -185,7 +158,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="padding-left: 20px;">
+                        <td style="padding-left: 20px;">
                             Misi&oacute;n encomendada:  
                             <strong>
                                 <?php 
@@ -203,7 +176,7 @@
                     </tr>
                 </table>
             </td>
-        	<td align="left">
+        	<td align="left" valign="top">
             	<table align="right">
                 	<tr>
                     	<td width="125">
@@ -251,7 +224,32 @@
                 </table>
             </td>
         </tr>
-        
+        <tr>
+            <td colspan="2" align="justify" style="padding: 0px 20px;">
+                Acompa&ntilde;ante(s): 
+                <strong>
+                    <?php 
+                        $i=0;
+                        $cadena="";
+                        foreach($acompanantes as $val) {
+                            $x=substr(ucwords($val->nombre), 0, -1);
+                            if($i==1)
+                                $cadena.=", ";
+                            $cadena.=$x;
+                            $i=1;
+                        }
+                        echo strtoupper($cadena);
+                        if($i==1 && $info_solicitud['acompanante']!="")
+                            echo ", ";
+                        echo strtoupper($info_solicitud['acompanante']);
+                        if($i==1 || $info_solicitud['acompanante']!="")
+                            echo ".";
+                        else
+                            echo "NINGUNO.";
+                    ?>
+                </strong>
+            </td>
+        </tr>
         <tr><td colspan="2">&nbsp;</td></tr>
         <!--<tr>
         	<td align="center" style="width:50%">
@@ -272,15 +270,14 @@
     <table align="center" class="tabla2" cellspacing="0">
     	<tr><td colspan="2">&nbsp;</td></tr>
     	<tr>
-        	<td align="center" style="width:60%">
+        	<td align="center" style="width:47%; font-size: 11px;">
             	<strong>USO EXCLUSIVO SERVICIOS GENERALES</strong>
-                 <table align="center" class="tabla" cellspacing="0" style="width: 100%; margin-right: 20px;">
+                 <table align="center" class="tabla" cellspacing="0" style="width: 100%; margin-right: 20px; font-size: 11px;">
                  	<tr>
                     	<td style="border-bottom: 1px solid #000;" align="center">
                         	<strong>AUTORIZACION  DE VEHICULO A  MISION  OFICIAL</strong>
                         </td>
                     </tr>
-        			<tr><td>&nbsp;</td></tr>
                  	<tr>
                     	<td>
                         	Motorista: <strong><?php echo strtoupper($motorista_vehiculo['nombre']) ?></strong>
@@ -296,45 +293,45 @@
                         	Clase del veh&iacute;culo: <strong><?php echo strtoupper($motorista_vehiculo['nombre_clase']) ?></strong>
                         </td>
                     </tr>
-        			<tr><td>&nbsp;</td></tr>
-        			<tr><td>&nbsp;</td></tr>
-        			<tr><td>&nbsp;</td></tr>
-        			<tr><td>&nbsp;</td></tr>
-        			<tr><td>&nbsp;</td></tr>
+        			<tr>
+                        <td align="center" style="vertical-align:bottom;">
+                            <img src="img/firma_jefe.png" style="max-height: 60px;"><br>
+                        </td>         
+                    </tr>
                     <tr>
                         <td align="center">
                            	<!--f. _____________________________________________<br />-->
-                            Asignado por <strong><?php echo ucwords($motorista_vehiculo['nombre2']) ?> </strong><br /><?php echo ucwords($info_empleado3['funcional']) ?><br />Fecha asignaci&oacute;n: <?php echo $motorista_vehiculo['fecha_asignacion'] ?> a las <?php echo $motorista_vehiculo['hora_asignacion'] ?> 
+                            Asignado por <strong><?php echo ucwords($motorista_vehiculo['nombre2']) ?> </strong><br /><?php echo ucwords(str_replace('ENCARGADO', 'JEFE', $info_empleado3['funcional'])) ?><br />Fecha asignaci&oacute;n: <?php echo $motorista_vehiculo['fecha_asignacion'] ?> a las <?php echo $motorista_vehiculo['hora_asignacion'] ?> 
                         </td>
                   	</tr>
                  </table>
             </td>
-        	<td align="center" style="width:40%">
+        	<td align="center" style="width:53%">
                 <!--<strong>USO EXCLUSIVO PORTERIA</strong> -->
             	
-                 <table align="center"  class="tabla" cellspacing="0" style="width:1000px">
+                 <table align="center" class="tabla" cellspacing="0" style="font-size: 11px;">
                     <tr>
-                    	<td>&nbsp;</td>
-                    	<td></td>
-                        <td rowspan="9" align="right">
+                    	<td style="width: 10px;">&nbsp;</td>
+                    	<td style="width: 50px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td rowspan="7" align="right" style="width: 150px;">
                             
-                        	<img src="img/marcador_combustible<?php echo $salida_entrada_real['combustible'] ?>.jpg" style="width:20%;height:auto; margin-right: 10px; padding-top: 10px;" /><br>
-                            <span style="font-size: 10px;">Remanente de combustible que queda<br>
-                                                            al final de la misión en el vehículo.</span>
+                        	<img src="img/marcador_combustible<?php echo $salida_entrada_real['combustible'] ?>.jpg" style="width:150px;height:auto; margin: 10px 5px 0px 5px;" /><br>
+                            <span style="font-size: 10px;">Remanente &nbsp;&nbsp;de &nbsp;&nbsp;combustible al<br>
+                                                           final de la misión en el vehículo.</span>
                         </td>
                    	</tr>
                  	<tr>
-                    	<td >
+                    	<td align="right" style="width: 10px; padding-right: 5px;">
                         	Kilometraje inicial:
                         </td>
-                    	<td style="width:13%;" <?php if($salida_entrada_real['km_inicial']=="") echo 'class="titu"';?>>
+                    	<td <?php if($salida_entrada_real['km_inicial']=="") echo 'class="titu"';?>>
                         	<strong><?php echo $salida_entrada_real['km_inicial'] ?></strong>
                             
                         </td>
                     </tr>
                  	<tr>
-                    	<td >
-                        	kilometraje final:
+                    	<td align="right" style="width: 10px; padding-right: 5px;">
+                        	Kilometraje final:
                         </td>
                     	<td <?php if($salida_entrada_real['km_final']=="") echo 'class="titu"';?>>
                         	<strong><?php echo $salida_entrada_real['km_final'] ?></strong>
@@ -342,7 +339,7 @@
                         </td>
                     </tr>
                  	<tr>
-                    	<td>
+                    	<td align="right" style="width: 10px; padding-right: 5px;">
                         	Kms. recorridos:
                         </td>
                     	<td <?php if($salida_entrada_real['km_final']=="") echo 'class="titu"';?>>
@@ -367,31 +364,20 @@
                     	<td></td>
                    	</tr>
                     <tr>
-                    	<td>&nbsp;</td>
-                    	<td></td>
-                   	</tr>
-                    <tr>
-                    	<td>&nbsp;</td>
-                    	<td></td>
-                   	</tr>
-                    <tr>
-                    
-                    	<td colspan="3">&nbsp;</td>
-                   	</tr>
-                    <tr>
-                        <td align="center" colspan="3">
+                        <td align="center" colspan="2">
                             <br><br><br>
-                            F. _____________________________________________<br />
+                            F. _______________________________________<br />
                             Motorista
                         </td>
+                        
                   	</tr>
                  </table>
             </td>
         </tr>
-    </table><br>
+    </table>
     <table align="left" border="0" cellspacing="0" style="width:100%;">
         <tr>
-            <td align="left" style="width:60%">
+            <td align="left" style="width:44%">
                 <table align="center" style="font-size: 11px;">
                     <tr>
                         <td align="center">
@@ -402,35 +388,32 @@
                  <table align="left" class="tabla" cellspacing="0" style="font-size: 11px;">
                     <tr>
                         <td style="border-bottom: 1px solid #000;" align="center" colspan="2">
-                            <strong>AUTORIZACION  DE VEHICULO A  MISION  OFICIAL</strong>
+                            <strong>AUTORIZACION  DE CIERRE A  MISION  OFICIAL</strong>
                         </td>
                     </tr>
-                    <tr><td>&nbsp;</td></tr>
                     <tr>
                         <td style="padding-left: 15px;" colspan="2">
-                            <br>Motorista: _____________________________________________________________________
+                            <br>Motorista: ________________________________________________
                         </td>
                     </tr>
                     <tr>
-                        <td style="padding-left: 15px; width: 60%">
-                            <br>No. placa del veh&iacute;culo: _____________________
+                        <td style="padding-left: 15px; width: 55%">
+                            <br>Placa: _________________________
                         </td>
-                        <td style="padding-left: 15px; width: 40%">
-                            <br>Kilometraje inicial: _________
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding-left: 15px; width: 60%">
-                            <br>Clase del veh&iacute;culo: _________________________
-                        </td>
-                        <td style="padding-left: 15px; width: 40%">
-                            <br>Kilometraje final: ___________
+                        <td style="padding-left: 10px; width: 45%">
+                            <br>Km. inicial: ____________
                         </td>
                     </tr>
                     <tr>
-                        <td style="padding-left: 15px; width: 60%">
+                        <td style="padding-left: 15px; width: 55%">
+                            <br>Clase: _________________________
                         </td>
-                        <td style="padding-left: 15px; width: 40%">
+                        <td style="padding-left: 10px; width: 45%">
+                            <br>Km. final: ______________
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="right" style="padding-right: 15px;">
                             <br>Kms. recorridos: ___________
                         </td>
                     </tr>
@@ -443,9 +426,9 @@
                     </tr>
                  </table>
             </td>
-            <td align="center" style="width:40%; height:200px; vertical-align:bottom;">
-                F.<img src="img/firma_gerencia.png"/ style="max-height: 100px;"><br />
-                <div style="text-decoration: overline ;">Direcci&oacute;n Administrativa</div>
+            <td align="center" style="width:55%; height:200px; vertical-align:bottom;">
+                <img src="img/firma_gerencia.png"/ style="max-height: 100px;"><br />
+                F._____________________________________<br>Direcci&oacute;n Administrativa
             </td>
         </tr>
     </table>
@@ -471,6 +454,7 @@
                         }
                         echo $quien.":<br><ul><li><strong>".strtoupper($val['observacion']).".</strong></li></ul>";			
                     }
+                    echo "<br>Observaciones Transporte:<br>____________________________________________________________________________________________________________________________<br>____________________________________________________________________________________________________________________________<br>____________________________________________________________________________________________________________________________";
                 ?>
             </td>
         </tr>
