@@ -247,8 +247,8 @@
 					$titulo="SOLICITUD DE TRANSPORTE Nº".$id_solicitud_transporte;
 
 					if ($datos[$i]['id_rol'] == 14) {
-						$url="<p style='font-family: arial,verdana,sans-serif;'>Ingrese <a href='".base_url()."index.php/".$mod['url_modulo']."' title='Visualizar en el sistema'>aqu&iacute;</a> para asignar veh&iacute;lo/motorista.</p>";
-						$mensaje.="<p style='font-family: arial,verdana,sans-serif;'>La solicitud Nº <strong>$id_solicitud_transporte</strong> para el horario de <strong>".$solicitud['hora_salida']."</strong> a <strong>".$solicitud['hora_entrada']."</strong> requiere asignaci&oacute;n de veh&iacute;lo/motorista.</p>".$url;
+						$url="<p style='font-family: arial,verdana,sans-serif;'>Ingrese <a href='".base_url()."index.php/".$mod['url_modulo']."' title='Visualizar en el sistema'>aqu&iacute;</a> para asignar veh&iacute;culo/motorista.</p>";
+						$mensaje.="<p style='font-family: arial,verdana,sans-serif;'>La solicitud Nº <strong>$id_solicitud_transporte</strong> para el horario de <strong>".$solicitud['hora_salida']."</strong> a <strong>".$solicitud['hora_entrada']."</strong> requiere asignaci&oacute;n de veh&iacute;culo/motorista.</p>".$url;
 					} else {
 						$url="<p style='font-family: arial,verdana,sans-serif;'>Ingrese <a href='".base_url()."index.php/".$mod['url_modulo']."' title='Visualizar en el sistema'>aqu&iacute;</a> para visualizar la solicitud en el sistema.</p>";
 						$mensaje.="<p style='font-family: arial,verdana,sans-serif;'>Su solicitud Nº <strong>$id_solicitud_transporte</strong> para el horario de <strong>".$solicitud['hora_salida']."</strong> a <strong>".$solicitud['hora_entrada']."</strong> ha sido registrada.</p>".$url;

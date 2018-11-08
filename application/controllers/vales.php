@@ -18,7 +18,8 @@
 	define("GASOLINERA",140);
 	define("FUENTE_FONDO",119);
 	define("ACTIVAR_COMBUSTIBLE",205);
-	define("PLANTA", 401);
+	define("INGRESO_PLANTA", 430);
+	define("CONSUMO_PLANTA", 431);
 	define ("SISTEMA","5"); //ID del sistema
 
 class Vales extends CI_Controller
@@ -2839,10 +2840,10 @@ function Combustible_para_todos()
 	*	Observaciones: Ninguna.
 	*/
 	function ingreso_requisicion_planta() {
-		$data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usuario'), PLANTA); /*Verificacion de permiso para crear requisiciones*/
+		$data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usuario'), INGRESO_PLANTA); /*Verificacion de permiso para crear requisiciones*/
 		$url='vales/requicision_planta';
 
-		$data['id_modulo']=PLANTA;
+		$data['id_modulo']=INGRESO_PLANTA;
 
 		if($data['id_permiso']!=NULL) {
 
@@ -2850,6 +2851,31 @@ function Combustible_para_todos()
 			$data['estado_transaccion']=$estado_transaccion;
 			$data['accion']=$accion;
 			$data['m']=$this->vales_model->meses_requisicion();
+			$data['gasolineras']=$this->vales_model->consultar_gasolineras();
+
+			pantalla($url, $data);
+		}
+		else {
+			echo 'No tiene permisos para acceder ';
+		}
+	}
+
+		/*
+	*	Nombre: ingreso_consumo_planta
+	*	Objetivo: Cargar la vista de la consumo planta
+	*	Hecha por: Alberto
+	*	Modificada por: Alberto
+	*	Última Modificación: 8/11/2018
+	*	Observaciones: Ninguna.
+	*/
+	function ingreso_consumo_planta() {
+		$data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usuario'), CONSUMO_PLANTA); /*Verificacion de permiso para crear requisiciones*/
+		$url='vales/consumo_planta';
+
+		$data['id_modulo']=CONSUMO_PLANTA;
+
+		if($data['id_permiso']!=NULL) {
+
 			$data['gasolineras']=$this->vales_model->consultar_gasolineras();
 
 			pantalla($url, $data);
@@ -2917,7 +2943,7 @@ function Combustible_para_todos()
 	*/
 	public function guardar_requisicion_planta() {
 
-		$data = $this->seguridad_model->consultar_permiso($this->session->userdata('id_usuario'), PLANTA); /*Verificacion de permiso */
+		$data = $this->seguridad_model->consultar_permiso($this->session->userdata('id_usuario'), INGRESO_PLANTA); /*Verificacion de permiso */
 
 		if($data['id_permiso'] != NULL) {
 
