@@ -20,6 +20,7 @@
 	define("ACTIVAR_COMBUSTIBLE",205);
 	define("INGRESO_PLANTA", 430);
 	define("CONSUMO_PLANTA", 431);
+	define("USO", 432);
 	define ("SISTEMA","5"); //ID del sistema
 
 class Vales extends CI_Controller
@@ -3026,6 +3027,75 @@ function Combustible_para_todos()
 
 		}
 
+	}
+
+	public function uso($estado_transaccion=NULL,$tipo=NULL) {
+		$data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usuario'), USO);
+        $data['id_modulo']=USO;
+        
+        if($data['id_permiso']!=NULL) {
+			if($estado_transaccion!=NULL) {
+				$data['estado_transaccion']=$estado_transaccion;
+				if($tipo!=NULL && $estado_transaccion==1) {
+					switch($tipo) {
+						case 1: $data['mensaje']='Se ha registrado un nuevo uso éxitosamente';
+								break;
+						case 2: $data['mensaje']='Se ha modificado la información del uso éxitosamente';
+								break;
+					}
+				}
+			}
+			$data['usos']=$this->db->get('tcm_seccion_adicional')->result_array();
+			pantalla('uso/uso',$data);
+		}
+		else {
+			echo 'No tiene permisos para acceder';
+		}
+	}
+	
+	public function nuevo_uso() {
+		$data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usuario'), USO);
+		$url='uso/uso_nuevo';
+
+		$data['id_modulo']=USO;
+
+		if($data['id_permiso']!=NULL) {
+
+			pantalla($url, $data);
+		}
+		else {
+			echo 'No tiene permisos para acceder ';
+		}
+	}
+
+	public function guardar_uso($id_articulo=NULL) {
+		
+		$data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usuario'), USO);
+		$url='uso/uso_nuevo';
+
+		$data['id_modulo']=USO;
+
+		if($data['id_permiso']!=NULL) {
+
+			$this->db->trans_start();
+
+			$post = array(
+				'nombre_seccion_adicional' => $this->input->post('seccion'),
+				'dependencia_seccion_adicional' => 21
+			);
+
+			$this->db->insert('tcm_seccion_adicional', $post);
+
+
+			$tr=($this->db->trans_status()===FALSE)?0:1;
+
+			ir_a('index.php/vales/uso/'.$tr.'/1');
+			
+		}
+		else {
+			echo 'No tiene permisos para acceder ';
+		}
+		
 	}
 
 }
