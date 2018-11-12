@@ -13,7 +13,7 @@
 
 <script src="<?php echo base_url()?>js/views/entrega_vales_plan.js" type="text/javascript"></script>
 <section>
-    <h2>Ingreso de Requisición de Combustible para la Planta Electrica</h2>
+    <h2>Ingreso de Requisición de Combustible para la Planta Electrica y Otros</h2>
 </section>
 <style>
 .k-multiselect {
@@ -33,11 +33,23 @@
                     </span>
                 </a>
             </li>
-        </ul>                 
+        </ul>
 
         <div id="step-1">
             <h2 class="StepTitle">Ingrese los datos de la requisición</h2>
-           
+
+            <p>
+                <label for="id_seccion" id="lid_seccion" >Uso</label>
+                <select class="select" id="id_seccion" name="id_seccion" style="width:350px">
+                    <?php
+                      foreach($secciones as $val) {
+                          echo '<option value="'.$val['id_seccion_adicional'].'">'.$val['nombre_seccion_adicional'].'</option>';
+                      }
+                    ?>
+                </select>
+            </p>
+
+            <br>
 
             <p>
                 <label for="cantidad_solicitada" id="lcantidad_solicitada">Cantidad Solicitada </label>
@@ -78,7 +90,7 @@
             
             <p>
             	<label for="justificacion" id="ljustificacion" class="label_textarea">Justificación </label>
-              	<textarea class="tam-4" id="justificacion" tabindex="3" name="justificacion" >PARA PLANTA DE EMERGENCIA DEL MINISTERIO DE TRABAJO Y PREVISIÓN SOCIAL</textarea>
+              	<textarea class="tam-4" id="justificacion" tabindex="3" name="justificacion" ></textarea>
             </p>
 
             <br>

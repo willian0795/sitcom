@@ -5,6 +5,11 @@ $(document).ready(function(){
 	
 	$('#wizard').smartWizard();
 	
+	$("#id_seccion").validacion({
+		numMin: 0,
+		ent: true
+	});
+
 	$("#cantidad_solicitada").validacion({
 		numMin: 0,
 		ent: true

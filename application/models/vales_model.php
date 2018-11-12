@@ -1609,19 +1609,21 @@ function consumo_seccion_fuente_d($id_seccion='', $id_fuente_fondo="", $fecha_in
 			INNER JOIN org_seccion s ON s.id_seccion = r.id_seccion
 			WHERE
 				rv.id_vale = $id_vale
+			
 			UNION
 
 			SELECT 
 				rv.numero_inicial AS del,
 				rv.numero_inicial + rv.cantidad_entregado - 1 AS al,
-				'Planta de Emergencia' AS seccion,
+				s.nombre_seccion_adicional AS seccion,
 				id_vale,
 				rv.id_requisicion_vale,
 				rv.cantidad_entregado AS cantidad,
 				rv.cantidad_restante AS restante
 			FROM tcm_requisicion_vale rv
 			JOIN tcm_requisicion r ON rv.id_requisicion = r.id_requisicion
-			WHERE rv.id_vale = $id_vale AND r.id_seccion = 0
+			JOIN tcm_seccion_adicional s ON s.id_seccion_adicional = r.id_seccion
+			WHERE rv.id_vale = $id_vale
 
 			UNION
 
@@ -2512,7 +2514,7 @@ function Desactivar_combustible_para_todos_automatico()
 		extract($formuInfo);
 		$sentencia="INSERT INTO mtps.tcm_requisicion
 		(fecha, id_seccion, cantidad_solicitada, id_empleado_solicitante, id_fuente_fondo, justificacion, id_empledo_entrega, id_empleado_vistobueno, id_usuario_crea, fecha_creacion, fecha_modificacion, estado, fecha_visto_bueno, fecha_entregado, refuerzo, observaciones, cantidad_entregado, correlativo, asignado, mes, restante_anterior)
-		VALUES( CONCAT_WS(' ', CURDATE(),CURTIME()),'$id_seccion','$cantidad_solicitada','$id_empleado_solicitante', $id_fuente_fondo, '$justificacion', '$id_empleado_solicitante', '$id_empleado_solicitante', $id_usuario, CONCAT_WS(' ', CURDATE(),CURTIME()), CONCAT_WS(' ', CURDATE(),CURTIME()), 3, CONCAT_WS(' ', CURDATE(),CURTIME()), CONCAT_WS(' ', CURDATE(),CURTIME()), 0, '', $cantidad_solicitada, (SELECT max(a.correlativo) + 1 correlativo FROM tcm_requisicion a WHERE YEAR(fecha_creacion) = YEAR(NOW())), $cantidad_solicitada, $mes, 0);";
+		VALUES( CONCAT_WS(' ', CURDATE(),CURTIME()),'$id_seccion','$cantidad_solicitada','$id_empleado_solicitante', $id_fuente_fondo, '$justificacion', '$id_empleado_solicitante', '$id_empleado_solicitante', $id_usuario, CONCAT_WS(' ', CURDATE(),CURTIME()), CONCAT_WS(' ', CURDATE(),CURTIME()), 3, CONCAT_WS(' ', CURDATE(),CURTIME()), CONCAT_WS(' ', CURDATE(),CURTIME()), 0, '', 0, (SELECT max(a.correlativo) + 1 correlativo FROM tcm_requisicion a WHERE YEAR(fecha_creacion) = YEAR(NOW())), $cantidad_solicitada, $mes, 0);";
 		
 		$this->db->query($sentencia);
 		return $this->db->insert_id();

@@ -1,12 +1,17 @@
 <?php
+<<<<<<< Updated upstream
 	define("INGRESO_PLANTA", 430);
 	define("CONSUMO_PLANTA", 431);
     define("USO", 432);
     define("BODEGA",117);
+=======
+	define("INGRESO",69);
+>>>>>>> Stashed changes
 	define ("SISTEMA","5"); //ID del sistema
 
 class Uso extends CI_Controller {
 
+<<<<<<< Updated upstream
     function __construct() {
         parent::__construct();
 		date_default_timezone_set('America/El_Salvador');
@@ -38,10 +43,29 @@ class Uso extends CI_Controller {
 			}
 			$data['usos']=$this->db->get('tcm_seccion_adicional');
 			pantalla('uso/uso',$data);
+=======
+  function __construct() {
+    parent::__construct();
+    date_default_timezone_set('America/El_Salvador');
+    $this->load->model('seccion_adicional_model');
+    if(!$this->session->userdata('id_usuario')){
+      redirect('index.php/sessiones');
+    }
+  }
+
+  public function index() {
+    $data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usuario'),INGRESO);
+		$data['id_modulo']=INGRESO;
+
+		if($data['id_permiso']!=NULL) {
+			$data['secciones']=$this->seccion_adicional_model->consultar_secciones_adicionales();
+			pantalla("uso",$data);
+>>>>>>> Stashed changes
 		}
 		else {
 			echo 'No tiene permisos para acceder';
 		}
+<<<<<<< Updated upstream
     }
       
 	function ingreso_vales($estado_transaccion=NULL, $insertado=NULL) {
@@ -78,3 +102,8 @@ class Uso extends CI_Controller {
 }
 
 ?>
+=======
+  }
+
+}
+>>>>>>> Stashed changes

@@ -33,6 +33,7 @@ class Vales extends CI_Controller
 		$this->load->model('vales_model');
 		$this->load->model('transporte_model');
 		$this->load->model('seguridad_model');
+		$this->load->model('seccion_adicional_model');
 		$this->load->library("mpdf");
     	if(!$this->session->userdata('id_usuario')){
 			redirect('index.php/sessiones');
@@ -2852,7 +2853,7 @@ function Combustible_para_todos()
 			$data['estado_transaccion']=$estado_transaccion;
 			$data['accion']=$accion;
 			$data['m']=$this->vales_model->meses_requisicion();
-			$data['gasolineras']=$this->vales_model->consultar_gasolineras();
+			$data['secciones']=$this->seccion_adicional_model->consultar_secciones_adicionales();
 
 			pantalla($url, $data);
 		}
@@ -2878,6 +2879,7 @@ function Combustible_para_todos()
 		if($data['id_permiso']!=NULL) {
 
 			$data['gasolineras']=$this->vales_model->consultar_gasolineras();
+			$data['secciones']=$this->seccion_adicional_model->consultar_secciones_adicionales();
 
 			pantalla($url, $data);
 		}
@@ -2953,7 +2955,7 @@ function Combustible_para_todos()
 			$id_empleado_solicitante=$this->vales_model->get_id_empleado($this->session->userdata('nr'));
 
 			$post = array(
-				'id_seccion' => null,
+				'id_seccion' => $this->input->post('id_seccion'),
 				'cantidad_solicitada' => $this->input->post('cantidad_solicitada'),
 				'id_empleado_solicitante' => $id_empleado_solicitante,
 				'id_fuente_fondo' => $this->input->post('id_fuente_fondo'),
@@ -2973,6 +2975,24 @@ function Combustible_para_todos()
 
 			bitacora("Se autorizó una requicisión  con id_requisicion ".$id_requisicion,4);
 			bitacora("Se entregarón los vales autorizados a la requsición con id_requisicion ".$id_requisicion,4);
+
+			$this->db->trans_complete();
+			$tr=($this->db->trans_status()===FALSE)?0:1;
+
+			ir_a('index.php/vales/ingreso_requisicion_planta/'.$tr.'/1');
+
+		}else {
+
+			echo 'No tiene permisos para acceder';
+
+		}
+
+	}
+
+	public function guardar_consumo_planta() {
+		$data = $this->seguridad_model->consultar_permiso($this->session->userdata('id_usuario'), CONSUMO_PLANTA); /*Verificacion de permiso */
+
+		if($data['id_permiso'] != NULL) {
 
 			$super = 0;
 			$regular = 0;
@@ -3004,14 +3024,13 @@ function Combustible_para_todos()
 			$consumo = array(
 				'id_consumo'=>$id_consumo,
 				'id_vehiculo'=> 0,
-				'actividad_consumo'=> 'Planta Electrica',
+				'actividad_consumo'=> 'Otra Actividad',
 				'tip_gas'=> $this->input->post('tipo_gas'),
-				'id_requisicion_vale'=> $id_requisicion_vale,
-				'cantidad'=> $this->input->post('cantidad_solicitada'),
+				'cantidad'=> $this->input->post('cantidad'),
 				'id_gasolinera'=> $this->input->post('id_gasolinera'),
 				'recibido'=> 1,
 				'bandera'=> 0,
-				'id_seccion'=> 0,
+				'id_seccion'=> $this->input->post('id_seccion'),
 				'id_herramienta'=> 0
 			);
 			$this->vales_model->buscar_requisicion_vale($consumo);
@@ -3019,14 +3038,13 @@ function Combustible_para_todos()
 			$this->db->trans_complete();
 			$tr=($this->db->trans_status()===FALSE)?0:1;
 
-			ir_a('index.php/vales/ingreso_requisicion_planta/'.$tr.'/1');
-
-		}else {
+			ir_a('index.php/vales/ingreso_consumo_planta/'.$tr.'/1');
+		
+		} else {
 
 			echo 'No tiene permisos para acceder';
 
 		}
-
 	}
 
 	public function uso($estado_transaccion=NULL,$tipo=NULL) {

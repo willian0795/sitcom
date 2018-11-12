@@ -20,7 +20,7 @@
 	display: inline-block;
 }
 </style>
-<form name="form_mision" method="post" id="form_mision" action="<?php echo base_url()?>index.php/vales/guardar_requisicion_planta">
+<form name="form_mision" method="post" id="form_mision" action="<?php echo base_url()?>index.php/vales/guardar_consumo_planta">
     <?=llaveform()?>
 	<div id="wizard" class="swMain">
         <ul>
@@ -37,6 +37,19 @@
 
         <div id="step-1">	
             <h2 class="StepTitle">Ingresar la factura</h2>
+
+             <p>
+                <label for="id_seccion" id="lid_seccion" >Uso</label>
+                <select class="select" id="id_seccion" name="id_seccion" style="width:350px">
+                    <?php
+                      foreach($secciones as $val) {
+                          echo '<option value="'.$val['id_seccion_adicional'].'">'.$val['nombre_seccion_adicional'].'</option>';
+                      }
+                    ?>
+                </select>
+            </p>
+
+            <br>
 
             <p>
                 <label for="id_gasolinera" id="lid_gasolinera" >Proveedor</label>
@@ -65,7 +78,7 @@
             <p>
 
                 <label for="tipo_gas" id="ltipo_gas">Tipo de Gasolina </label>
-                <select class="select" style="width:200px;" tabindex="5" id="tipo_gas" name="tipo_gas" >
+                <select class="select" style="width:100px;" tabindex="5" id="tipo_gas" name="tipo_gas" >
                     <option value=""></option>
                     <option value="1">Super</option>
                     <option value="2">Regular</option>
@@ -74,6 +87,9 @@
             
                 <label for="valor" id="lvalor" style="width:20%;">Precio </label>
                 $ <input tabindex="4" id="valor" name="valor" type="text" size="5"/> US
+
+                <label for="cantidad" id="lcantidad" style="width:20%;">Cantidad </label>
+                <input tabindex="4" id="cantidad" name="cantidad" type="text" size="5"/>
             
             </p>
 

@@ -5,13 +5,27 @@ $(document).ready(function(){
 	
 	$('#wizard').smartWizard();
 
+	$("#id_seccion").validacion({
+	men: "Debe seleccionar un item"
+	});
+
 	$("#tipo_gas").validacion({
         men: "Debe seleccionar un item"
 	});
 
 	$("#numero_factura").validacion({
         numMin:1,
-		ent: true
+	ent: true
+	});
+
+	// $("#valor").validacion({
+	// numMin: 1,
+	// ent: true
+	// });
+
+	$("#cantidad").validacion({
+	numMin: 1,
+	ent: true
 	});
 
 	var fec_soli=$("#fecha_factura").kendoDatePicker({
