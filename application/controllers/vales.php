@@ -28,7 +28,7 @@ class Vales extends CI_Controller
 
     function __construct() {
 		//error_reporting(0);
-        parent::__construct();
+    parent::__construct();
 		date_default_timezone_set('America/El_Salvador');
 		$this->load->model('vales_model');
 		$this->load->model('transporte_model');
@@ -3063,7 +3063,7 @@ function Combustible_para_todos()
 					}
 				}
 			}
-			$data['usos']=$this->db->get('tcm_seccion_adicional')->result_array();
+			$data['usos']=$this->seccion_adicional_model->consultar_secciones_adicionales();
 			pantalla('uso/uso',$data);
 		}
 		else {
@@ -3071,7 +3071,7 @@ function Combustible_para_todos()
 		}
 	}
 	
-	public function nuevo_uso() {
+	public function nuevo_uso($id_uso = 0) {
 		$data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usuario'), USO);
 		$url='uso/uso_nuevo';
 
@@ -3079,6 +3079,17 @@ function Combustible_para_todos()
 
 		if($data['id_permiso']!=NULL) {
 
+			if ($id_uso == 0) {
+				
+				$data['bandera'] = false;
+				
+			} else {
+
+				$data['info_uso'] = $this->seccion_adicional_model->consultar_seccion_adicional($id_uso);
+				$data['bandera'] = true;
+			
+			}
+			
 			pantalla($url, $data);
 		}
 		else {
@@ -3086,10 +3097,9 @@ function Combustible_para_todos()
 		}
 	}
 
-	public function guardar_uso($id_articulo=NULL) {
+	public function guardar_uso() {
 		
 		$data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usuario'), USO);
-		$url='uso/uso_nuevo';
 
 		$data['id_modulo']=USO;
 
@@ -3102,12 +3112,41 @@ function Combustible_para_todos()
 				'dependencia_seccion_adicional' => 21
 			);
 
-			$this->db->insert('tcm_seccion_adicional', $post);
+			$this->seccion_adicional_model->insertar_secciones_adicionales($post);
 
 
 			$tr=($this->db->trans_status()===FALSE)?0:1;
 
 			ir_a('index.php/vales/uso/'.$tr.'/1');
+			
+		}
+		else {
+			echo 'No tiene permisos para acceder ';
+		}
+		
+	}
+
+	public function modificar_uso() {
+		
+		$data=$this->seguridad_model->consultar_permiso($this->session->userdata('id_usuario'), USO);
+
+		$data['id_modulo']=USO;
+
+		if($data['id_permiso']!=NULL) {
+
+			$this->db->trans_start();
+
+			$post = array(
+				'id_seccion_adicional' => $this->input->post('id_seccion'),
+				'nombre_seccion_adicional' => $this->input->post('seccion'),
+				'dependencia_seccion_adicional' => 21
+			);
+
+			$this->seccion_adicional_model->modificar_seccion_adicional($post);
+
+			$tr=($this->db->trans_status()===FALSE)?0:1;
+
+			ir_a('index.php/vales/uso/'.$tr.'/2');
 			
 		}
 		else {

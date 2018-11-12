@@ -23,9 +23,7 @@
             <td><?php echo $fila['id_seccion_adicional']?></td>
             <td><?php echo $fila['nombre_seccion_adicional']?></td>
             <td>
-            	<!-- <a rel="leanModal" title="Ver información detallada del artículo" href="#ventana" onclick="dialogo(<?php echo $fila['id_articulo'] ?>)"><img  src="<?php echo base_url()?>img/lupa.gif"/></a>
-            	<a rel="leanModal" title="Modificar información del artículo" href="<?php echo base_url()."index.php/vehiculo/nuevo_articulo/".$fila['id_articulo'] ?>" ><img src="<?php echo base_url()?>img/editar.png"/></a>
-                <a rel="leanModal" title="Cargar artículo" href="<?php echo base_url()."index.php/vehiculo/cargar_articulo/".$fila['id_articulo'] ?>" ><img src="<?php echo base_url()?>img/compra.png" width="25px"/></a> -->
+            	<a rel="leanModal" title="Modificar información del artículo" href="<?php echo base_url()."index.php/vales/nuevo_uso/".$fila['id_seccion_adicional'] ?>" ><img src="<?php echo base_url()?>img/editar.png"/></a>
             </td>
         </tr>
     <?php } ?>
