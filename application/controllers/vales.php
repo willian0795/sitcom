@@ -27,21 +27,17 @@ class Vales extends CI_Controller
 {
 
     function __construct() {
-		//error_reporting(0);
-    parent::__construct();
-		date_default_timezone_set('America/El_Salvador');
-		$this->load->model('vales_model');
-		$this->load->model('transporte_model');
-		$this->load->model('seguridad_model');
-		$this->load->model('seccion_adicional_model');
-		$this->load->library("mpdf");
+			error_reporting(0);
+			parent::__construct();
+			date_default_timezone_set('America/El_Salvador');
+			$this->load->model('vales_model');
+			$this->load->model('transporte_model');
+			$this->load->model('seguridad_model');
+			$this->load->model('seccion_adicional_model');
+			$this->load->library("mpdf");
     	if(!$this->session->userdata('id_usuario')){
-			redirect('index.php/sessiones');
-		}
-	#error_reporting(E_ALL);
-	#ini_set('display_errors','1');
-
-
+				redirect('index.php/sessiones');
+			}
     }
 
 	function index()
@@ -2962,17 +2958,35 @@ function Combustible_para_todos()
 				'justificacion' => $this->input->post('justificacion'),
 				'id_usuario' => $id_usuario,
 				'refuerzo' => 0,
-				'mes' => $this->input->post('mes')
+				'mes' => $this->input->post('mes'),
+				'asignado' => 0,
+				'restante' => 0
 			);
 
-			$id_requisicion = $this->vales_model->insertar_requisicion($post);
+			$id_requisicion=$this->vales_model->guardar_requisicion($post, $id_usuario, $id_empleado_solicitante);
 
 			bitacora("Se guardó una requicisión  con id_requisicion ".$id_requisicion,3);
 
-			$this->vales_model->buscar_vales($id_requisicion, $this->input->post('id_fuente_fondo'), $this->input->post('cantidad_solicitada'));
-
-			$this->vales_model->insertar_liquidacion_planta($id_requisicion, $post);
-
+			$this->vales_model->guardar_visto_bueno(array(
+				'id_empleado' => $id_empleado_solicitante,
+				'id_usuario' => $id_usuario,
+				'resp' => 2,
+				'observacion' => "",
+				'asignar' => $this->input->post('cantidad_solicitada'),
+				'ids' => $id_requisicion
+				)
+			);
+			
+			$this->vales_model->guardar_entrega(array(
+				'correlativo' => $this->vales_model->info_correlativo()[0]->correlativo,
+				'id_usuario' => $id_usuario,
+				'id_empleado' => $id_empleado_solicitante,
+				'ids' => $id_requisicion
+				)
+			);
+			
+			// $this->vales_model->buscar_vales($id_requisicion, $this->input->post('id_fuente_fondo'), $this->input->post('cantidad_solicitada'));
+			
 			bitacora("Se autorizó una requicisión  con id_requisicion ".$id_requisicion,4);
 			bitacora("Se entregarón los vales autorizados a la requsición con id_requisicion ".$id_requisicion,4);
 

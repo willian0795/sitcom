@@ -1689,14 +1689,18 @@ function detalleF($id_consumo=NULL)
 				inicial + cv.cantidad_vales - 1 AS al,
 				cv.cantidad_vales AS cantidad, 
 								CASE 1
-								WHEN cv.id_vehiculo IS NULL AND cv.id_herramienta IS NULL THEN 'Planta Emergencia'
+								WHEN cv.id_vehiculo IS NULL AND cv.id_herramienta IS NULL THEN ( 
+									SELECT d.nombre_seccion_adicional FROM tcm_requisicion_vale_consumo_vehiculo a
+									JOIN tcm_requisicion_vale b ON b.id_requisicion_vale = a.id_requisicion_vale
+									JOIN tcm_requisicion c ON c.id_requisicion = b.id_requisicion
+									JOIN tcm_seccion_adicional d ON c.id_seccion = d.id_seccion_adicional
+									WHERE a.id_consumo_vehiculo = cv.id_consumo_vehiculo )
 								WHEN cv.id_vehiculo IS NULL THEN
 									h.nombre 
 								WHEN cv.id_herramienta IS NULL THEN
 									v.placa 
 								END		as en
-			FROM
-				tcm_consumo_vehiculo cv
+			FROM tcm_consumo_vehiculo cv
 			LEFT JOIN tcm_herramienta h ON cv.id_herramienta = h.id_herramienta
 			LEFT JOIN tcm_vehiculo v ON v.id_vehiculo = cv.id_vehiculo
 			WHERE
