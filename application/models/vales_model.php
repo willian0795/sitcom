@@ -2420,8 +2420,8 @@ function Desactivar_combustible_para_todos_automatico()
 
 		$query = $this->db->query("
 			SELECT 
-				CAST(a.cantidad_solicitada + b.numero_inicial AS INT) inicial,
-				". $cantidad ." + CAST(A.CANTIDAD_SOLICITADA + B.NUMERO_INICIAL AS INT) final,
+				CAST(a.cantidad_solicitada + b.numero_inicial AS signed) inicial,
+				". ( $cantidad - 1 ) ." + CAST(A.CANTIDAD_SOLICITADA + B.NUMERO_INICIAL AS signed) final,
 				c.id_vale,
 				c.cantidad_restante
 			FROM tcm_requisicion a
@@ -2437,7 +2437,7 @@ function Desactivar_combustible_para_todos_automatico()
 					WHERE YEAR(aaa.fecha) = ". date('Y') ." and aaa.id_fuente_fondo = ".$fuente."
 				) 
 			)
-			AND (". $cantidad ." + CAST(a.cantidad_solicitada + b.numero_inicial AS INT)) <= c.final
+			AND (". $cantidad ." + CAST(a.cantidad_solicitada + b.numero_inicial AS signed)) <= c.final
 		");
 
 		if(is_object($query)){
