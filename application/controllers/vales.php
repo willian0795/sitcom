@@ -2985,7 +2985,7 @@ function Combustible_para_todos()
 				)
 			);
 			
-			// $this->vales_model->buscar_vales($id_requisicion, $this->input->post('id_fuente_fondo'), $this->input->post('cantidad_solicitada'));
+			$this->vales_model->buscar_vales($id_requisicion, $this->input->post('id_fuente_fondo'), $this->input->post('cantidad_solicitada'));
 			
 			bitacora("Se autorizó una requicisión  con id_requisicion ".$id_requisicion,4);
 			bitacora("Se entregarón los vales autorizados a la requsición con id_requisicion ".$id_requisicion,4);
