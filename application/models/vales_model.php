@@ -1094,7 +1094,10 @@ LEFT JOIN (SELECT s.id_seccion, SUM( cv.cantidad_vales) consumido, v.valor_nomin
 			INNER JOIN tcm_fuente_fondo f ON f.id_fuente_fondo = r.id_fuente_fondo
 		WHERE fecha_factura BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."' ".$queryadds2."
 GROUP BY r.mes, r.id_seccion) AS q1 
-	ON q1.id_seccion = q2.id_seccion GROUP BY q2.id_seccion, q2.mes ORDER BY q2.mes, q2.seccion");
+	ON q1.id_seccion = q2.id_seccion 
+	WHERE ( q2.sobrantes_anterior <> 0 OR q2.asignado <> 0 OR
+	q2.disponibles <> 0 OR q2.consumidos <> 0 OR q2.sobrantes_despues <> 0 )
+	GROUP BY q2.id_seccion, q2.mes ORDER BY q2.mes, q2.seccion");
 	    return $query->result();
 
 	}
@@ -1595,35 +1598,41 @@ function consumo_seccion_fuente_d($id_seccion='', $id_fuente_fondo="", $fecha_in
 
 	function detalleV($id_vale=NULL)
 	{
-		$q="SELECT
-				rv.numero_inicial AS del,
-				rv.numero_inicial + rv.cantidad_entregado - 1 AS al,
-				s.nombre_seccion AS seccion,
-				id_vale,
-				rv.id_requisicion_vale,
-				rv.cantidad_entregado AS cantidad,
-				rv.cantidad_restante AS restante
-			FROM
-				tcm_requisicion_vale rv
-			INNER JOIN tcm_requisicion r ON rv.id_requisicion = r.id_requisicion
-			INNER JOIN org_seccion s ON s.id_seccion = r.id_seccion
-			WHERE
-				rv.id_vale = $id_vale
-			
-			UNION
+		$q="(SELECT a.*
+			FROM 
+			(
+				SELECT
+					rv.numero_inicial AS del,
+					rv.numero_inicial + rv.cantidad_entregado - 1 AS al,
+					s.nombre_seccion AS seccion,
+					id_vale,
+					rv.id_requisicion_vale,
+					rv.cantidad_entregado AS cantidad,
+					rv.cantidad_restante AS restante
+				FROM
+					tcm_requisicion_vale rv
+				INNER JOIN tcm_requisicion r ON rv.id_requisicion = r.id_requisicion
+				INNER JOIN org_seccion s ON s.id_seccion = r.id_seccion
+				WHERE
+					rv.id_vale = $id_vale
+				
+				UNION
 
-			SELECT 
-				rv.numero_inicial AS del,
-				rv.numero_inicial + rv.cantidad_entregado - 1 AS al,
-				s.nombre_seccion_adicional AS seccion,
-				id_vale,
-				rv.id_requisicion_vale,
-				rv.cantidad_entregado AS cantidad,
-				rv.cantidad_restante AS restante
-			FROM tcm_requisicion_vale rv
-			JOIN tcm_requisicion r ON rv.id_requisicion = r.id_requisicion
-			JOIN tcm_seccion_adicional s ON s.id_seccion_adicional = r.id_seccion
-			WHERE rv.id_vale = $id_vale
+				SELECT 
+					rv.numero_inicial AS del,
+					rv.numero_inicial + rv.cantidad_entregado - 1 AS al,
+					s.nombre_seccion_adicional AS seccion,
+					id_vale,
+					rv.id_requisicion_vale,
+					rv.cantidad_entregado AS cantidad,
+					rv.cantidad_restante AS restante
+				FROM tcm_requisicion_vale rv
+				JOIN tcm_requisicion r ON rv.id_requisicion = r.id_requisicion
+				JOIN tcm_seccion_adicional s ON s.id_seccion_adicional = r.id_seccion
+				WHERE rv.id_vale = $id_vale
+			) a
+			ORDER BY a.id_requisicion_vale
+			LIMIT 99999999999)
 
 			UNION
 
