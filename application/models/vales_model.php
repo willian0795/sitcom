@@ -1867,7 +1867,7 @@ GROUP BY r.mes, r.id_seccion";
         					COALESCE(SUM(lc.consumidos),0) AS consumidos, 
         					SUM(lc.sobrantes_despues) sobrantes_despues,
         					CONCAT(s.nombre_seccion) seccion FROM tcm_liquidacion_combustible lc 
-        					JOIN org_seccion s ON s.id_seccion = lc.id_seccion 
+        					JOIN (SELECT * FROM org_seccion UNION SELECT *,1 FROM tcm_seccion_adicional) s ON s.id_seccion = lc.id_seccion 
         					WHERE lc.mes_liquidacion = '".$mes."' ".$queryadds."
         					GROUP BY lc.mes_liquidacion, lc.id_seccion) AS q2
 LEFT JOIN
@@ -1885,7 +1885,7 @@ LEFT JOIN
 				INNER JOIN tcm_requisicion_vale rv ON rv.id_requisicion_vale = rvcv.id_requisicion_vale
 				INNER JOIN tcm_requisicion r ON r.id_requisicion = rv.id_requisicion
 				INNER JOIN tcm_requisicion_vale2 rv2 ON r.id_requisicion = rv2.id_requisicion
-				INNER JOIN org_seccion s ON s.id_seccion= r.id_seccion
+				INNER JOIN (SELECT * FROM org_seccion UNION SELECT *,1 FROM tcm_seccion_adicional) s ON s.id_seccion= r.id_seccion
 				INNER JOIN tcm_vale v ON v.id_vale  = rv.id_vale
 				INNER JOIN tcm_fuente_fondo f ON f.id_fuente_fondo = r.id_fuente_fondo
 	WHERE YEAR(fecha_factura) = '".$year."' AND  MONTH(fecha_factura) = '".substr($mes, -2)."' ".$queryadds2."
