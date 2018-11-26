@@ -1636,7 +1636,7 @@ function consumo_seccion_fuente_d($id_seccion='', $id_fuente_fondo="", $fecha_in
 
 			UNION
 
-			SELECT
+			(SELECT
 				v.final - v.cantidad_restante + 1 AS del,
 				v.final AS al,
 				'No entregados',
@@ -1648,8 +1648,8 @@ function consumo_seccion_fuente_d($id_seccion='', $id_fuente_fondo="", $fecha_in
 				tcm_vale v
 			WHERE
 				v.cantidad_restante >0 AND
-				v.id_vale = $id_vale";
-				$query=$this->db->query($q);
+				v.id_vale = $id_vale)";
+			$query=$this->db->query($q);
 			return $query->result_array();
 
 	}
