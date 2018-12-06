@@ -337,7 +337,7 @@ class Transporte extends CI_Controller
 				<input type='hidden' name='id_solicitud' value='".$id."' />
 				
 				<fieldset>      
-					<legend align='left'>Informaci�n de la Solicitud</legend>
+					<legend align='left'>Información de la Solicitud</legend>
 					";
 					foreach($d as $datos)
 					{
@@ -353,9 +353,9 @@ class Transporte extends CI_Controller
 					}
 				
 				echo "Nombre: <strong>".$nombre."</strong> <br>
-				Secci�n: <strong>".$seccion."</strong> <br>
+				Sección: <strong>".$seccion."</strong> <br>
 				Fecha de solicitud: <strong>".$fechaS."</strong> <br>
-				Fecha de misi�n: <strong>".$fechaM."</strong> <br>
+				Fecha de misión: <strong>".$fechaM."</strong> <br>
 				Hora de salida: <strong>".$salida."</strong> <br>
 				Hora de regreso: <strong>".$entrada."</strong> <br>
 				
@@ -402,7 +402,7 @@ class Transporte extends CI_Controller
 								Lugar de destino
 							</th>
 							<th>
-								Direcci�n
+								Dirección
 							</th>
 							<th>
 								Misi�n Encomendada
@@ -426,7 +426,7 @@ class Transporte extends CI_Controller
 			    <br />
 			   
 				<fieldset>
-					<legend align='left'>Acompa�antes</legend>
+					<legend align='left'>Acompañantes</legend>
 					
 					";
 					foreach($a as $acompa)
@@ -440,7 +440,7 @@ class Transporte extends CI_Controller
 				</fieldset>
 				<br>
 				<fieldset>
-				<legend align='left'>Informaci&oacute;n del Veh�culo</legend>
+				<legend align='left'>Informaci&oacute;n del Vehículo</legend>
 					<p>
 					<label>N&deg; Placa <font color='#FF0000'>*</font></label>
 				   <select class='select' name='vehiculo' id='vehiculo' style='width:100px;' onchange='motoristaf(this.value,".$id.")'>

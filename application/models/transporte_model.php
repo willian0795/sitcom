@@ -8,26 +8,17 @@ class Transporte_model extends CI_Model {
     }
 	function consultar_seccion_usuario($nr=0)
 	{
-		
-		$sentencia="SELECT id_empleado FROM sir_empleado WHERE nr like '".$nr."'";
-		$query=$this->db->query($sentencia);
-		
-		$datos=$query->row_array();
-				
-		$sentencia="SELECT
-			sir_empleado_informacion_laboral.id_empleado_informacion_laboral,
-			sir_empleado_informacion_laboral.id_empleado,
-			sir_empleado_informacion_laboral.id_seccion,
-			sir_empleado_informacion_laboral.fecha_inicio
-			FROM sir_empleado_informacion_laboral
-			WHERE sir_empleado_informacion_laboral.id_empleado=".$datos['id_empleado']."
-			GROUP BY sir_empleado_informacion_laboral.id_empleado_informacion_laboral
-			HAVING sir_empleado_informacion_laboral.fecha_inicio >= ALL(SELECT
-					sir_empleado_informacion_laboral.fecha_inicio
-					FROM sir_empleado_informacion_laboral
-					WHERE sir_empleado_informacion_laboral.id_empleado=".$datos['id_empleado']."
-					GROUP BY sir_empleado_informacion_laboral.id_empleado,sir_empleado_informacion_laboral.fecha_inicio) 
+					
+		$sentencia="
+			SELECT eil.id_empleado_informacion_laboral, 
+					eil.id_empleado, 
+					eil.id_seccion, 
+					eil.fecha_inicio 
+			FROM sir_empleado e JOIN sir_empleado_informacion_laboral eil ON eil.id_empleado = e.id_empleado 
+								JOIN tcm_empleado_informacion_laboral veil ON veil.id_empleado = eil.id_empleado 
+								AND veil.fecha_inicio = eil.fecha_inicio AND e.nr = '".$nr."'
 		";
+		//echo $sentencia;
 		$query=$this->db->query($sentencia);
 		
 		if($query->num_rows() > 0) {
@@ -395,6 +386,7 @@ function todas_solicitudes_por_asignar(){
 		(
 			SELECT id_solicitud_transporte id,
 			DATE_FORMAT(fecha_mision,'%d-%m-%Y') fecha,
+			fecha_mision,
 			DATE_FORMAT(hora_entrada,'%r') entrada,
 			DATE_FORMAT(hora_salida,'%r') salida,
 			requiere_motorista,
@@ -413,6 +405,7 @@ function todas_solicitudes_por_asignar(){
 					
 			SELECT id_solicitud_transporte id,
 			DATE_FORMAT(fecha_mision,'%d-%m-%Y') fecha,
+			fecha_mision,
 			DATE_FORMAT(hora_entrada,'%r') entrada,
 			DATE_FORMAT(hora_salida,'%r') salida,
 			requiere_motorista,
@@ -443,6 +436,8 @@ function todas_solicitudes_por_asignar(){
 		)
 		as k
 		GROUP BY k.id
+		ORDER BY k.fecha_mision DESC
+		LIMIT 100
 		");
 
 	   	return $query->result();
@@ -523,10 +518,35 @@ function solicitudes_por_asignar_depto(){
 		return $query->result();
 	}
 	///////////////////////////////////////////////////////////////////////////////////////
+
+	function vehiculos_disponibles2($fecha,$hentrada,$hsalida,$seccion)
+	{
+		$query=$this->db->query("
+			select v.id_vehiculo, v.placa
+			from tcm_vehiculo as v
+			where v.id_vehiculo not in
+			(
+				select avm.id_vehiculo
+				from tcm_solicitud_transporte as st
+				inner join tcm_asignacion_sol_veh_mot as avm
+				on (avm.id_solicitud_transporte=st.id_solicitud_transporte)
+				where st.fecha_mision='$fecha' and 
+					(
+						(st.hora_salida>='$hsalida' and st.hora_salida<='$hentrada')
+						 or (st.hora_entrada>='$hsalida' and st.hora_entrada<='$hentrada')
+						 or (st.hora_salida<='$hsalida' and st.hora_entrada>='$hentrada')
+					 )
+				and st.estado_solicitud_transporte=3
+			)
+			and (id_seccion='$seccion') and v.estado=1
+			order by v.id_vehiculo asc;");
+				return $query->result();
+	}
 	
 	//////VEHICUlOS DISPONIBlES INClUYE lOS QUE ESTÁN EN MISIONES lOCAlES VERSIÓN OFICINAS ///////////
 	function vehiculos_disponibles($fecha,$hentrada,$hsalida,$seccion)
 	{
+
 		$query=$this->db->query("
 			select v.id_vehiculo, v.placa, vm.nombre, vmo.modelo, vc.nombre_clase, vcon.condicion
 			from tcm_vehiculo as v
@@ -542,20 +562,12 @@ function solicitudes_por_asignar_depto(){
 				on (dm.id_solicitud_transporte=st.id_solicitud_transporte)
 				inner join tcm_asignacion_sol_veh_mot as avm
 				on (avm.id_solicitud_transporte=st.id_solicitud_transporte)
-				where avm.id_vehiculo in
-				(
-					select avm.id_vehiculo
-					from tcm_solicitud_transporte as st
-					inner join tcm_asignacion_sol_veh_mot as avm
-					on (st.id_solicitud_transporte=avm.id_solicitud_transporte)
-					where st.fecha_mision='$fecha' and 
+				where st.fecha_mision='$fecha' and 
 					(
 						(st.hora_salida>='$hsalida' and st.hora_salida<='$hentrada')
 						 or (st.hora_entrada>='$hsalida' and st.hora_entrada<='$hentrada')
 						 or (st.hora_salida<='$hsalida' and st.hora_entrada>='$hentrada')
 					 )
-					 and st.estado_solicitud_transporte=3
-				)
 				and st.estado_solicitud_transporte=3
 			)
 			and (id_seccion='$seccion') and v.estado=1
@@ -582,24 +594,16 @@ function solicitudes_por_asignar_depto(){
 				on (dm.id_solicitud_transporte=st.id_solicitud_transporte)
 				inner join tcm_asignacion_sol_veh_mot as avm
 				on (avm.id_solicitud_transporte=st.id_solicitud_transporte)
-				where avm.id_vehiculo in
-				(
-					select avm.id_vehiculo
-					from tcm_solicitud_transporte as st
-					inner join tcm_asignacion_sol_veh_mot as avm
-					on (st.id_solicitud_transporte=avm.id_solicitud_transporte)
-					where st.fecha_mision='$fecha' and 
+				where st.fecha_mision='$fecha' and 
 					(
 						(st.hora_salida>='$hsalida' and st.hora_salida<='$hentrada')
 						 or (st.hora_entrada>='$hsalida' and st.hora_entrada<='$hentrada')
 						 or (st.hora_salida<='$hsalida' and st.hora_entrada>='$hentrada')
 					 )
-					 and st.estado_solicitud_transporte=3
-				)
 				and st.estado_solicitud_transporte=3
 				and dm.id_municipio<>97
 			)
-			and (v.id_seccion!=52 and v.id_seccion!=53 and v.id_seccion!=54 and v.id_seccion!=55 and v.id_seccion!=56 and v.id_seccion!=57 and v.id_seccion!=58 and v.id_seccion!=59 and v.id_seccion!=60 and v.id_seccion!=61 and v.id_seccion!=64 and v.id_seccion!=65 and v.id_seccion!=66)
+			and v.id_seccion NOT IN(52,53,54,55,56,57,58,59,60,61,64,65,66)
 			and v.estado=1
 			order by v.id_vehiculo asc;");
 				return $query->result();
@@ -624,20 +628,12 @@ function solicitudes_por_asignar_depto(){
 				on (dm.id_solicitud_transporte=st.id_solicitud_transporte)
 				inner join tcm_asignacion_sol_veh_mot as avm
 				on (avm.id_solicitud_transporte=st.id_solicitud_transporte)
-				where avm.id_vehiculo in
-				(
-					select avm.id_vehiculo
-					from tcm_solicitud_transporte as st
-					inner join tcm_asignacion_sol_veh_mot as avm
-					on (st.id_solicitud_transporte=avm.id_solicitud_transporte)
-					where st.fecha_mision='$fecha' and 
+				where st.fecha_mision='$fecha' and 
 					(
 						(st.hora_salida>='$hsalida' and st.hora_salida<='$hentrada')
 						 or (st.hora_entrada>='$hsalida' and st.hora_entrada<='$hentrada')
 						 or (st.hora_salida<='$hsalida' and st.hora_entrada>='$hentrada')
 					 )
-					 and st.estado_solicitud_transporte=3
-				)
 				and st.estado_solicitud_transporte=3
 				and dm.id_municipio<>97
 			)
@@ -1355,6 +1351,8 @@ where s.id_solicitud_transporte='$id'");
 				LOWER(CONCAT_WS(' ',e.primer_nombre, e.segundo_nombre, e.tercer_nombre,
 				e.primer_apellido,e.segundo_apellido,e.apellido_casada)) AS nombre,
 				estado_solicitud_transporte estado,
+				DATE_FORMAT(fecha_mision,'%d-%m-%Y') fecha,
+				fecha_mision,
 				DATE_FORMAT(hora_salida,'%h:%i %p') salida,
 				DATE_FORMAT(hora_entrada,'%h:%i %p') entrada,
 				vh.placa	
@@ -1362,7 +1360,7 @@ where s.id_solicitud_transporte='$id'");
 			INNER JOIN sir_empleado e ON id_empleado_solicitante = id_empleado
 			INNER JOIN  tcm_asignacion_sol_veh_mot asi ON asi.id_solicitud_transporte=s.id_solicitud_transporte
 			INNER JOIN tcm_vehiculo vh ON vh.id_vehiculo= asi.id_vehiculo
-			WHERE  ( (estado_solicitud_transporte=3) OR estado_solicitud_transporte=4)");
+			WHERE  ( (estado_solicitud_transporte=3) OR estado_solicitud_transporte=4) ORDER BY fecha_mision DESC LIMIT 100");
 		return $query->result();
 		
 		}
@@ -1567,6 +1565,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 		(
 			SELECT id_solicitud_transporte id,
 			DATE_FORMAT(fecha_mision,'%d-%m-%Y') fecha,
+			fecha_mision,
 			DATE_FORMAT(hora_entrada,'%r') entrada,
 			DATE_FORMAT(hora_salida,'%r') salida,
 			requiere_motorista,
@@ -1586,6 +1585,7 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 					
 			SELECT id_solicitud_transporte id,
 			DATE_FORMAT(fecha_mision,'%d-%m-%Y') fecha,
+			fecha_mision,
 			DATE_FORMAT(hora_entrada,'%r') entrada,
 			DATE_FORMAT(hora_salida,'%r') salida,
 			requiere_motorista,
@@ -1615,8 +1615,10 @@ LEFT JOIN sir_empleado e ON e.id_empleado = s.id_empleado_solicitante
 				".$whereExtra."
 		)
 		as k
-		GROUP BY k.id
+		GROUP BY k.id ORDER BY k.fecha_mision DESC LIMIT 100 
 		";
+
+		//echo $sentencia;
 		
 		$query=$this->db->query($sentencia);
 		if($query->num_rows() > 0) {

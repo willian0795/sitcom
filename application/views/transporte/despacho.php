@@ -16,6 +16,7 @@
 	<thead>
   		<tr>
             <th>ID Solicitud</th>
+            <th>Fecha</th>
     		<th>Hora de Salida</th>
     		<th>Hora de Regreso</th>
             <th>Vehículo</th>
@@ -33,6 +34,7 @@
         ?>
   		<tr>
             <td><?=$fila->id?></td>
+            <td><?=$fila->fecha?></td>
             <td><?=$fila->salida?></td>
             <td><?=$fila->entrada?></td>
             <td><?=$fila->placa?></td>
